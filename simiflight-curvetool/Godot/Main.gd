@@ -1,16 +1,24 @@
+@tool
 extends Control
 
-@onready var angle_input = $AngleInput
-@onready var result_label = $ResultLabel
+func _ready():
+	if Engine.is_editor_hint():
+		if not has_node("VBox"):
+			var vbox = VBoxContainer.new()
+			vbox.name = "VBox"
+			vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			vbox.anchor_right = 1.0
+			vbox.anchor_bottom = 1.0
+			vbox.margin_left = 300
+			vbox.margin_top = 200
+			vbox.margin_right = -300
+			vbox.margin_bottom = -200
+			vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+			add_child(vbox)
 
-func _on_calculate_button_pressed():
-	var angle = angle_input.text
-	var output = []
-
-	var exit_code = OS.execute("python3", ["res://lift_calc.py", angle], output)
-	
-	if exit_code == 0:
-		var cl = output[0].strip()
-		result_label.text = "Cl = " + cl
-	else:
-		result_label.text = "Fehler bei Berechnung"
+			for label in ["Kurve erstellen", "Kurve laden", "Kurve speichern"]:
+				var btn = Button.new()
+				btn.text = label
+				btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				vbox.add_child(btn)

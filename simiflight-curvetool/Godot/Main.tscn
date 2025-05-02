@@ -10,20 +10,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_glv2v")
-
-[node name="AngleInput" type="LineEdit" parent="."]
-layout_mode = 0
-offset_right = 68.5625
-offset_bottom = 31.0
-
-[node name="CalculateButton" type="Button" parent="."]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-
-[node name="ResultLabel" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[connection signal="pressed" from="CalculateButton" to="." method="_on_calculate_button_pressed"]

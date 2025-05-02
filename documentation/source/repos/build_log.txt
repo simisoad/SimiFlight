@@ -1,0 +1,10 @@
+﻿scons : 
+In Zeile:1 Zeichen:1
++ scons -j8 verbose=1 *>&1 | Out-File -Encoding UTF8 build_log.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+scons: *** No SConstruct file found.
+File "C:\Users\SIMI\AppData\Local\Programs\Python\Python313\Lib\site-packages\SCons\Script\Main.py", line 1023, in 
+_main
