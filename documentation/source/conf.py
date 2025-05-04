@@ -20,7 +20,6 @@ extensions = [
     "sphinx.ext.viewcode"
 ]
 
-
 templates_path = ['_templates']
 exclude_patterns = []
 
@@ -32,16 +31,17 @@ suppress_warnings = [
     'rest.underline',  # Diese Zeile unterdrückt Unterstreichungswarnungen
 ]
 
-
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "furo"#'alabaster'
+html_theme = "furo"  #'alabaster'
 html_theme_options = {
     "sidebar_hide_name": False,  # Zeigt den Projektnamen in der Sidebar
-    "navigation_with_keys": True, # Ermöglicht Navigation mit Pfeiltasten
+    "navigation_with_keys": True,  # Ermöglicht Navigation mit Pfeiltasten
 }
 
-
 html_static_path = ['_static']
+
+html_baseurl = "https://simisoad.github.io/SimiFlight/"
+
+
