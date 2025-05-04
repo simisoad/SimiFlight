@@ -15,6 +15,23 @@ run/main_scene="uid://dwbhwc07efop"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Console="*res://addons/gameconsole/console/console.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gameconsole/plugin.cfg", "res://addons/god_plot/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/inspector_extender/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://GodPlot_Tests/": "orange",
+"res://addons/": "gray",
+"res://console/": "orange",
+"res://tests/": "green"
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
