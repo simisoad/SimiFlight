@@ -42,8 +42,6 @@ html_theme_options = {
     "sidebar_hide_name": False,  # Zeigt den Projektnamen in der Sidebar
     "navigation_with_keys": True, # Ermöglicht Navigation mit Pfeiltasten
 }
-html_sidebars = {
-    "**": ["sidebar.html"]
-}
+
 
 html_static_path = ['_static']
