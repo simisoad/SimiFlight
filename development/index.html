@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Development Tools" href="tools.html" /><link rel="prev" title="Godot-Python Integration" href="../technical/integration.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Development Roadmap" href="roadmap.html" /><link rel="prev" title="Flight Physics Engine" href="../technical/physics.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>Development Information - SimiFlightDocumentation develop documentation</title>
+        <title>Development - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -205,19 +205,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../technical/world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/godot.html">Godot Engine Modifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/physics.html">Flight Physics Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/ground_effect.html">Ground Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/curve.html">Curve Tool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/integration.html">Godot-Python Integration</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Development Information</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development Information</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="tools.html">Development Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins/plugins.html">Godot Plugins Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html">Repository Structure</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Development</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="roadmap.html">Development Roadmap</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 </li>
 </ul>
@@ -260,98 +252,58 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="development-information">
-<h1>Development Information<a class="headerlink" href="#development-information" title="Link to this heading">¶</a></h1>
-<p>This section provides details about SimiFlight’s development process, tools, and organization.</p>
+          <section id="development">
+<h1>Development<a class="headerlink" href="#development" title="Link to this heading">¶</a></h1>
+<p>This section covers information relevant to developers working on the SimiFlight project.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">Development Tools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tools.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html#core-development-environment">Core Development Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html#version-control-and-collaboration">Version Control and Collaboration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html#development-workflow">Development Workflow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html#specialized-development-tools">Specialized Development Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html#external-resources">External Resources</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="plugins/plugins.html">Godot Plugins Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="plugins/plugins.html#game-console">Game Console</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins/plugins.html#godplot">GodPlot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins/plugins.html#gut-godot-unit-test">GUT (Godot Unit Test)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins/plugins.html#inspector-extender">Inspector Extender</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="structure.html">Repository Structure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#main-repository-organization">Main Repository Organization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#key-components">Key Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#documentation-structure">Documentation Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#development-workflow">Development Workflow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#best-practices">Best Practices</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Development Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-1-foundation">Phase 1: Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-2-core-physics">Phase 2: Core Physics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-3-world-system">Phase 3: World System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-4-optimization">Phase 4: Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-5-gameplay">Phase 5: Gameplay</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-6-documentation-and-release">Phase 6: Documentation and Release</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#long-term-vision">Long-term Vision</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#timeline-and-milestones">Timeline and Milestones</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ai_team.html">SimiFlight AI Team — Persona Definitions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html#ava-senior-c-engineer">Ava — Senior C++ Engineer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html#pedro-python-data-tooling-expert">Pedro — Python Data &amp; Tooling Expert</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html#dr-wind-aerodynamics-professor">Dr. Wind — Aerodynamics Professor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html#riley-project-manager-integrator">Riley — Project Manager &amp; Integrator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html#usage-guidelines">Usage Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#major-phases">Major Phases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#milestone-chart">Milestone Chart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#release-versioning">Release Versioning</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<p>SimiFlight is being developed as a modular project with several interconnected components.
-This section describes the development approach, tools, and structure.</p>
-<section id="development-approach">
-<span id="id1"></span><h3>Development Approach<a class="headerlink" href="#development-approach" title="Link to this heading">¶</a></h3>
-<p>The development of SimiFlight follows these core principles:</p>
+<section id="development-philosophy">
+<h2>Development Philosophy<a class="headerlink" href="#development-philosophy" title="Link to this heading">¶</a></h2>
+<p>SimiFlight development follows these core principles:</p>
 <ul class="simple">
-<li><p><strong>Modular design</strong> - Components are developed with clean interfaces</p></li>
-<li><p><strong>Physics-first</strong> - Focus on accurate flight dynamics as the foundation</p></li>
-<li><p><strong>Progressive enhancement</strong> - Start with core features and enhance over time</p></li>
-<li><p><strong>Open development</strong> - Clear documentation and structured approach</p></li>
+<li><p><strong>Modular design</strong> - Components should be self-contained and testable</p></li>
+<li><p><strong>Incremental progress</strong> - Working in small, verifiable milestones</p></li>
+<li><p><strong>Documentation-driven</strong> - Writing documentation alongside code</p></li>
+<li><p><strong>Performance awareness</strong> - Considering optimization early in design</p></li>
 </ul>
 </section>
-<section id="development-tools">
-<span id="development-tools-overview"></span><h3>Development Tools<a class="headerlink" href="#development-tools" title="Link to this heading">¶</a></h3>
-<p>SimiFlight development relies on several specialized tools:</p>
-<ul class="simple">
-<li><p><strong>Modified Godot Engine 4.4</strong> - Customized for 64-bit precision</p></li>
-<li><p><strong>Python ecosystem</strong> - For aerodynamic modeling and external tools</p></li>
-<li><p><strong>C++ extensions</strong> - For performance-critical components</p></li>
-<li><p><strong>Version control</strong> - Git-based workflow with feature branches</p></li>
-</ul>
-<p>For more detailed information, see <a class="reference internal" href="tools.html"><span class="doc">Development Tools</span></a>.</p>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<p>To begin working on SimiFlight:</p>
+<ol class="arabic simple">
+<li><p>Clone the repository: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/username/simiflight.git</span></code></p></li>
+<li><p>Follow setup instructions in the README</p></li>
+<li><p>Run the development environment script: <code class="docutils literal notranslate"><span class="pre">./setup_dev.sh</span></code></p></li>
+<li><p>Explore the sample scenes in <code class="docutils literal notranslate"><span class="pre">Godot/samples/</span></code></p></li>
+</ol>
 </section>
 <section id="repository-structure">
-<span id="repository-structure-overview"></span><h3>Repository Structure<a class="headerlink" href="#repository-structure" title="Link to this heading">¶</a></h3>
-<p>The project is organized into a clear repository structure:</p>
-<ul class="simple">
-<li><p><strong>Main Godot project</strong> - Core simulation engine and gameplay</p></li>
-<li><p><strong>CurveTool</strong> - Specialized tool for aerodynamic data generation</p></li>
-<li><p><strong>Python utilities</strong> - Shared code for mathematical modeling</p></li>
-<li><p><strong>Assets</strong> - Models, textures, and sounds</p></li>
-<li><p><strong>Documentation</strong> - User guides and API references</p></li>
-</ul>
-<p>For details on the repository organization, see <a class="reference internal" href="structure.html"><span class="doc">Repository Structure</span></a>.</p>
+<span id="id1"></span><h2>Repository Structure<a class="headerlink" href="#repository-structure" title="Link to this heading">¶</a></h2>
+<p>The SimiFlight repository is organized into several key components:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>simiflight/
+├── Godot/                  # Main project (C++/GDScript, physics, scenes)
+├── simiflight-curvetool/   # Aerodynamic curve generator
+│   ├── Godot/             # CurveTool UI (Godot scenes and scripts)
+│   └── Python/            # Python backend (lift/drag calculations)
+├── assets/                # 3D models, textures, sounds
+├── docs/                  # Documentation (Sphinx format)
+├── Python/                # Shared physics utilities (optional)
+└── README.md              # Project overview
+</pre></div>
+</div>
+<p>For more details, see <span class="xref std std-doc">structure</span>.</p>
 </section>
 <section id="development-roadmap">
-<span id="development-roadmap-overview"></span><h3>Development Roadmap<a class="headerlink" href="#development-roadmap" title="Link to this heading">¶</a></h3>
-<p>SimiFlight’s development follows a strategic roadmap:</p>
+<span id="id2"></span><h2>Development Roadmap<a class="headerlink" href="#development-roadmap" title="Link to this heading">¶</a></h2>
+<p>The current development roadmap follows these major phases:</p>
 <ol class="arabic simple">
 <li><p><strong>Prototype Curve Tool</strong> - Python backend + Godot UI</p></li>
 <li><p><strong>Physics Core</strong> - Implement forces, load curve data, test in 3D</p></li>
@@ -360,52 +312,35 @@ This section describes the development approach, tools, and structure.</p>
 <li><p><strong>Gameplay Systems</strong> - Add missions, challenges, and assists</p></li>
 <li><p><strong>Documentation</strong> - Write user guides, example scenes, and API references</p></li>
 </ol>
-<p>For the complete development timeline, see <a class="reference internal" href="roadmap.html"><span class="doc">Development Roadmap</span></a>.</p>
-</section>
+<p>For a detailed timeline and milestones, see <a class="reference internal" href="roadmap.html"><span class="doc">Development Roadmap</span></a>.</p>
 </section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
-<p>Contributions to SimiFlight are welcome in several areas:</p>
+<p>Contributions to SimiFlight are welcome! Please follow these guidelines:</p>
 <ul class="simple">
-<li><p><strong>Aircraft models</strong> - Creating new aircraft with realistic flight characteristics</p></li>
-<li><p><strong>Flight physics</strong> - Enhancing the aerodynamic model</p></li>
-<li><p><strong>Terrain systems</strong> - Improving the planetary rendering</p></li>
-<li><p><strong>Gameplay mechanics</strong> - Developing missions and challenges</p></li>
-<li><p><strong>Documentation</strong> - Expanding guides and examples</p></li>
+<li><p>Create a branch for new features</p></li>
+<li><p>Write tests for new functionality</p></li>
+<li><p>Document your code with comments</p></li>
+<li><p>Submit pull requests with clear descriptions</p></li>
 </ul>
 </section>
-<section id="development-environment-setup">
-<h2>Development Environment Setup<a class="headerlink" href="#development-environment-setup" title="Link to this heading">¶</a></h2>
-<p>To set up a development environment for SimiFlight:</p>
-<ol class="arabic simple">
-<li><p>Clone the repository with submodules</p></li>
-<li><p>Install the required dependencies</p></li>
-<li><p>Build the custom Godot engine</p></li>
-<li><p>Set up the Python environment with required packages</p></li>
-<li><p>Import the project in the Godot editor</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the repository</span>
-git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/username/simiflight.git
-
-<span class="c1"># Install Python dependencies</span>
-<span class="nb">cd</span><span class="w"> </span>simiflight/Python
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-
-<span class="c1"># Build custom Godot (see detailed instructions in documentation)</span>
-</pre></div>
-</div>
-</section>
-<section id="best-practices">
-<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
-<p>Development follows these best practices:</p>
+<section id="code-style">
+<h2>Code Style<a class="headerlink" href="#code-style" title="Link to this heading">¶</a></h2>
+<p>SimiFlight follows these coding standards:</p>
 <ul class="simple">
-<li><p><strong>Code style</strong> - Consistent formatting and naming</p></li>
-<li><p><strong>Documentation</strong> - Comprehensive comments and external docs</p></li>
-<li><p><strong>Testing</strong> - Unit tests for critical components</p></li>
-<li><p><strong>Performance</strong> - Regular profiling and optimization</p></li>
-<li><p><strong>Modular design</strong> - Clean interfaces between components</p></li>
+<li><p><strong>GDScript</strong> - Follow the <a class="reference external" href="https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html">Godot style guide</a></p></li>
+<li><p><strong>C++</strong> - Use the project’s <code class="docutils literal notranslate"><span class="pre">.clang-format</span></code> file</p></li>
+<li><p><strong>Python</strong> - Follow PEP 8 style guidelines</p></li>
 </ul>
-<p>For more detailed guidance, see <a class="reference external" href="https://en.wikipedia.org/wiki/Best_practice">Wikipedia: Best Practice</a>.</p>
+</section>
+<section id="documentation-standards">
+<h2>Documentation Standards<a class="headerlink" href="#documentation-standards" title="Link to this heading">¶</a></h2>
+<p>All code should be documented following these principles:</p>
+<ul class="simple">
+<li><p><strong>Public APIs</strong> - Every public method should have documentation</p></li>
+<li><p><strong>Examples</strong> - Include usage examples for complex features</p></li>
+<li><p><strong>Implementation Notes</strong> - Document non-obvious implementation details</p></li>
+</ul>
 </section>
 </section>
 
@@ -414,23 +349,23 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="tools.html">
+          <a class="next-page" href="roadmap.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Development Tools</div>
+                <div class="title">Development Roadmap</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../technical/integration.html">
+          <a class="prev-page" href="../technical/physics.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Godot-Python Integration</div>
+                <div class="title">Flight Physics Engine</div>
                 
               </div>
             </a>
@@ -464,17 +399,14 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Development Information</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a><ul>
-<li><a class="reference internal" href="#development-approach">Development Approach</a></li>
-<li><a class="reference internal" href="#development-tools">Development Tools</a></li>
+<li><a class="reference internal" href="#">Development</a><ul>
+<li><a class="reference internal" href="#development-philosophy">Development Philosophy</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li><a class="reference internal" href="#repository-structure">Repository Structure</a></li>
 <li><a class="reference internal" href="#development-roadmap">Development Roadmap</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#contributing">Contributing</a></li>
-<li><a class="reference internal" href="#development-environment-setup">Development Environment Setup</a></li>
-<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#code-style">Code Style</a></li>
+<li><a class="reference internal" href="#documentation-standards">Documentation Standards</a></li>
 </ul>
 </li>
 </ul>
@@ -486,7 +418,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=16816911"></script>
+</div><script src="../_static/documentation_options.js?v=fd2318e6"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

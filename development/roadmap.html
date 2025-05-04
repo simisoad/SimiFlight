@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="SimiFlight AI Team — Persona Definitions" href="ai_team.html" /><link rel="prev" title="Repository Structure" href="structure.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="Development" href="index.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Development Roadmap - SimiFlightDocumentation develop documentation</title>
@@ -205,19 +205,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../technical/world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/godot.html">Godot Engine Modifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/physics.html">Flight Physics Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/ground_effect.html">Ground Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/curve.html">Curve Tool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/integration.html">Godot-Python Integration</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Development Information</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development Information</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="tools.html">Development Tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugins/plugins.html">Godot Plugins Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html">Repository Structure</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Development</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Development Roadmap</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ai_team.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 </li>
 </ul>
@@ -262,263 +254,167 @@
         <article role="main" id="furo-main-content">
           <section id="development-roadmap">
 <h1>Development Roadmap<a class="headerlink" href="#development-roadmap" title="Link to this heading">¶</a></h1>
-<section id="overview">
-<span id="id1"></span><h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<p>The SimiFlight development roadmap outlines the planned progression of features and capabilities,
-from core physics to gameplay elements and optimization.</p>
-</section>
-<section id="phase-1-foundation">
-<h2>Phase 1: Foundation<a class="headerlink" href="#phase-1-foundation" title="Link to this heading">¶</a></h2>
-<section id="curve-tool-development">
-<h3>Curve Tool Development<a class="headerlink" href="#curve-tool-development" title="Link to this heading">¶</a></h3>
-<p><strong>Status: Prototype Complete</strong></p>
-<p>The first major development milestone focuses on the Curve Tool:</p>
-<ul class="simple">
-<li><p><strong>Python backend</strong> for aerodynamic calculations
-* Implementation of thin airfoil theory
-* Panel method for 2D potential flow
-* Stall modeling and corrections</p></li>
-<li><p><strong>Godot UI</strong> for interactive use
-* Curve visualization and editing
-* Aircraft parameter input
-* Data export for simulation</p></li>
+<p>This page outlines the development plan for SimiFlight, including major milestones,
+priorities, and estimated timelines.</p>
+<section id="major-phases">
+<h2>Major Phases<a class="headerlink" href="#major-phases" title="Link to this heading">¶</a></h2>
+<section id="phase-1-prototype-curve-tool">
+<h3>Phase 1: Prototype Curve Tool<a class="headerlink" href="#phase-1-prototype-curve-tool" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: In Progress</p>
+<dl class="simple">
+<dt><strong>Goals</strong>:</dt><dd><ul class="simple">
+<li><p>Implement Python backend for aerodynamic calculations</p></li>
+<li><p>Create Godot UI for curve tool</p></li>
+<li><p>Export aerodynamic data in usable format</p></li>
+<li><p>Validate calculations against known airfoils</p></li>
 </ul>
-<figure class="align-center" id="id2">
-<img alt="Curve Tool Development" src="_static/curve_tool_milestone.png" />
-<figcaption>
-<p><span class="caption-text"><em>Curve Tool prototype showing lift coefficient curves</em></span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
-</section>
-</section>
-<section id="phase-2-core-physics">
-<h2>Phase 2: Core Physics<a class="headerlink" href="#phase-2-core-physics" title="Link to this heading">¶</a></h2>
-<section id="flight-physics-engine">
-<h3>Flight Physics Engine<a class="headerlink" href="#flight-physics-engine" title="Link to this heading">¶</a></h3>
-<p><strong>Status: In Progress</strong></p>
-<p>Implementation of the core flight physics system:</p>
-<ul class="simple">
-<li><p><strong>Four forces model</strong> (lift, drag, weight, thrust)
-* Force application at multiple control points
-* Integration with curve data from the Curve Tool
-* Basic atmospheric model</p></li>
-<li><p><strong>Control model</strong>
-* Primary flight controls (ailerons, elevator, rudder)
-* Secondary controls (flaps, trim)
-* Simplified engine model</p></li>
-</ul>
-</section>
-<section id="test-environment">
-<h3>Test Environment<a class="headerlink" href="#test-environment" title="Link to this heading">¶</a></h3>
-<p>Creation of a simplified testing environment:</p>
-<ul class="simple">
-<li><p><strong>Basic aircraft</strong> with configurable parameters</p></li>
-<li><p><strong>Flight test world</strong> with flat terrain</p></li>
-<li><p><strong>Telemetry system</strong> for physics validation</p></li>
-<li><p><strong>Comparison tools</strong> for real-world data validation</p></li>
-</ul>
-</section>
-</section>
-<section id="phase-3-world-system">
-<h2>Phase 3: World System<a class="headerlink" href="#phase-3-world-system" title="Link to this heading">¶</a></h2>
-<section id="spherical-world-implementation">
-<h3>Spherical World Implementation<a class="headerlink" href="#spherical-world-implementation" title="Link to this heading">¶</a></h3>
-<p><strong>Status: Planning</strong></p>
-<p>Development of the planetary-scale world system:</p>
-<ul class="simple">
-<li><p><strong>64-bit coordinate system</strong>
-* Integration with modified Godot Engine
-* Position tracking on planetary scale</p></li>
-<li><p><strong>Floating origin technique</strong>
-* Dynamic repositioning of simulation origin
-* Seamless transition across large distances</p></li>
-<li><p><strong>Terrain systems</strong>
-* Basic spherical planet geometry
-* Heightmap-based terrain generation
-* Dynamic Level of Detail (LOD)</p></li>
-</ul>
-</section>
-<section id="environmental-systems">
-<h3>Environmental Systems<a class="headerlink" href="#environmental-systems" title="Link to this heading">¶</a></h3>
-<p>Basic environmental systems to complement the world:</p>
-<ul class="simple">
-<li><p><strong>Atmospheric model</strong>
-* Altitude-based air density and temperature
-* Basic wind model</p></li>
-<li><p><strong>Time and lighting</strong>
-* Day/night cycle
-* Basic weather conditions</p></li>
-</ul>
-</section>
-</section>
-<section id="phase-4-optimization">
-<h2>Phase 4: Optimization<a class="headerlink" href="#phase-4-optimization" title="Link to this heading">¶</a></h2>
-<section id="c-integration">
-<h3>C++ Integration<a class="headerlink" href="#c-integration" title="Link to this heading">¶</a></h3>
-<p><strong>Status: Not Started</strong></p>
-<p>Performance optimization through C++ implementation:</p>
-<ul class="simple">
-<li><p><strong>GDExtensions</strong> for performance-critical systems
-* Physics calculations
-* Terrain management
-* 64-bit precision mathematics</p></li>
-<li><p><strong>Multi-threading</strong>
-* Parallel processing for physics
-* Background loading for terrain</p></li>
-</ul>
-</section>
-<section id="profiling-and-benchmarking">
-<h3>Profiling and Benchmarking<a class="headerlink" href="#profiling-and-benchmarking" title="Link to this heading">¶</a></h3>
-<p>Performance analysis and optimization:</p>
-<ul class="simple">
-<li><p><strong>Identification of bottlenecks</strong></p></li>
-<li><p><strong>Memory usage optimization</strong></p></li>
-<li><p><strong>Rendering performance improvements</strong></p></li>
-<li><p><strong>Load time reduction</strong></p></li>
-</ul>
-</section>
-</section>
-<section id="phase-5-gameplay">
-<h2>Phase 5: Gameplay<a class="headerlink" href="#phase-5-gameplay" title="Link to this heading">¶</a></h2>
-<section id="gameplay-systems">
-<h3>Gameplay Systems<a class="headerlink" href="#gameplay-systems" title="Link to this heading">¶</a></h3>
-<p><strong>Status: Conceptual</strong></p>
-<p>Development of core gameplay elements:</p>
-<ul class="simple">
-<li><p><strong>Aircraft progression</strong>
-* Multiple aircraft with different characteristics
-* Customization options</p></li>
-<li><p><strong>Mission system</strong>
-* Basic mission framework
-* Objectives and challenges
-* Achievement tracking</p></li>
-<li><p><strong>World exploration</strong>
-* Points of interest
-* Dynamic events
-* Navigation aids</p></li>
-</ul>
-</section>
-<section id="user-experience">
-<h3>User Experience<a class="headerlink" href="#user-experience" title="Link to this heading">¶</a></h3>
-<p>Refinement of the overall user experience:</p>
-<ul class="simple">
-<li><p><strong>User interface improvements</strong>
-* HUD options and customization
-* Camera systems
-* Control options</p></li>
-<li><p><strong>Tutorial system</strong>
-* Learning progression
-* Interactive guides
-* Contextual help</p></li>
-</ul>
-</section>
-</section>
-<section id="phase-6-documentation-and-release">
-<h2>Phase 6: Documentation and Release<a class="headerlink" href="#phase-6-documentation-and-release" title="Link to this heading">¶</a></h2>
-<section id="documentation-expansion">
-<h3>Documentation Expansion<a class="headerlink" href="#documentation-expansion" title="Link to this heading">¶</a></h3>
-<p><strong>Status: Ongoing</strong></p>
-<p>Comprehensive documentation development:</p>
-<ul class="simple">
-<li><p><strong>User guides</strong>
-* Getting started tutorials
-* Aircraft operation guides
-* Feature documentation</p></li>
-<li><p><strong>Developer documentation</strong>
-* API references
-* Extension guides
-* Modding documentation</p></li>
-</ul>
-</section>
-<section id="release-preparation">
-<h3>Release Preparation<a class="headerlink" href="#release-preparation" title="Link to this heading">¶</a></h3>
-<p>Final steps toward initial release:</p>
-<ul class="simple">
-<li><p><strong>Comprehensive testing</strong>
-* Performance validation
-* Compatibility testing
-* User experience testing</p></li>
-<li><p><strong>Polishing</strong>
-* Graphics and sound refinement
-* UI improvements
-* Balance adjustments</p></li>
-</ul>
-</section>
-</section>
-<section id="long-term-vision">
-<h2>Long-term Vision<a class="headerlink" href="#long-term-vision" title="Link to this heading">¶</a></h2>
-<p>Beyond the initial roadmap, SimiFlight has several aspirational goals:</p>
-<ul class="simple">
-<li><p><strong>Advanced weather simulation</strong>
-* Dynamic weather systems
-* Effect on flight characteristics</p></li>
-<li><p><strong>Enhanced terrain</strong>
-* Procedural detailing
-* Realistic ecosystems</p></li>
-<li><p><strong>Multiplayer capabilities</strong>
-* Cooperative flying
-* Shared world experiences</p></li>
-<li><p><strong>Content creation tools</strong>
-* Aircraft designer
-* Mission editor
-* Terrain customization</p></li>
-</ul>
-</section>
-<section id="timeline-and-milestones">
-<h2>Timeline and Milestones<a class="headerlink" href="#timeline-and-milestones" title="Link to this heading">¶</a></h2>
-<div class="table-wrapper colwidths-given docutils container" id="id3">
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Development Timeline</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+</dd>
+</dl>
+<p><strong>Timeline</strong>: Q3 2025</p>
+<p><strong>Key Tasks</strong>:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 20.0%" />
-<col style="width: 30.0%" />
+<col style="width: 10.0%" />
 <col style="width: 50.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Phase</p></th>
-<th class="head"><p>Target Completion</p></th>
-<th class="head"><p>Key Deliverables</p></th>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Priority</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Foundation</p></td>
-<td><p>Q2 2023</p></td>
-<td><p>Curve Tool prototype, initial documentation</p></td>
+<tr class="row-even"><td><p>Python Backend</p></td>
+<td><p>Implement basic lift/drag calculations</p></td>
+<td><p>In Progress</p></td>
+<td><p>High</p></td>
 </tr>
-<tr class="row-odd"><td><p>Core Physics</p></td>
-<td><p>Q4 2023</p></td>
-<td><p>Basic flight model, test environment</p></td>
+<tr class="row-odd"><td><p>Simple UI</p></td>
+<td><p>Create minimal Godot interface</p></td>
+<td><p>Planned</p></td>
+<td><p>Medium</p></td>
 </tr>
-<tr class="row-even"><td><p>World System</p></td>
-<td><p>Q2 2024</p></td>
-<td><p>Spherical world, basic terrain, floating origin</p></td>
+<tr class="row-even"><td><p>Data Export</p></td>
+<td><p>Define and implement data format</p></td>
+<td><p>Not Started</p></td>
+<td><p>Medium</p></td>
 </tr>
-<tr class="row-odd"><td><p>Optimization</p></td>
-<td><p>Q3 2024</p></td>
-<td><p>C++ physics, performance improvements</p></td>
-</tr>
-<tr class="row-even"><td><p>Gameplay</p></td>
-<td><p>Q1 2025</p></td>
-<td><p>Missions, progression, enhanced UI</p></td>
-</tr>
-<tr class="row-odd"><td><p>Documentation &amp; Release</p></td>
-<td><p>Q3 2025</p></td>
-<td><p>Initial public release</p></td>
+<tr class="row-odd"><td><p>Validation</p></td>
+<td><p>Test against NACA airfoil data</p></td>
+<td><p>Not Started</p></td>
+<td><p>High</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This roadmap represents the current development plan and is subject to change as the project evolves.</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="tools.html"><span class="doc">Development Tools</span></a> - Development tools used in SimiFlight</p></li>
-<li><p><a class="reference internal" href="structure.html"><span class="doc">Repository Structure</span></a> - Repository structure information</p></li>
+</section>
+<section id="phase-2-physics-core">
+<h3>Phase 2: Physics Core<a class="headerlink" href="#phase-2-physics-core" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: Planning</p>
+<dl class="simple">
+<dt><strong>Goals</strong>:</dt><dd><ul class="simple">
+<li><p>Implement core flight physics in GDScript</p></li>
+<li><p>Create test aircraft with simple controls</p></li>
+<li><p>Load and utilize aerodynamic curve data</p></li>
+<li><p>Test flight model in simple 3D environment</p></li>
 </ul>
-</div>
+</dd>
+</dl>
+<p><strong>Timeline</strong>: Q4 2025</p>
+<dl class="simple">
+<dt><strong>Dependencies</strong>:</dt><dd><ul class="simple">
+<li><p>Completion of Curve Tool prototype</p></li>
+<li><p>Definition of aircraft data format</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="phase-3-spherical-world">
+<h3>Phase 3: Spherical World<a class="headerlink" href="#phase-3-spherical-world" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: Research</p>
+<dl class="simple">
+<dt><strong>Goals</strong>:</dt><dd><ul class="simple">
+<li><p>Implement 64-bit coordinate system</p></li>
+<li><p>Create floating origin mechanism</p></li>
+<li><p>Test physics integration with spherical world</p></li>
+<li><p>Develop basic terrain streaming</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Timeline</strong>: Q1 2026</p>
+<dl class="simple">
+<dt><strong>Technical Challenges</strong>:</dt><dd><ul class="simple">
+<li><p>Godot Engine modifications for 64-bit precision</p></li>
+<li><p>Performance optimizations for coordinate transformations</p></li>
+<li><p>LOD implementation for planetary scale</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="phase-4-optimization">
+<h3>Phase 4: Optimization<a class="headerlink" href="#phase-4-optimization" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: Not Started</p>
+<dl class="simple">
+<dt><strong>Goals</strong>:</dt><dd><ul class="simple">
+<li><p>Port critical physics components to C++</p></li>
+<li><p>Profile performance and identify bottlenecks</p></li>
+<li><p>Implement multi-threading for physics calculations</p></li>
+<li><p>Optimize terrain rendering and LOD systems</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Timeline</strong>: Q2 2026</p>
+</section>
+<section id="phase-5-gameplay-systems">
+<h3>Phase 5: Gameplay Systems<a class="headerlink" href="#phase-5-gameplay-systems" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: Conceptual</p>
+<dl class="simple">
+<dt><strong>Goals</strong>:</dt><dd><ul class="simple">
+<li><p>Implement mission system</p></li>
+<li><p>Create challenge framework</p></li>
+<li><p>Add assist systems for new players</p></li>
+<li><p>Develop initial gameplay loops</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Timeline</strong>: Q3-Q4 2026</p>
+</section>
+<section id="phase-6-documentation">
+<h3>Phase 6: Documentation<a class="headerlink" href="#phase-6-documentation" title="Link to this heading">¶</a></h3>
+<p><strong>Status</strong>: Ongoing</p>
+<dl class="simple">
+<dt><strong>Goals</strong>:</dt><dd><ul class="simple">
+<li><p>Complete API reference documentation</p></li>
+<li><p>Create user guides and tutorials</p></li>
+<li><p>Document example scenes and usage patterns</p></li>
+<li><p>Prepare contributor guidelines</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Timeline</strong>: Continuous</p>
+</section>
+</section>
+<section id="milestone-chart">
+<h2>Milestone Chart<a class="headerlink" href="#milestone-chart" title="Link to this heading">¶</a></h2>
+<figure class="align-center" id="id1">
+<img alt="Roadmap Timeline" src="_static/roadmap_chart.png" />
+<figcaption>
+<p><span class="caption-text"><em>SimiFlight development roadmap timeline</em></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="release-versioning">
+<h2>Release Versioning<a class="headerlink" href="#release-versioning" title="Link to this heading">¶</a></h2>
+<p>SimiFlight follows semantic versioning:</p>
+<ul class="simple">
+<li><p><strong>0.x</strong>: Development versions (not feature complete)</p></li>
+<li><p><strong>1.0</strong>: First stable release with core functionality</p></li>
+<li><p><strong>1.x</strong>: Incremental feature</p></li>
+</ul>
 </section>
 </section>
 
@@ -527,23 +423,15 @@ from core physics to gameplay elements and optimization.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="ai_team.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">SimiFlight AI Team — Persona Definitions</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="structure.html">
+          
+          <a class="prev-page" href="index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Repository Structure</div>
+                <div class="title">Development</div>
                 
               </div>
             </a>
@@ -578,38 +466,17 @@ from core physics to gameplay elements and optimization.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Development Roadmap</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#phase-1-foundation">Phase 1: Foundation</a><ul>
-<li><a class="reference internal" href="#curve-tool-development">Curve Tool Development</a></li>
+<li><a class="reference internal" href="#major-phases">Major Phases</a><ul>
+<li><a class="reference internal" href="#phase-1-prototype-curve-tool">Phase 1: Prototype Curve Tool</a></li>
+<li><a class="reference internal" href="#phase-2-physics-core">Phase 2: Physics Core</a></li>
+<li><a class="reference internal" href="#phase-3-spherical-world">Phase 3: Spherical World</a></li>
+<li><a class="reference internal" href="#phase-4-optimization">Phase 4: Optimization</a></li>
+<li><a class="reference internal" href="#phase-5-gameplay-systems">Phase 5: Gameplay Systems</a></li>
+<li><a class="reference internal" href="#phase-6-documentation">Phase 6: Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#phase-2-core-physics">Phase 2: Core Physics</a><ul>
-<li><a class="reference internal" href="#flight-physics-engine">Flight Physics Engine</a></li>
-<li><a class="reference internal" href="#test-environment">Test Environment</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#phase-3-world-system">Phase 3: World System</a><ul>
-<li><a class="reference internal" href="#spherical-world-implementation">Spherical World Implementation</a></li>
-<li><a class="reference internal" href="#environmental-systems">Environmental Systems</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#phase-4-optimization">Phase 4: Optimization</a><ul>
-<li><a class="reference internal" href="#c-integration">C++ Integration</a></li>
-<li><a class="reference internal" href="#profiling-and-benchmarking">Profiling and Benchmarking</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#phase-5-gameplay">Phase 5: Gameplay</a><ul>
-<li><a class="reference internal" href="#gameplay-systems">Gameplay Systems</a></li>
-<li><a class="reference internal" href="#user-experience">User Experience</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#phase-6-documentation-and-release">Phase 6: Documentation and Release</a><ul>
-<li><a class="reference internal" href="#documentation-expansion">Documentation Expansion</a></li>
-<li><a class="reference internal" href="#release-preparation">Release Preparation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#long-term-vision">Long-term Vision</a></li>
-<li><a class="reference internal" href="#timeline-and-milestones">Timeline and Milestones</a></li>
+<li><a class="reference internal" href="#milestone-chart">Milestone Chart</a></li>
+<li><a class="reference internal" href="#release-versioning">Release Versioning</a></li>
 </ul>
 </li>
 </ul>
@@ -621,7 +488,7 @@ from core physics to gameplay elements and optimization.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=16816911"></script>
+</div><script src="../_static/documentation_options.js?v=fd2318e6"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
