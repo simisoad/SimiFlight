@@ -10,6 +10,7 @@ This section covers the key technical concepts behind SimiFlight's implementatio
    world
    godot
    physics
+   ground_effect
    curve
    integration
 

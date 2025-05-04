@@ -1,63 +1,71 @@
-===========
-Development
-===========
+======================
+Development Information
+======================
 
-This section covers information relevant to developers working on the SimiFlight project.
+This section provides details about SimiFlight's development process, tools, and organization.
 
 .. toctree::
    :maxdepth: 2
-   
+
    tools
+   plugins/plugins
    structure
    roadmap
+   ai_team
 
-Development Philosophy
-=====================
+Overview
+========
 
-SimiFlight development follows these core principles:
+SimiFlight is being developed as a modular project with several interconnected components.
+This section describes the development approach, tools, and structure.
 
-* **Modular design** - Components should be self-contained and testable
-* **Incremental progress** - Working in small, verifiable milestones
-* **Documentation-driven** - Writing documentation alongside code
-* **Performance awareness** - Considering optimization early in design
+.. _development-approach:
 
-Getting Started
-==============
+Development Approach
+------------------
 
-To begin working on SimiFlight:
+The development of SimiFlight follows these core principles:
 
-1. Clone the repository: ``git clone https://github.com/username/simiflight.git``
-2. Follow setup instructions in the README
-3. Run the development environment script: ``./setup_dev.sh``
-4. Explore the sample scenes in ``Godot/samples/``
+* **Modular design** - Components are developed with clean interfaces
+* **Physics-first** - Focus on accurate flight dynamics as the foundation
+* **Progressive enhancement** - Start with core features and enhance over time
+* **Open development** - Clear documentation and structured approach
 
-.. _repository-structure:
+.. _development-tools-overview:
+
+Development Tools
+---------------
+
+SimiFlight development relies on several specialized tools:
+
+* **Modified Godot Engine 4.4** - Customized for 64-bit precision
+* **Python ecosystem** - For aerodynamic modeling and external tools
+* **C++ extensions** - For performance-critical components
+* **Version control** - Git-based workflow with feature branches
+
+For more detailed information, see :doc:`tools`.
+
+.. _repository-structure-overview:
 
 Repository Structure
-===================
+------------------
 
-The SimiFlight repository is organized into several key components:
+The project is organized into a clear repository structure:
 
-.. code-block:: text
+* **Main Godot project** - Core simulation engine and gameplay
+* **CurveTool** - Specialized tool for aerodynamic data generation
+* **Python utilities** - Shared code for mathematical modeling
+* **Assets** - Models, textures, and sounds
+* **Documentation** - User guides and API references
 
-   simiflight/  
-   ├── Godot/                  # Main project (C++/GDScript, physics, scenes)  
-   ├── simiflight-curvetool/   # Aerodynamic curve generator  
-   │   ├── Godot/             # CurveTool UI (Godot scenes and scripts)  
-   │   └── Python/            # Python backend (lift/drag calculations)  
-   ├── assets/                # 3D models, textures, sounds  
-   ├── docs/                  # Documentation (Sphinx format)  
-   ├── Python/                # Shared physics utilities (optional)  
-   └── README.md              # Project overview  
+For details on the repository organization, see :doc:`structure`.
 
-For more details, see :doc:`structure`.
-
-.. _development-roadmap:
+.. _development-roadmap-overview:
 
 Development Roadmap
-==================
+-----------------
 
-The current development roadmap follows these major phases:
+SimiFlight's development follows a strategic roadmap:
 
 1. **Prototype Curve Tool** - Python backend + Godot UI
 2. **Physics Core** - Implement forces, load curve data, test in 3D
@@ -66,32 +74,50 @@ The current development roadmap follows these major phases:
 5. **Gameplay Systems** - Add missions, challenges, and assists
 6. **Documentation** - Write user guides, example scenes, and API references
 
-For a detailed timeline and milestones, see :doc:`roadmap`.
+For the complete development timeline, see :doc:`roadmap`.
 
 Contributing
 ===========
 
-Contributions to SimiFlight are welcome! Please follow these guidelines:
+Contributions to SimiFlight are welcome in several areas:
 
-* Create a branch for new features
-* Write tests for new functionality
-* Document your code with comments
-* Submit pull requests with clear descriptions
+* **Aircraft models** - Creating new aircraft with realistic flight characteristics
+* **Flight physics** - Enhancing the aerodynamic model
+* **Terrain systems** - Improving the planetary rendering
+* **Gameplay mechanics** - Developing missions and challenges
+* **Documentation** - Expanding guides and examples
 
-Code Style
-=========
+Development Environment Setup
+===========================
 
-SimiFlight follows these coding standards:
+To set up a development environment for SimiFlight:
 
-* **GDScript** - Follow the `Godot style guide <https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html>`_
-* **C++** - Use the project's ``.clang-format`` file
-* **Python** - Follow PEP 8 style guidelines
+1. Clone the repository with submodules
+2. Install the required dependencies
+3. Build the custom Godot engine
+4. Set up the Python environment with required packages
+5. Import the project in the Godot editor
 
-Documentation Standards
-======================
+.. code-block:: bash
 
-All code should be documented following these principles:
+   # Clone the repository
+   git clone --recursive https://github.com/username/simiflight.git
+   
+   # Install Python dependencies
+   cd simiflight/Python
+   pip install -r requirements.txt
+   
+   # Build custom Godot (see detailed instructions in documentation)
 
-* **Public APIs** - Every public method should have documentation
-* **Examples** - Include usage examples for complex features
-* **Implementation Notes** - Document non-obvious implementation details
+Best Practices
+============
+
+Development follows these best practices:
+
+* **Code style** - Consistent formatting and naming
+* **Documentation** - Comprehensive comments and external docs
+* **Testing** - Unit tests for critical components
+* **Performance** - Regular profiling and optimization
+* **Modular design** - Clean interfaces between components
+
+For more detailed guidance, see `Wikipedia: Best Practice <https://en.wikipedia.org/wiki/Best_practice>`_.

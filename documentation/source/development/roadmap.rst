@@ -2,140 +2,263 @@
 Development Roadmap
 =================
 
-This page outlines the development plan for SimiFlight, including major milestones,
-priorities, and estimated timelines.
+.. _development-roadmap:
 
-Major Phases
-===========
+Overview
+========
 
-Phase 1: Prototype Curve Tool
-----------------------------
+The SimiFlight development roadmap outlines the planned progression of features and capabilities,
+from core physics to gameplay elements and optimization.
 
-**Status**: In Progress
+Phase 1: Foundation
+=================
 
-**Goals**:
-   * Implement Python backend for aerodynamic calculations
-   * Create Godot UI for curve tool
-   * Export aerodynamic data in usable format
-   * Validate calculations against known airfoils
+Curve Tool Development
+--------------------
 
-**Timeline**: Q3 2025
+**Status: Prototype Complete**
 
-**Key Tasks**:
+The first major development milestone focuses on the Curve Tool:
 
-.. list-table::
-   :widths: 10 50 20 20
-   :header-rows: 1
+* **Python backend** for aerodynamic calculations
+  * Implementation of thin airfoil theory
+  * Panel method for 2D potential flow
+  * Stall modeling and corrections
+  
+* **Godot UI** for interactive use
+  * Curve visualization and editing
+  * Aircraft parameter input
+  * Data export for simulation
 
-   * - Task
-     - Description
-     - Status
-     - Priority
-   * - Python Backend
-     - Implement basic lift/drag calculations
-     - In Progress
-     - High
-   * - Simple UI
-     - Create minimal Godot interface
-     - Planned
-     - Medium
-   * - Data Export
-     - Define and implement data format
-     - Not Started
-     - Medium
-   * - Validation
-     - Test against NACA airfoil data
-     - Not Started
-     - High
-
-Phase 2: Physics Core
--------------------
-
-**Status**: Planning
-
-**Goals**:
-   * Implement core flight physics in GDScript
-   * Create test aircraft with simple controls
-   * Load and utilize aerodynamic curve data
-   * Test flight model in simple 3D environment
-
-**Timeline**: Q4 2025
-
-**Dependencies**:
-   * Completion of Curve Tool prototype
-   * Definition of aircraft data format
-
-Phase 3: Spherical World
-----------------------
-
-**Status**: Research
-
-**Goals**:
-   * Implement 64-bit coordinate system
-   * Create floating origin mechanism
-   * Test physics integration with spherical world
-   * Develop basic terrain streaming
-
-**Timeline**: Q1 2026
-
-**Technical Challenges**:
-   * Godot Engine modifications for 64-bit precision
-   * Performance optimizations for coordinate transformations
-   * LOD implementation for planetary scale
-
-Phase 4: Optimization
-------------------
-
-**Status**: Not Started
-
-**Goals**:
-   * Port critical physics components to C++
-   * Profile performance and identify bottlenecks
-   * Implement multi-threading for physics calculations
-   * Optimize terrain rendering and LOD systems
-
-**Timeline**: Q2 2026
-
-Phase 5: Gameplay Systems
-----------------------
-
-**Status**: Conceptual
-
-**Goals**:
-   * Implement mission system
-   * Create challenge framework
-   * Add assist systems for new players
-   * Develop initial gameplay loops
-
-**Timeline**: Q3-Q4 2026
-
-Phase 6: Documentation
--------------------
-
-**Status**: Ongoing
-
-**Goals**:
-   * Complete API reference documentation
-   * Create user guides and tutorials
-   * Document example scenes and usage patterns
-   * Prepare contributor guidelines
-
-**Timeline**: Continuous
-
-Milestone Chart
-=============
-
-.. figure:: ../_static/roadmap_chart.png
-   :alt: Roadmap Timeline
+.. figure:: ../_static/curve_tool_milestone.png
+   :alt: Curve Tool Development
    :align: center
    
-   *SimiFlight development roadmap timeline*
+   *Curve Tool prototype showing lift coefficient curves*
 
-Release Versioning
-================
+Phase 2: Core Physics
+===================
 
-SimiFlight follows semantic versioning:
+Flight Physics Engine
+-------------------
 
-* **0.x**: Development versions (not feature complete)
-* **1.0**: First stable release with core functionality
-* **1.x**: Incremental feature
+**Status: In Progress**
+
+Implementation of the core flight physics system:
+
+* **Four forces model** (lift, drag, weight, thrust)
+  * Force application at multiple control points
+  * Integration with curve data from the Curve Tool
+  * Basic atmospheric model
+  
+* **Control model**
+  * Primary flight controls (ailerons, elevator, rudder)
+  * Secondary controls (flaps, trim)
+  * Simplified engine model
+
+Test Environment
+--------------
+
+Creation of a simplified testing environment:
+
+* **Basic aircraft** with configurable parameters
+* **Flight test world** with flat terrain
+* **Telemetry system** for physics validation
+* **Comparison tools** for real-world data validation
+
+Phase 3: World System
+===================
+
+Spherical World Implementation
+----------------------------
+
+**Status: Planning**
+
+Development of the planetary-scale world system:
+
+* **64-bit coordinate system**
+  * Integration with modified Godot Engine
+  * Position tracking on planetary scale
+  
+* **Floating origin technique**
+  * Dynamic repositioning of simulation origin
+  * Seamless transition across large distances
+  
+* **Terrain systems**
+  * Basic spherical planet geometry
+  * Heightmap-based terrain generation
+  * Dynamic Level of Detail (LOD)
+
+Environmental Systems
+------------------
+
+Basic environmental systems to complement the world:
+
+* **Atmospheric model**
+  * Altitude-based air density and temperature
+  * Basic wind model
+  
+* **Time and lighting**
+  * Day/night cycle
+  * Basic weather conditions
+
+Phase 4: Optimization
+===================
+
+C++ Integration
+------------
+
+**Status: Not Started**
+
+Performance optimization through C++ implementation:
+
+* **GDExtensions** for performance-critical systems
+  * Physics calculations
+  * Terrain management
+  * 64-bit precision mathematics
+  
+* **Multi-threading**
+  * Parallel processing for physics
+  * Background loading for terrain
+
+Profiling and Benchmarking
+-------------------------
+
+Performance analysis and optimization:
+
+* **Identification of bottlenecks**
+* **Memory usage optimization**
+* **Rendering performance improvements**
+* **Load time reduction**
+
+Phase 5: Gameplay
+===============
+
+Gameplay Systems
+-------------
+
+**Status: Conceptual**
+
+Development of core gameplay elements:
+
+* **Aircraft progression**
+  * Multiple aircraft with different characteristics
+  * Customization options
+  
+* **Mission system**
+  * Basic mission framework
+  * Objectives and challenges
+  * Achievement tracking
+
+* **World exploration**
+  * Points of interest
+  * Dynamic events
+  * Navigation aids
+
+User Experience
+-------------
+
+Refinement of the overall user experience:
+
+* **User interface improvements**
+  * HUD options and customization
+  * Camera systems
+  * Control options
+  
+* **Tutorial system**
+  * Learning progression
+  * Interactive guides
+  * Contextual help
+
+Phase 6: Documentation and Release
+================================
+
+Documentation Expansion
+---------------------
+
+**Status: Ongoing**
+
+Comprehensive documentation development:
+
+* **User guides**
+  * Getting started tutorials
+  * Aircraft operation guides
+  * Feature documentation
+  
+* **Developer documentation**
+  * API references
+  * Extension guides
+  * Modding documentation
+
+Release Preparation
+-----------------
+
+Final steps toward initial release:
+
+* **Comprehensive testing**
+  * Performance validation
+  * Compatibility testing
+  * User experience testing
+  
+* **Polishing**
+  * Graphics and sound refinement
+  * UI improvements
+  * Balance adjustments
+
+Long-term Vision
+==============
+
+Beyond the initial roadmap, SimiFlight has several aspirational goals:
+
+* **Advanced weather simulation**
+  * Dynamic weather systems
+  * Effect on flight characteristics
+  
+* **Enhanced terrain**
+  * Procedural detailing
+  * Realistic ecosystems
+  
+* **Multiplayer capabilities**
+  * Cooperative flying
+  * Shared world experiences
+
+* **Content creation tools**
+  * Aircraft designer
+  * Mission editor
+  * Terrain customization
+
+Timeline and Milestones
+=====================
+
+.. list-table:: Development Timeline
+   :header-rows: 1
+   :widths: 20 30 50
+   
+   * - Phase
+     - Target Completion
+     - Key Deliverables
+   * - Foundation
+     - Q2 2023
+     - Curve Tool prototype, initial documentation
+   * - Core Physics
+     - Q4 2023
+     - Basic flight model, test environment
+   * - World System
+     - Q2 2024
+     - Spherical world, basic terrain, floating origin
+   * - Optimization
+     - Q3 2024
+     - C++ physics, performance improvements
+   * - Gameplay
+     - Q1 2025
+     - Missions, progression, enhanced UI
+   * - Documentation & Release
+     - Q3 2025
+     - Initial public release
+
+.. note::
+   This roadmap represents the current development plan and is subject to change as the project evolves.
+
+.. seealso::
+   * :doc:`tools` - Development tools used in SimiFlight
+   * :doc:`structure` - Repository structure information

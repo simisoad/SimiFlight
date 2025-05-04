@@ -27,7 +27,9 @@ suppress_warnings = [
     'rest.underline',  # Diese Zeile unterdrückt Unterstreichungswarnungen
 ]
 
-
+latex_documents = [
+    ('index', 'SimiFlight.tex', 'SimiFlight Documentation', 'Simon', 'manual'),
+]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
