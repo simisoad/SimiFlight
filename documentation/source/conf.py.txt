@@ -14,12 +14,7 @@ release = 'develop'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.viewcode"
-]
-
+extensions = []
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -38,12 +33,4 @@ suppress_warnings = [
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "furo"#'alabaster'
-html_theme_options = {
-    "sidebar_hide_name": False,  # Zeigt den Projektnamen in der Sidebar
-    "navigation_with_keys": True, # Ermöglicht Navigation mit Pfeiltasten
-}
-html_sidebars = {
-    "**": ["sidebar.html"]
-}
-
 html_static_path = ['_static']
