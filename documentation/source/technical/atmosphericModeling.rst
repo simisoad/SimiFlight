@@ -28,90 +28,98 @@ Singleton: WindManager
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
-```gdscript
-class_name WindManager
-var global_wind := Vector3(5, 0, 0)  # default eastward wind
+.. code-block:: gdscript
 
-func get_wind_at(position: Vector3) -> Vector3:
-    return global_wind
-```
+   class_name WindManager
+   var global_wind := Vector3(5, 0, 0)  # default eastward wind
+   
+   func get_wind_at(position: Vector3) -> Vector3:
+       return global_wind
+.. code-block:: ```````````````````
 
-This system allows aircraft to query wind conditions at any position and is future-proof for expansion.
+      
+      This system allows aircraft to query wind conditions at any position and is future-proof for expansion.
+      
+      ---
+      
+      Gusts and Turbulence
+      --------------------
+      
+      
+   .. code-block:: gdscript
+   
+      var gust_timer := 0.0
+      var gust_strength := 0.0
+      
+      func update_gusts(delta):
+          gust_timer -= delta
+          if gust_timer <= 0:
+              gust_strength = randf_range(-2.0, 2.0)
+              gust_timer = randf_range(0.5, 2.0)
+      
+      func get_wind_at(position: Vector3) -> Vector3:
+          update_gusts(get_process_delta_time())
+          return global_wind + Vector3(gust_strength, 0, 0)
 
----
+   
+   ---
+   
+   Thermal Simulation (Volumetric Zones)
+   -------------------------------------
+   
+   
+   Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:
+   
+.. code-block:: gdscript
 
-Gusts and Turbulence
---------------------
+   class ThermicZone:
+       var center: Vector3
+       var radius: float
+       var strength: float
+   
+       func get_vertical_lift_at(pos: Vector3) -> float:
+           var d = center.distance_to(pos)
+           if d > radius:
+               return 0.0
+           return strength * (1.0 - (d / radius))
+.. code-block:: ```````````````````````````````````````````
 
-
-```gdscript
-var gust_timer := 0.0
-var gust_strength := 0.0
-
-func update_gusts(delta):
-    gust_timer -= delta
-    if gust_timer <= 0:
-        gust_strength = randf_range(-2.0, 2.0)
-        gust_timer = randf_range(0.5, 2.0)
-
-func get_wind_at(position: Vector3) -> Vector3:
-    update_gusts(get_process_delta_time())
-    return global_wind + Vector3(gust_strength, 0, 0)
-```
-
----
-
-Thermal Simulation (Volumetric Zones)
--------------------------------------
-
-
-Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:
-
-```gdscript
-class ThermicZone:
-    var center: Vector3
-    var radius: float
-    var strength: float
-
-    func get_vertical_lift_at(pos: Vector3) -> float:
-        var d = center.distance_to(pos)
-        if d > radius:
-            return 0.0
-        return strength * (1.0 - (d / radius))
-```
-
-Aircraft query nearby thermal zones and apply resulting vertical force.
-
-Future enhancement: Automatically generate thermals based on terrain slope, sun angle, or elevation.
-
----
-
-Terrain and Hang Lift (Advanced)
---------------------------------
-
-
-Orographic lift occurs when wind is forced upwards by terrain:
-
+      
+      Aircraft query nearby thermal zones and apply resulting vertical force.
+      
+      Future enhancement: Automatically generate thermals based on terrain slope, sun angle, or elevation.
+      
+      ---
+      
+      Terrain and Hang Lift (Advanced)
+      --------------------------------
+      
+      
+      Orographic lift occurs when wind is forced upwards by terrain:
+      
 * Requires terrain slope and wind direction analysis
+
 * Can be approximated using local surface normals and comparing them with wind vectors
-
-Planned as a future extension.
-
----
-
-Visualization and Debugging
----------------------------
-
-
-To test and visualize airflow:
-
+      
+      Planned as a future extension.
+      
+      ---
+      
+      Visualization and Debugging
+      ---------------------------
+      
+      
+      To test and visualize airflow:
+      
 * Use particle systems or vector arrows to show wind fields
+
 * Enable toggleable debug drawing for thermal zones
+      
+      ---
+      
+      Conclusion
+      ----------
+      
+      
+      The atmospheric simulation in SimiFlight should grow organically with project needs. Starting with a solid API (`WindManager`) allows early integration of wind effects, and opens the door for realism upgrades such as thermals and mountain updrafts without reworking core systems.
 
----
-
-Conclusion
-----------
-
-
-The atmospheric simulation in SimiFlight should grow organically with project needs. Starting with a solid API (`WindManager`) allows early integration of wind effects, and opens the door for realism upgrades such as thermals and mountain updrafts without reworking core systems.

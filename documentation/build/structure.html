@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goals.html">Goals</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="technical/world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="technical/physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -262,32 +273,32 @@
           <section id="simiflight-sphinx-documentation-structure">
 <h1>SimiFlight Sphinx Documentation Structure<a class="headerlink" href="#simiflight-sphinx-documentation-structure" title="Link to this heading">¶</a></h1>
 <p>Here’s how your Sphinx documentation structure could look:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">simiflight-docs/</span>
-<span class="pre">├──</span> <span class="pre">source/</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">_static/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Static</span> <span class="pre">files</span> <span class="pre">(CSS,</span> <span class="pre">images)</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">_templates/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Custom</span> <span class="pre">HTML</span> <span class="pre">templates</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">index.rst</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Main</span> <span class="pre">entry</span> <span class="pre">point</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">overview.rst</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Project</span> <span class="pre">overview</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">motivation.rst</span>&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Personal</span> <span class="pre">motivation</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">goals.rst</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Project</span> <span class="pre">goals</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">technical/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Technical</span> <span class="pre">concepts</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">index.rst</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Technical</span> <span class="pre">concepts</span> <span class="pre">index</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">world.rst</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Hybrid</span> <span class="pre">precision</span> <span class="pre">world</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">godot.rst</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Godot</span> <span class="pre">engine</span> <span class="pre">modifications</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">physics.rst</span>&#160;&#160; <span class="pre">#</span> <span class="pre">Flight</span> <span class="pre">physics</span> <span class="pre">engine</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">curve.rst</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Curve</span> <span class="pre">tool</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">integration.rst</span> <span class="pre">#</span> <span class="pre">Godot-Python</span> <span class="pre">integration</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">development/</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Development</span> <span class="pre">information</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">index.rst</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Development</span> <span class="pre">index</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">tools.rst</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Development</span> <span class="pre">tools</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">structure.rst</span> <span class="pre">#</span> <span class="pre">Repository</span> <span class="pre">structure</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">roadmap.rst</span>&#160;&#160; <span class="pre">#</span> <span class="pre">Development</span> <span class="pre">roadmap</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">├──</span> <span class="pre">inspirations.rst</span>&#160; <span class="pre">#</span> <span class="pre">Project</span> <span class="pre">inspirations</span>
-<span class="pre">│</span>&#160;&#160; <span class="pre">└──</span> <span class="pre">best_practices.rst</span> <span class="pre">#</span> <span class="pre">Best</span> <span class="pre">practices</span>
-<span class="pre">├──</span> <span class="pre">Makefile</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">For</span> <span class="pre">building</span> <span class="pre">documentation</span> <span class="pre">on</span> <span class="pre">Unix</span>
-<span class="pre">└──</span> <span class="pre">make.bat</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">For</span> <span class="pre">building</span> <span class="pre">documentation</span> <span class="pre">on</span> <span class="pre">Windows</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>simiflight-docs/
+├── source/
+│   ├── _static/          # Static files (CSS, images)
+│   ├── _templates/       # Custom HTML templates
+│   ├── index.rst         # Main entry point
+│   ├── overview.rst      # Project overview
+│   ├── motivation.rst    # Personal motivation
+│   ├── goals.rst         # Project goals
+│   ├── technical/        # Technical concepts
+│   │   ├── index.rst     # Technical concepts index
+│   │   ├── world.rst     # Hybrid precision world
+│   │   ├── godot.rst     # Godot engine modifications
+│   │   ├── physics.rst   # Flight physics engine
+│   │   ├── curve.rst     # Curve tool
+│   │   └── integration.rst # Godot-Python integration
+│   ├── development/      # Development information
+│   │   ├── index.rst     # Development index
+│   │   ├── tools.rst     # Development tools
+│   │   ├── structure.rst # Repository structure
+│   │   └── roadmap.rst   # Development roadmap
+│   ├── inspirations.rst  # Project inspirations
+│   └── best_practices.rst # Best practices
+├── Makefile              # For building documentation on Unix
+└── make.bat              # For building documentation on Windows
+</pre></div>
+</div>
 <p>To set up this structure:</p>
 <ol class="arabic simple">
 <li><p>Install Sphinx: <cite>pip install sphinx sphinx_rtd_theme</cite></p></li>

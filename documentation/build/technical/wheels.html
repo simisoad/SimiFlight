@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -282,53 +293,58 @@
 </section>
 <section id="wheelsuspension-gd">
 <h1>WheelSuspension.gd<a class="headerlink" href="#wheelsuspension-gd" title="Link to this heading">¶</a></h1>
-<dl>
-<dt><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></dt><dd><blockquote>
-<div><p>extends Node3D
-class_name WheelSuspension</p>
-<p>&#64;export var suspension_length := 0.5  # maximum spring extension (m)
-&#64;export var spring_strength := 20000.0  # spring constant (N/m)
-&#64;export var damping := 4000.0  # damping force (N/(m/s))
-&#64;export var wheel_radius := 0.3
-&#64;export var friction := 1.5  # surface friction coefficient
-&#64;export var rotate_wheel_visual := true</p>
-<p>&#64;onready var raycast = $RayCast3D
-&#64;onready var wheel_mesh = $WheelMesh  # for optional wheel rotation</p>
-<p>var compression := 0.0
-var previous_compression := 0.0
-var current_rotation := 0.0</p>
-<p>func _physics_process(delta):
-if not raycast.is_colliding():
-previous_compression = compression
-compression = 0.0
-return</p>
-</div></blockquote>
-<p>var contact_normal = raycast.get_collision_normal()
-var local_velocity = to_local(get_parent().get_linear_velocity_at_position(global_position))</p>
-<p># Suspension force
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> extends Node3D
+ class\_name WheelSuspension
+
+ @export var suspension\_length := 0.5  # maximum spring extension (m)
+ @export var spring\_strength := 20000.0  # spring constant (N/m)
+ @export var damping := 4000.0  # damping force (N/(m/s))
+ @export var wheel\_radius := 0.3
+ @export var friction := 1.5  # surface friction coefficient
+ @export var rotate\_wheel\_visual := true
+
+ @onready var raycast = \$RayCast3D
+ @onready var wheel\_mesh = \$WheelMesh  # for optional wheel rotation
+
+ var compression := 0.0
+ var previous\_compression := 0.0
+ var current\_rotation := 0.0
+
+ func \_physics\_process(delta):
+ if not raycast.is\_colliding():
+ previous\_compression = compression
+ compression = 0.0
+ return
+
+
+var contact_normal = raycast.get_collision_normal()
+var local_velocity = to_local(get_parent().get_linear_velocity_at_position(global_position))
+
+# Suspension force
 var distance = raycast.length - raycast.get_collision_distance()
 compression = clamp(distance, 0.0, suspension_length)
 var compression_velocity = (compression - previous_compression) / delta
-previous_compression = compression</p>
-<p>var spring_force = spring_strength * compression
+previous_compression = compression
+
+var spring_force = spring_strength * compression
 var damping_force = damping * compression_velocity
-var total_force = (spring_force - damping_force) * contact_normal</p>
-<p># Lateral friction (simplified)
+var total_force = (spring_force - damping_force) * contact_normal
+
+# Lateral friction (simplified)
 var lateral_velocity = local_velocity.x
 var friction_force = -lateral_velocity * friction * contact_normal.length()
-var total_force_global = -contact_normal * total_force + transform.basis.x * friction_force</p>
-<p># Apply force to parent (aircraft)
-get_parent().apply_central_force(total_force_global)</p>
-<p># Visual wheel rotation
-if rotate_wheel_visual:</p>
-<blockquote>
-<div><p>var forward_speed = -local_velocity.z
-current_rotation += (forward_speed / wheel_radius) * delta
-wheel_mesh.rotation.x = current_rotation</p>
-</div></blockquote>
-</dd>
-</dl>
-<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+var total_force_global = -contact_normal * total_force + transform.basis.x * friction_force
+
+# Apply force to parent (aircraft)
+get_parent().apply_central_force(total_force_global)
+
+# Visual wheel rotation
+if rotate_wheel_visual:
+    var forward_speed = -local_velocity.z
+    current_rotation += (forward_speed / wheel_radius) * delta
+    wheel_mesh.rotation.x = current_rotation
+</pre></div>
+</div>
 <section id="scene-structure">
 <h2>Scene Structure<a class="headerlink" href="#scene-structure" title="Link to this heading">¶</a></h2>
 <p>::</p>

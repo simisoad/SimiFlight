@@ -3,18 +3,18 @@ Motivation
 ==========
 
 Personal Background
-==================
+===================
 
 The SimiFlight project stems from a lifelong passion for aviation and simulation technology.
 
 Name Origin
-----------
+-----------
 
 The name "SimiFlight" derives from "Simi," which is Luzerner dialect for "Simon" - 
 reflecting the personal connection to the project's creator.
 
 Inspiration
-----------
+-----------
 
 SimiFlight draws inspiration from several sources:
 
@@ -23,7 +23,7 @@ SimiFlight draws inspiration from several sources:
 * A desire to create a simulator that balances realism with accessibility
 
 Physics Preference
------------------
+------------------
 
 The project's approach to physics reflects a specific philosophy:
 
@@ -32,7 +32,7 @@ The project's approach to physics reflects a specific philosophy:
 * Creating systems that are authentic but approachable
 
 Spherical World Model
---------------------
+---------------------
 
 A core principle of SimiFlight is the implementation of a spherical world model:
 
@@ -47,7 +47,7 @@ A core principle of SimiFlight is the implementation of a spherical world model:
    *Conceptual illustration of SimiFlight's spherical world model*
 
 Project Goals
-============
+=============
 
 SimiFlight aims to create an experience that:
 

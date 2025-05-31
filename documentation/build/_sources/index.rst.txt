@@ -28,14 +28,14 @@ simulator that blends realistic physics with sandbox-style exploration.
    roadmap
 
 Project Vision
-=============
+==============
 
 SimiFlight aims to create a flight simulator that balances physical realism with accessible
 gameplay, all built on a scientifically accurate spherical world model. Our approach focuses
 on realistic aerodynamics without overwhelming users with complex cockpit procedures.
 
 Quick Links
-==========
+===========
 
 * :ref:`Repository Structure <repository-structure>`
 * :ref:`Development Roadmap <development-roadmap>`
@@ -43,7 +43,7 @@ Quick Links
 * :ref:`Curve Tool <curve-tool>`
 
 Indices and tables
-=================
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`

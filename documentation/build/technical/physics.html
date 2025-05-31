@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Atmospheric Modeling Concepts" href="atmosphericModeling.html" /><link rel="prev" title="Hybrid Precision World Model" href="world.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Atmospheric Modeling Concepts" href="atmosphericModeling.html" /><link rel="prev" title="Core Concept" href="world.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/physics.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>Flight Physics Engine - SimiFlightDocumentation develop documentation</title>
+        <title>Core Forces - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -253,18 +264,16 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="flight-physics-engine">
-<h1>Flight Physics Engine<a class="headerlink" href="#flight-physics-engine" title="Link to this heading">¶</a></h1>
-<p>The Flight Physics Engine is the heart of SimiFlight’s simulation capabilities,
+          <p>The Flight Physics Engine is the heart of SimiFlight’s simulation capabilities,
 providing realistic aerodynamic behavior based on physical principles.</p>
 <section id="core-forces">
-<h2>Core Forces<a class="headerlink" href="#core-forces" title="Link to this heading">¶</a></h2>
+<h1>Core Forces<a class="headerlink" href="#core-forces" title="Link to this heading">¶</a></h1>
 <p>The physics engine models four fundamental forces:</p>
 <ul class="simple">
 <li><p><strong>Lift</strong> - Perpendicular force generated by airflow over airfoils</p></li>
@@ -280,9 +289,9 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </figure>
 </section>
 <section id="physics-model">
-<h2>Physics Model<a class="headerlink" href="#physics-model" title="Link to this heading">¶</a></h2>
+<h1>Physics Model<a class="headerlink" href="#physics-model" title="Link to this heading">¶</a></h1>
 <section id="implementation-approach">
-<h3>Implementation Approach<a class="headerlink" href="#implementation-approach" title="Link to this heading">¶</a></h3>
+<h2>Implementation Approach<a class="headerlink" href="#implementation-approach" title="Link to this heading">¶</a></h2>
 <p>The flight physics system is implemented in layers:</p>
 <ol class="arabic simple">
 <li><p><strong>Prototype layer</strong> - Initial implementation in GDScript</p></li>
@@ -291,7 +300,7 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </ol>
 </section>
 <section id="multi-point-force-application">
-<h3>Multi-point Force Application<a class="headerlink" href="#multi-point-force-application" title="Link to this heading">¶</a></h3>
+<h2>Multi-point Force Application<a class="headerlink" href="#multi-point-force-application" title="Link to this heading">¶</a></h2>
 <p>Forces are applied at specific control points:</p>
 <ul class="simple">
 <li><p><strong>Wings</strong> - Main lifting surfaces with variable control points</p></li>
@@ -308,9 +317,9 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </section>
 </section>
 <section id="aerodynamic-data">
-<h2>Aerodynamic Data<a class="headerlink" href="#aerodynamic-data" title="Link to this heading">¶</a></h2>
+<h1>Aerodynamic Data<a class="headerlink" href="#aerodynamic-data" title="Link to this heading">¶</a></h1>
 <section id="curve-based-approach">
-<h3>Curve-Based Approach<a class="headerlink" href="#curve-based-approach" title="Link to this heading">¶</a></h3>
+<h2>Curve-Based Approach<a class="headerlink" href="#curve-based-approach" title="Link to this heading">¶</a></h2>
 <p>SimiFlight uses precomputed aerodynamic tables:</p>
 <ul class="simple">
 <li><p><strong>Lift coefficients</strong> by angle of attack and Mach number</p></li>
@@ -326,7 +335,7 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </figure>
 </section>
 <section id="special-conditions">
-<h3>Special Conditions<a class="headerlink" href="#special-conditions" title="Link to this heading">¶</a></h3>
+<h2>Special Conditions<a class="headerlink" href="#special-conditions" title="Link to this heading">¶</a></h2>
 <p>The physics model accounts for special flight conditions:</p>
 <ul class="simple">
 <li><p><strong>Stall</strong> - Separation of airflow at high angles of attack</p></li>
@@ -337,9 +346,9 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </section>
 </section>
 <section id="performance-optimization">
-<h2>Performance Optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading">¶</a></h2>
+<h1>Performance Optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading">¶</a></h1>
 <section id="multi-threading">
-<h3>Multi-threading<a class="headerlink" href="#multi-threading" title="Link to this heading">¶</a></h3>
+<h2>Multi-threading<a class="headerlink" href="#multi-threading" title="Link to this heading">¶</a></h2>
 <p>The physics engine utilizes multi-threading for performance:</p>
 <ul class="simple">
 <li><p><strong>Force calculations</strong> distributed across worker threads</p></li>
@@ -358,7 +367,7 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </section>
 </section>
 <section id="integration-with-curve-tool">
-<h2>Integration with Curve Tool<a class="headerlink" href="#integration-with-curve-tool" title="Link to this heading">¶</a></h2>
+<h1>Integration with Curve Tool<a class="headerlink" href="#integration-with-curve-tool" title="Link to this heading">¶</a></h1>
 <p>The physics engine consumes data from the <span class="xref std std-doc">curve</span> to model aerodynamic behaviors:</p>
 <ul class="simple">
 <li><p><strong>Load curves</strong> at aircraft initialization</p></li>
@@ -367,7 +376,7 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </ul>
 </section>
 <section id="code-example">
-<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h2>
+<h1>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h1>
 <div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simplified lift calculation in GDScript</span>
 <span class="k">func</span><span class="w"> </span><span class="n">calculate_lift</span><span class="p">(</span><span class="n">airfoil_data</span><span class="p">,</span><span class="w"> </span><span class="n">angle_of_attack</span><span class="p">,</span><span class="w"> </span><span class="n">airspeed</span><span class="p">,</span><span class="w"> </span><span class="n">air_density</span><span class="p">,</span><span class="w"> </span><span class="n">wing_area</span><span class="p">):</span>
 <span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">lift_coefficient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">airfoil_data</span><span class="o">.</span><span class="n">get_lift_coefficient</span><span class="p">(</span><span class="n">angle_of_attack</span><span class="p">)</span>
@@ -378,12 +387,11 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </div>
 </section>
 <section id="related-technical-concepts">
-<h2>Related Technical Concepts<a class="headerlink" href="#related-technical-concepts" title="Link to this heading">¶</a></h2>
+<h1>Related Technical Concepts<a class="headerlink" href="#related-technical-concepts" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p><span class="xref std std-doc">curve</span> - Generation of aerodynamic data</p></li>
 <li><p><span class="xref std std-doc">integration</span> - Connection with Python aerodynamic tools</p></li>
 </ul>
-</section>
 </section>
 
         </article>
@@ -407,7 +415,7 @@ providing realistic aerodynamic behavior based on physical principles.</p>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Hybrid Precision World Model</div>
+                <div class="title">Core Concept</div>
                 
               </div>
             </a>
@@ -429,44 +437,8 @@ providing realistic aerodynamic behavior based on physical principles.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Flight Physics Engine</a><ul>
-<li><a class="reference internal" href="#core-forces">Core Forces</a></li>
-<li><a class="reference internal" href="#physics-model">Physics Model</a><ul>
-<li><a class="reference internal" href="#implementation-approach">Implementation Approach</a></li>
-<li><a class="reference internal" href="#multi-point-force-application">Multi-point Force Application</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#aerodynamic-data">Aerodynamic Data</a><ul>
-<li><a class="reference internal" href="#curve-based-approach">Curve-Based Approach</a></li>
-<li><a class="reference internal" href="#special-conditions">Special Conditions</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#performance-optimization">Performance Optimization</a><ul>
-<li><a class="reference internal" href="#multi-threading">Multi-threading</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#integration-with-curve-tool">Integration with Curve Tool</a></li>
-<li><a class="reference internal" href="#code-example">Code Example</a></li>
-<li><a class="reference internal" href="#related-technical-concepts">Related Technical Concepts</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

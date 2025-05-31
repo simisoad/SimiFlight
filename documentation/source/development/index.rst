@@ -88,7 +88,7 @@ SimiFlight follows these coding standards:
 * **Python** - Follow PEP 8 style guidelines
 
 Documentation Standards
-======================
+=======================
 
 All code should be documented following these principles:
 

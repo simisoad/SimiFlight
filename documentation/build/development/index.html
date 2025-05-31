@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../technical/world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -264,12 +275,17 @@
 <p>This section covers information relevant to developers working on the SimiFlight project.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Development Roadmap</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#major-phases">Major Phases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#milestone-chart">Milestone Chart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="roadmap.html#release-versioning">Release Versioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Major Phases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-1-prototype-curve-tool">Phase 1: Prototype Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-2-physics-core">Phase 2: Physics Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-3-spherical-world">Phase 3: Spherical World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-4-optimization">Phase 4: Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-5-gameplay-systems">Phase 5: Gameplay Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#phase-6-documentation">Phase 6: Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html#milestone-chart">Milestone Chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html#release-versioning">Release Versioning</a></li>
 </ul>
 </div>
 <section id="development-philosophy">
@@ -319,7 +335,7 @@
 <li><p><strong>Gameplay Systems</strong> - Add missions, challenges, and assists</p></li>
 <li><p><strong>Documentation</strong> - Write user guides, example scenes, and API references</p></li>
 </ol>
-<p>For a detailed timeline and milestones, see <a class="reference internal" href="roadmap.html"><span class="doc">Development Roadmap</span></a>.</p>
+<p>For a detailed timeline and milestones, see <a class="reference internal" href="roadmap.html"><span class="doc">Major Phases</span></a>.</p>
 </section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>

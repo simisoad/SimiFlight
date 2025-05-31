@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Insights on Large World Simulation and Precision for SimiFlight" href="simiflight_world_precision_insights.html" /><link rel="prev" title="Flight Physics Engine" href="physics.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Insights on Large World Simulation and Precision for SimiFlight" href="simiflight_world_precision_insights.html" /><link rel="prev" title="Core Forces" href="physics.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/atmosphericModeling.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -280,84 +291,89 @@
 <p>The wind model should be implemented as a dedicated and modular system, for example:</p>
 <section id="singleton-windmanager">
 <h3>Singleton: WindManager<a class="headerlink" href="#singleton-windmanager" title="Link to this heading">¶</a></h3>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>gdscript
-class_name WindManager
-var global_wind := Vector3(5, 0, 0)  # default eastward wind</p>
-<dl class="simple">
-<dt>func get_wind_at(position: Vector3) -&gt; Vector3:</dt><dd><p>return global_wind</p>
-</dd>
-</dl>
-<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
-<p>This system allows aircraft to query wind conditions at any position and is future-proof for expansion.</p>
-<p>—</p>
-</section>
-</section>
-<section id="gusts-and-turbulence">
-<h2>Gusts and Turbulence<a class="headerlink" href="#gusts-and-turbulence" title="Link to this heading">¶</a></h2>
-<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>gdscript
-var gust_timer := 0.0
-var gust_strength := 0.0</p>
-<dl>
-<dt>func update_gusts(delta):</dt><dd><p>gust_timer -= delta
-if gust_timer &lt;= 0:</p>
-<blockquote>
-<div><p>gust_strength = randf_range(-2.0, 2.0)
-gust_timer = randf_range(0.5, 2.0)</p>
-</div></blockquote>
-</dd>
-<dt>func get_wind_at(position: Vector3) -&gt; Vector3:</dt><dd><p>update_gusts(get_process_delta_time())
-return global_wind + Vector3(gust_strength, 0, 0)</p>
-</dd>
-</dl>
-<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
-<p>—</p>
-</section>
-<section id="thermal-simulation-volumetric-zones">
-<h2>Thermal Simulation (Volumetric Zones)<a class="headerlink" href="#thermal-simulation-volumetric-zones" title="Link to this heading">¶</a></h2>
-<p>Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:</p>
-<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>gdscript
-class ThermicZone:</p>
-<blockquote>
-<div><p>var center: Vector3
-var radius: float
-var strength: float</p>
-<dl>
-<dt>func get_vertical_lift_at(pos: Vector3) -&gt; float:</dt><dd><p>var d = center.distance_to(pos)
-if d &gt; radius:</p>
-<blockquote>
-<div><p>return 0.0</p>
-</div></blockquote>
-<p>return strength * (1.0 - (d / radius))</p>
-</dd>
-</dl>
-</div></blockquote>
-<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
-<p>Aircraft query nearby thermal zones and apply resulting vertical force.</p>
-<p>Future enhancement: Automatically generate thermals based on terrain slope, sun angle, or elevation.</p>
-<p>—</p>
-</section>
-<section id="terrain-and-hang-lift-advanced">
-<h2>Terrain and Hang Lift (Advanced)<a class="headerlink" href="#terrain-and-hang-lift-advanced" title="Link to this heading">¶</a></h2>
-<p>Orographic lift occurs when wind is forced upwards by terrain:</p>
-<ul class="simple">
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="k">class_name</span><span class="w"> </span><span class="n">WindManager</span>
+<span class="k">var</span><span class="w"> </span><span class="n">global_wind</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="c1"># default eastward wind</span>
+
+<span class="k">func</span><span class="w"> </span><span class="n">get_wind_at</span><span class="p">(</span><span class="n">position</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">:</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">global_wind</span>
+</pre></div>
+</div>
+<div class="highlight-``````````````````` notranslate"><div class="highlight"><pre><span></span>   This system allows aircraft to query wind conditions at any position and is future-proof for expansion.
+
+   ---
+
+   Gusts and Turbulence
+   --------------------
+
+
+.. code-block:: gdscript
+
+   var gust_timer := 0.0
+   var gust_strength := 0.0
+
+   func update_gusts(delta):
+       gust_timer -= delta
+       if gust_timer &lt;= 0:
+           gust_strength = randf_range(-2.0, 2.0)
+           gust_timer = randf_range(0.5, 2.0)
+
+   func get_wind_at(position: Vector3) -&gt; Vector3:
+       update_gusts(get_process_delta_time())
+       return global_wind + Vector3(gust_strength, 0, 0)
+
+
+---
+
+Thermal Simulation (Volumetric Zones)
+-------------------------------------
+
+
+Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:
+</pre></div>
+</div>
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="n">ThermicZone</span><span class="p">:</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">center</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">Vector3</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">radius</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">strength</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span>
+
+<span class="w">    </span><span class="k">func</span><span class="w"> </span><span class="n">get_vertical_lift_at</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">:</span>
+<span class="w">        </span><span class="k">var</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">center</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">radius</span><span class="p">:</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">strength</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">radius</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-``````````````````````````````````````````` notranslate"><div class="highlight"><pre><span></span>Aircraft query nearby thermal zones and apply resulting vertical force.
+
+Future enhancement: Automatically generate thermals based on terrain slope, sun angle, or elevation.
+
+---
+
+Terrain and Hang Lift (Advanced)
+--------------------------------
+
+
+Orographic lift occurs when wind is forced upwards by terrain:
+</pre></div>
+</div>
+<ul>
 <li><p>Requires terrain slope and wind direction analysis</p></li>
-<li><p>Can be approximated using local surface normals and comparing them with wind vectors</p></li>
-</ul>
-<p>Planned as a future extension.</p>
+<li><p>Can be approximated using local surface normals and comparing them with wind vectors</p>
+<blockquote>
+<div><p>Planned as a future extension.</p>
 <p>—</p>
-</section>
-<section id="visualization-and-debugging">
-<h2>Visualization and Debugging<a class="headerlink" href="#visualization-and-debugging" title="Link to this heading">¶</a></h2>
 <p>To test and visualize airflow:</p>
-<ul class="simple">
+</div></blockquote>
+</li>
 <li><p>Use particle systems or vector arrows to show wind fields</p></li>
-<li><p>Enable toggleable debug drawing for thermal zones</p></li>
-</ul>
-<p>—</p>
-</section>
-<section id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
+<li><p>Enable toggleable debug drawing for thermal zones</p>
+<blockquote>
+<div><p>—</p>
 <p>The atmospheric simulation in SimiFlight should grow organically with project needs. Starting with a solid API (<cite>WindManager</cite>) allows early integration of wind effects, and opens the door for realism upgrades such as thermals and mountain updrafts without reworking core systems.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -382,7 +398,7 @@ if d &gt; radius:</p>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Flight Physics Engine</div>
+                <div class="title">Core Forces</div>
                 
               </div>
             </a>
@@ -422,11 +438,6 @@ if d &gt; radius:</p>
 <li><a class="reference internal" href="#singleton-windmanager">Singleton: WindManager</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#gusts-and-turbulence">Gusts and Turbulence</a></li>
-<li><a class="reference internal" href="#thermal-simulation-volumetric-zones">Thermal Simulation (Volumetric Zones)</a></li>
-<li><a class="reference internal" href="#terrain-and-hang-lift-advanced">Terrain and Hang Lift (Advanced)</a></li>
-<li><a class="reference internal" href="#visualization-and-debugging">Visualization and Debugging</a></li>
-<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
 </ul>
 </li>
 </ul>

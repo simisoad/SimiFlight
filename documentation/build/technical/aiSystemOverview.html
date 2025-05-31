@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -278,17 +289,13 @@
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
-[ PilotAI ]         ← High-level logic (objectives, combat, racing)</p>
-<blockquote>
-<div><p>↓</p>
-</div></blockquote>
-<dl class="simple">
-<dt>[ FlightBrain ]     ← Low-level flight controller (heading, pitch, roll, throttle)</dt><dd><p>↓</p>
-</dd>
-</dl>
-<p>[ Aircraft Model ]  ← Physics engine + aerodynamics
-<a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[ PilotAI ]         ← High-level logic (objectives, combat, racing)
+     ↓
+[ FlightBrain ]     ← Low-level flight controller (heading, pitch, roll, throttle)
+     ↓
+[ Aircraft Model ]  ← Physics engine + aerodynamics
+</pre></div>
+</div>
 <ul class="simple">
 <li><p><strong>PilotAI</strong>: Controls strategic/tactical decisions.</p></li>
 <li><p><strong>FlightBrain</strong>: Converts intentions into physical control surface changes.</p></li>

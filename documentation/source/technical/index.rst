@@ -23,7 +23,7 @@ SimiFlight implements several advanced technical concepts to achieve its goals:
 .. _hybrid-precision-world:
 
 Hybrid Precision World
----------------------
+----------------------
 
 A dual-coordinate system approach that enables planetary-scale simulation:
 
@@ -34,7 +34,7 @@ A dual-coordinate system approach that enables planetary-scale simulation:
 .. _godot-modifications:
 
 Godot Engine Modifications
--------------------------
+--------------------------
 
 Customizations to the Godot Engine to support SimiFlight's requirements:
 
@@ -45,7 +45,7 @@ Customizations to the Godot Engine to support SimiFlight's requirements:
 .. _flight-physics:
 
 Flight Physics Engine
--------------------
+---------------------
 
 A sophisticated physics system that models realistic flight:
 
@@ -56,7 +56,7 @@ A sophisticated physics system that models realistic flight:
 .. _curve-tool:
 
 Curve Tool
----------
+----------
 
 A specialized tool for generating aerodynamic data:
 
@@ -67,7 +67,7 @@ A specialized tool for generating aerodynamic data:
 .. _godot-python:
 
 Godot-Python Integration
-----------------------
+------------------------
 
 Integration between Godot and Python for enhanced functionality:
 
@@ -76,7 +76,7 @@ Integration between Godot and Python for enhanced functionality:
 * Aerodynamic modeling through Python libraries
 
 Technical Implementation
-=======================
+========================
 
 The technical implementation of SimiFlight follows these principles:
 

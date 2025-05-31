@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -283,108 +294,103 @@ The steering effect should not rotate the aircraft directly, but instead come fr
 </section>
 <section id="gdscript-outline">
 <h3>GDScript Outline<a class="headerlink" href="#gdscript-outline" title="Link to this heading">¶</a></h3>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>gdscript
-&#64;export var is_steerable := false
-&#64;export var max_steering_angle := 25.0  # degrees
-var steering_input := 0.0  # -1 = left, 1 = right</p>
-<dl>
-<dt>func set_steering_input(value: float):</dt><dd><p>steering_input = clamp(value, -1.0, 1.0)</p>
-</dd>
-<dt>func _physics_process(delta):</dt><dd><dl class="simple">
-<dt>if not raycast.is_colliding():</dt><dd><p>return</p>
-</dd>
-</dl>
-<p>var steer_angle_rad = deg_to_rad(steering_input * max_steering_angle)
-var forward_dir = -transform.basis.z
-var steer_dir = forward_dir.rotated(Vector3.UP, steer_angle_rad)</p>
-<p>var local_velocity = to_local(get_parent().get_linear_velocity_at_position(global_position))</p>
-<p>var lateral_dir = steer_dir.cross(Vector3.UP).normalized()
-var lateral_speed = local_velocity.dot(lateral_dir)</p>
-<p>var side_force = -lateral_speed * friction
-var total_force = lateral_dir * side_force</p>
-<p>get_parent().apply_central_force(total_force)</p>
-</dd>
-</dl>
-<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
-</section>
-<section id="notes">
-<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h3>
-<ul class="simple">
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="err">@</span><span class="k">export</span><span class="w"> </span><span class="k">var</span><span class="w"> </span><span class="n">is_steerable</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="bp">false</span>
+<span class="err">@</span><span class="k">export</span><span class="w"> </span><span class="k">var</span><span class="w"> </span><span class="n">max_steering_angle</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mf">25.0</span><span class="w">  </span><span class="c1"># degrees</span>
+<span class="k">var</span><span class="w"> </span><span class="n">steering_input</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w">  </span><span class="c1"># -1 = left, 1 = right</span>
+
+<span class="k">func</span><span class="w"> </span><span class="n">set_steering_input</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">):</span>
+<span class="w">    </span><span class="n">steering_input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">clamp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="k">func</span><span class="w"> </span><span class="n">_physics_process</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">raycast</span><span class="o">.</span><span class="n">is_colliding</span><span class="p">():</span>
+<span class="w">        </span><span class="k">return</span>
+
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">steer_angle_rad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">steering_input</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_steering_angle</span><span class="p">)</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">forward_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">transform</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">z</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">steer_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">forward_dir</span><span class="o">.</span><span class="n">rotated</span><span class="p">(</span><span class="nb nb-Type">Vector3</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span><span class="w"> </span><span class="n">steer_angle_rad</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">local_velocity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">to_local</span><span class="p">(</span><span class="n">get_parent</span><span class="p">()</span><span class="o">.</span><span class="n">get_linear_velocity_at_position</span><span class="p">(</span><span class="n">global_position</span><span class="p">))</span>
+
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">lateral_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">steer_dir</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="nb nb-Type">Vector3</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">lateral_speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">local_velocity</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lateral_dir</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">side_force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">lateral_speed</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">friction</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">total_force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lateral_dir</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">side_force</span>
+
+<span class="w">    </span><span class="n">get_parent</span><span class="p">()</span><span class="o">.</span><span class="n">apply_central_force</span><span class="p">(</span><span class="n">total_force</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-`````````````````````````````````````````````` notranslate"><div class="highlight"><pre><span></span>Notes
+^^^^^
+</pre></div>
+</div>
+<ul>
 <li><p>Use local velocity at the wheel point to determine real effect</p></li>
 <li><p>Add forward spring force as described in <cite>WheelSuspension</cite></p></li>
-<li><p>Visual rotation of wheel mesh can reflect steering angle</p></li>
-</ul>
-<p>—</p>
-</section>
-</section>
-<section id="part-2-dynamic-lift-point-for-delta-wings">
-<h2>Part 2: Dynamic Lift Point for Delta Wings<a class="headerlink" href="#part-2-dynamic-lift-point-for-delta-wings" title="Link to this heading">¶</a></h2>
+<li><p>Visual rotation of wheel mesh can reflect steering angle</p>
+<blockquote>
+<div><blockquote>
+<div><p>—</p>
 <p><strong>Goal</strong>: Model realistic lift behavior for delta wings and other advanced geometries.</p>
 <p><strong>Problem</strong>: With delta wings, the aerodynamic center (lift point) shifts depending on angle of attack (Alpha), which affects pitch stability.</p>
-<section id="strategy-dynamic-center-of-pressure">
-<h3>Strategy: Dynamic Center of Pressure<a class="headerlink" href="#strategy-dynamic-center-of-pressure" title="Link to this heading">¶</a></h3>
 <p>Calculate the center of lift based on a formula or curve that shifts with Alpha:</p>
-<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>gdscript
-func get_cop_offset(alpha_deg: float) -&gt; float:</p>
-<blockquote>
-<div><p>return clamp(0.25 + 0.0015 * alpha_deg, 0.25, 0.7)</p>
 </div></blockquote>
-<dl class="simple">
-<dt>func get_lift_point(alpha_deg: float) -&gt; Vector3:</dt><dd><p>var offset_ratio = get_cop_offset(alpha_deg)
-var local_point = Vector3(-chord_length * offset_ratio, 0, 0)
-return global_transform.origin + global_transform.basis.xform(local_point)</p>
-</dd>
-</dl>
-<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
-</section>
-<section id="result">
-<h3>Result<a class="headerlink" href="#result" title="Link to this heading">¶</a></h3>
-<ul class="simple">
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="k">func</span><span class="w"> </span><span class="n">get_cop_offset</span><span class="p">(</span><span class="n">alpha_deg</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">:</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">clamp</span><span class="p">(</span><span class="mf">0.25</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.0015</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">alpha_deg</span><span class="p">,</span><span class="w"> </span><span class="mf">0.25</span><span class="p">,</span><span class="w"> </span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="k">func</span><span class="w"> </span><span class="n">get_lift_point</span><span class="p">(</span><span class="n">alpha_deg</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">:</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">offset_ratio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_cop_offset</span><span class="p">(</span><span class="n">alpha_deg</span><span class="p">)</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">local_point</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">(</span><span class="o">-</span><span class="n">chord_length</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">offset_ratio</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">global_transform</span><span class="o">.</span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">global_transform</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">xform</span><span class="p">(</span><span class="n">local_point</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
 <li><p>More realistic pitch behavior for delta wings</p></li>
-<li><p>Smooth stall behavior with less sudden drop</p></li>
-</ul>
-<p>—</p>
-</section>
-</section>
-<section id="part-3-vortex-lift-approximation">
-<h2>Part 3: Vortex Lift Approximation<a class="headerlink" href="#part-3-vortex-lift-approximation" title="Link to this heading">¶</a></h2>
-<p>Delta wings generate additional lift through vortex effects at high Alpha. This can be simulated without CFD.</p>
-<section id="simplified-vortex-model">
-<h3>Simplified Vortex Model:<a class="headerlink" href="#simplified-vortex-model" title="Link to this heading">¶</a></h3>
-<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>gdscript
-func compute_lift(alpha_deg: float) -&gt; float:</p>
+<li><p>Smooth stall behavior with less sudden drop</p>
 <blockquote>
-<div><p>var alpha_rad = deg_to_rad(alpha_deg)
-var cl_linear = alpha_deg * 0.1
-var cl_vortex = 2.5 * pow(sin(alpha_rad), 2)
-return cl_linear + cl_vortex</p>
+<div><p>—</p>
+<p>Delta wings generate additional lift through vortex effects at high Alpha. This can be simulated without CFD.</p>
 </div></blockquote>
-<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
-</section>
-<section id="alternative-curve-based-lift-model">
-<h3>Alternative: Curve-Based Lift Model<a class="headerlink" href="#alternative-curve-based-lift-model" title="Link to this heading">¶</a></h3>
-<p>Use a custom <cite>Curve</cite> to describe:</p>
-<ul class="simple">
+</li>
+</ul>
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="k">func</span><span class="w"> </span><span class="n">compute_lift</span><span class="p">(</span><span class="n">alpha_deg</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">:</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">alpha_rad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deg_to_rad</span><span class="p">(</span><span class="n">alpha_deg</span><span class="p">)</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">cl_linear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha_deg</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.1</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">cl_vortex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">pow</span><span class="p">(</span><span class="nb">sin</span><span class="p">(</span><span class="n">alpha_rad</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">cl_linear</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cl_vortex</span>
+</pre></div>
+</div>
+<div class="highlight-````````````````````````````` notranslate"><div class="highlight"><pre><span></span>Alternative: Curve-Based Lift Model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Use a custom `Curve` to describe:
+</pre></div>
+</div>
+<ul>
 <li><p>Linear region</p></li>
 <li><p>Vortex-enhanced lift bump</p></li>
-<li><p>Soft stall zone</p></li>
-</ul>
-</section>
-<section id="advantages">
-<h3>Advantages<a class="headerlink" href="#advantages" title="Link to this heading">¶</a></h3>
-<ul class="simple">
+<li><p>Soft stall zone</p>
+<blockquote>
+<div></div></blockquote>
+</li>
 <li><p>Stable behavior for Mirage, Su-27, Gripen, etc.</p></li>
 <li><p>Empirically tunable without fluid simulation</p></li>
-<li><p>Extendable for flaps, canards, or swept wings</p></li>
-</ul>
-<p>—</p>
+<li><p>Extendable for flaps, canards, or swept wings</p>
+<blockquote>
+<div><p>—</p>
 <p>Planned Improvements:</p>
-<ul class="simple">
+</div></blockquote>
+</li>
 <li><p>Modular wing system (<cite>WingSection</cite> class)</p></li>
 <li><p>Visual vortex debug lines/particles</p></li>
-<li><p>Stall and AoA limits per section</p></li>
+<li><p>Stall and AoA limits per section</p>
+<blockquote>
+<div><p>This structure makes the aerodynamic simulation extensible and prepares the system for future support of helicopters and unconventional aircraft designs.</p>
+</div></blockquote>
+</li>
 </ul>
-<p>This structure makes the aerodynamic simulation extensible and prepares the system for future support of helicopters and unconventional aircraft designs.</p>
 </section>
 </section>
 </section>
@@ -448,18 +454,6 @@ return cl_linear + cl_vortex</p>
 <li><a class="reference internal" href="#part-1-nose-gear-steering">Part 1: Nose Gear Steering</a><ul>
 <li><a class="reference internal" href="#physics-principle">Physics Principle</a></li>
 <li><a class="reference internal" href="#gdscript-outline">GDScript Outline</a></li>
-<li><a class="reference internal" href="#notes">Notes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#part-2-dynamic-lift-point-for-delta-wings">Part 2: Dynamic Lift Point for Delta Wings</a><ul>
-<li><a class="reference internal" href="#strategy-dynamic-center-of-pressure">Strategy: Dynamic Center of Pressure</a></li>
-<li><a class="reference internal" href="#result">Result</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#part-3-vortex-lift-approximation">Part 3: Vortex Lift Approximation</a><ul>
-<li><a class="reference internal" href="#simplified-vortex-model">Simplified Vortex Model:</a></li>
-<li><a class="reference internal" href="#alternative-curve-based-lift-model">Alternative: Curve-Based Lift Model</a></li>
-<li><a class="reference internal" href="#advantages">Advantages</a></li>
 </ul>
 </li>
 </ul>

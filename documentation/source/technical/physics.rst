@@ -1,12 +1,12 @@
 ==================
 Flight Physics Engine
-==================
+=====================
 
 The Flight Physics Engine is the heart of SimiFlight's simulation capabilities,
 providing realistic aerodynamic behavior based on physical principles.
 
 Core Forces
-==========
+===========
 
 The physics engine models four fundamental forces:
 
@@ -22,10 +22,10 @@ The physics engine models four fundamental forces:
    *The four fundamental forces acting on an aircraft in flight*
 
 Physics Model
-============
+=============
 
 Implementation Approach
-----------------------
+-----------------------
 
 The flight physics system is implemented in layers:
 
@@ -34,7 +34,7 @@ The flight physics system is implemented in layers:
 3. **Integration layer** - Connection to Godot's physics system
 
 Multi-point Force Application
-----------------------------
+-----------------------------
 
 Forces are applied at specific control points:
 
@@ -51,10 +51,10 @@ Forces are applied at specific control points:
    };
 
 Aerodynamic Data
-===============
+================
 
 Curve-Based Approach
--------------------
+--------------------
 
 SimiFlight uses precomputed aerodynamic tables:
 
@@ -70,7 +70,7 @@ SimiFlight uses precomputed aerodynamic tables:
    *Example lift curve showing coefficient of lift vs. angle of attack*
 
 Special Conditions
-----------------
+------------------
 
 The physics model accounts for special flight conditions:
 
@@ -80,10 +80,10 @@ The physics model accounts for special flight conditions:
 * **Ground effect** - Modified lift near terrain
 
 Performance Optimization
-=======================
+========================
 
 Multi-threading
--------------
+---------------
 
 The physics engine utilizes multi-threading for performance:
 
@@ -102,7 +102,7 @@ The physics engine utilizes multi-threading for performance:
    }
 
 Integration with Curve Tool
-==========================
+===========================
 
 The physics engine consumes data from the :doc:`curve` to model aerodynamic behaviors:
 
@@ -111,7 +111,7 @@ The physics engine consumes data from the :doc:`curve` to model aerodynamic beha
 * **Cache frequent lookups** for performance
 
 Code Example
-===========
+============
 
 .. code-block:: gdscript
 
@@ -123,7 +123,7 @@ Code Example
        return lift_force
 
 Related Technical Concepts
-=========================
+==========================
 
 * :doc:`curve` - Generation of aerodynamic data
 * :doc:`integration` - Connection with Python aerodynamic tools

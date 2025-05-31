@@ -61,10 +61,13 @@ Modding and Extensibility
 * Goal is to make it **easy for others to create mods**, from simple aircraft to complex avionics.
 * Support for:
 
-  * Aircraft plugins with physical models, 3D models, and sound packages.
-  * Scripting API in Python, GDScript, or possibly Lua.
-  * Sandbox mission editor with GUI.
-  * Community mod folder and loader structure.
+* Aircraft plugins with physical models, 3D models, and sound packages.
+
+* Scripting API in Python, GDScript, or possibly Lua.
+
+* Sandbox mission editor with GUI.
+
+* Community mod folder and loader structure.
 
 Software Architecture and Development Concepts
 ----------------------------------------------
@@ -84,17 +87,18 @@ Proposed Project Structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-```
-res://
-├── core/           # Core systems: Input, Config, Logger
-├── physics/        # Flight physics, environment, forces
-├── aircraft/       # Aircraft logic and definitions
-├── systems/        # HUD, camera, missions
-├── world/          # Terrain, fire systems, atmosphere
-├── ui/             # User interface
-├── scenes/         # Game scenes (menu, world, flight)
-└── utils/          # General-purpose utilities
-```
+.. code-block:: text
+
+   res://
+   ├── core/           # Core systems: Input, Config, Logger
+   ├── physics/        # Flight physics, environment, forces
+   ├── aircraft/       # Aircraft logic and definitions
+   ├── systems/        # HUD, camera, missions
+   ├── world/          # Terrain, fire systems, atmosphere
+   ├── ui/             # User interface
+   ├── scenes/         # Game scenes (menu, world, flight)
+   └── utils/          # General-purpose utilities
+
 
 Communication Between Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -110,13 +114,14 @@ Code Structure Example (SRP)
 
 For an aircraft:
 
-```
-Cessna.gd
-├── FlightController.gd  → handles input
-├── Aerodynamics.gd      → lift/drag calculations
-├── Engine.gd            → thrust and fuel
-├── Visual.gd            → visuals
-```
+.. code-block:: text
+
+   Cessna.gd
+   ├── FlightController.gd  → handles input
+   ├── Aerodynamics.gd      → lift/drag calculations
+   ├── Engine.gd            → thrust and fuel
+   ├── Visual.gd            → visuals
+
 
 Data-Driven Design
 ^^^^^^^^^^^^^^^^^^
@@ -124,78 +129,91 @@ Data-Driven Design
 
 Aircraft and config stored in external files (e.g., JSON):
 
-```json
-{
-  "name": "CL-415",
-  "mass": 12100,
-  "engines": 2,
-  "type": "turboprop",
-  "lift_curve": "res://curves/cl415_lift.json"
-}
-```
+.. code-block:: json
 
-```gdscript
-var plane_data = load_json("res://aircraft/cl415/data.json")
-plane.load_from_data(plane_data)
-```
+   {
+     "name": "CL-415",
+     "mass": 12100,
+     "engines": 2,
+     "type": "turboprop",
+     "lift_curve": "res://curves/cl415_lift.json"
+   }
+
+
+.. code-block:: gdscript
+
+   var plane_data = load_json("res://aircraft/cl415/data.json")
+   plane.load_from_data(plane_data)
+
 
 Testing
 ^^^^^^^
-
-
+      
+      
 * Use **GUT** for unit tests (flight models, math functions, mission logic)
-* Separate logic and rendering to allow headless testing
 
+* Separate logic and rendering to allow headless testing
+      
 Aircraft Testing & Development Philosophy
 -----------------------------------------
-
-
+      
+      
 * Initial test aircraft will cover different aerodynamic profiles:
+      
+* Cessna 172 (standard general aviation, low speed, propeller-driven)
 
-  * Cessna 172 (standard general aviation, low speed, propeller-driven)
-  * Messerschmitt Bf-109 (WWII-era propeller aircraft)
-  * Mirage III (delta wing supersonic jet – useful for stress-testing lift modeling)
+* Messerschmitt Bf-109 (WWII-era propeller aircraft)
+
+* Mirage III (delta wing supersonic jet – useful for stress-testing lift modeling)
+
 * Long-term integration of the Canadair CL-415 as a dedicated aerial firefighting aircraft:
+      
+* Amphibious water landing and scooping mechanics
 
-  * Amphibious water landing and scooping mechanics
-  * Fire zone simulation with smoke, heat, and wind
-  * Precision water drop mechanics
+* Fire zone simulation with smoke, heat, and wind
+
+* Precision water drop mechanics
+
 * Flexible physics to allow diverse aircraft types and roles.
-
+      
 Inspirations
 ------------
-
-
-| Game                 | Why it's relevant                                                        |
-| -------------------- | ------------------------------------------------------------------------ |
-| DCS World            | Excellent flight physics, but too complex for casual gameplay.           |
-| Kerbal Space Program | Blends science with fun; great handling of spherical worlds and physics. |
-| Outerra              | Real spherical world with terrain streaming and flight.                  |
-| SimplePlanes         | Physics-focused, sandbox-style flight.                                   |
-| FlightGear           | Open-source flight simulator; useful for reference and data.             |
-
+.. code-block:: text
+      
+      | Game                 | Why it's relevant                                                        |
+      | -------------------- | ------------------------------------------------------------------------ |
+      | DCS World            | Excellent flight physics, but too complex for casual gameplay.           |
+      | Kerbal Space Program | Blends science with fun; great handling of spherical worlds and physics. |
+      | Outerra              | Real spherical world with terrain streaming and flight.                  |
+      | SimplePlanes         | Physics-focused, sandbox-style flight.                                   |
+      | FlightGear           | Open-source flight simulator; useful for reference and data.             |
+      
 Development Tools
 -----------------
-
-
+      
+      
 * **Godot Engine**: Modified version for 64-bit precision and planetary rendering.
-* **Python**: Used for external tools like the curve editor or aerodynamic modeling.
-* **Markdown & PyCharm**: Project documentation and scripting.
-* **GitHub**: Project hosting (`simiflight` repository), structured into sub-projects.
-* **CLion / C++**: For performance-critical modules (e.g. physics engine)
 
+* **Python**: Used for external tools like the curve editor or aerodynamic modeling.
+
+* **Markdown & PyCharm**: Project documentation and scripting.
+
+* **GitHub**: Project hosting (`simiflight` repository), structured into sub-projects.
+
+* **CLion / C++**: For performance-critical modules (e.g. physics engine)
+      
 Repository Structure
 --------------------
+      
+.. code-block:: text
+   
+   simiflight/
+   ├── Godot/                  # Main game project
+   ├── simiflight-curvetool/  # Python GUI for aerodynamic curve editing
+   ├── simiflight-docs/       # Markdown documentation
+   ├── assets/                # 3D models, textures, sounds
+   └── README.md              # Project overview
 
-
-```
-simiflight/
-├── Godot/                  # Main game project
-├── simiflight-curvetool/  # Python GUI for aerodynamic curve editing
-├── simiflight-docs/       # Markdown documentation
-├── assets/                # 3D models, textures, sounds
-└── README.md              # Project overview
-```
 
 ---
 

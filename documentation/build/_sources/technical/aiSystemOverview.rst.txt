@@ -24,13 +24,14 @@ Modular Architecture
 
 .. code-block:: text
 
-```
-[ PilotAI ]         ← High-level logic (objectives, combat, racing)
-     ↓
-[ FlightBrain ]     ← Low-level flight controller (heading, pitch, roll, throttle)
-     ↓
-[ Aircraft Model ]  ← Physics engine + aerodynamics
-```
+.. code-block:: text
+
+   [ PilotAI ]         ← High-level logic (objectives, combat, racing)
+        ↓
+   [ FlightBrain ]     ← Low-level flight controller (heading, pitch, roll, throttle)
+        ↓
+   [ Aircraft Model ]  ← Physics engine + aerodynamics
+
 
 * **PilotAI**: Controls strategic/tactical decisions.
 * **FlightBrain**: Converts intentions into physical control surface changes.

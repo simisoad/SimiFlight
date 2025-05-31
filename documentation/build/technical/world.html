@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Flight Physics Engine" href="physics.html" /><link rel="prev" title="Technical Concepts" href="index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Core Forces" href="physics.html" /><link rel="prev" title="Technical Concepts" href="index.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/world.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>Hybrid Precision World Model - SimiFlightDocumentation develop documentation</title>
+        <title>Core Concept - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -253,18 +264,16 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="hybrid-precision-world-model">
-<h1>Hybrid Precision World Model<a class="headerlink" href="#hybrid-precision-world-model" title="Link to this heading">¶</a></h1>
-<p>The Hybrid Precision World Model is a cornerstone of SimiFlight’s technical implementation,
+          <p>The Hybrid Precision World Model is a cornerstone of SimiFlight’s technical implementation,
 enabling simulation across an entire planet while maintaining numerical precision.</p>
 <section id="core-concept">
-<h2>Core Concept<a class="headerlink" href="#core-concept" title="Link to this heading">¶</a></h2>
+<h1>Core Concept<a class="headerlink" href="#core-concept" title="Link to this heading">¶</a></h1>
 <p>SimiFlight uses a dual coordinate system approach:</p>
 <ul class="simple">
 <li><p><strong>Local coordinates</strong> (32-bit) - Used for rendering and physics calculations</p></li>
@@ -279,7 +288,7 @@ enabling simulation across an entire planet while maintaining numerical precisio
 </figure>
 </section>
 <section id="floating-origin-system">
-<h2>Floating Origin System<a class="headerlink" href="#floating-origin-system" title="Link to this heading">¶</a></h2>
+<h1>Floating Origin System<a class="headerlink" href="#floating-origin-system" title="Link to this heading">¶</a></h1>
 <p>To avoid precision issues when far from the origin point:</p>
 <ul class="simple">
 <li><p>The origin of the physics world “follows” the player</p></li>
@@ -288,9 +297,9 @@ enabling simulation across an entire planet while maintaining numerical precisio
 </ul>
 </section>
 <section id="implementation-details">
-<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h2>
+<h1>Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this heading">¶</a></h1>
 <section id="global-positioning">
-<h3>Global Positioning<a class="headerlink" href="#global-positioning" title="Link to this heading">¶</a></h3>
+<h2>Global Positioning<a class="headerlink" href="#global-positioning" title="Link to this heading">¶</a></h2>
 <p>Global positions use 64-bit double-precision values:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">GlobalPosition</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">latitude</span><span class="p">;</span><span class="w">    </span><span class="c1">// in radians</span>
@@ -301,7 +310,7 @@ enabling simulation across an entire planet while maintaining numerical precisio
 </div>
 </section>
 <section id="coordinate-transformation">
-<h3>Coordinate Transformation<a class="headerlink" href="#coordinate-transformation" title="Link to this heading">¶</a></h3>
+<h2>Coordinate Transformation<a class="headerlink" href="#coordinate-transformation" title="Link to this heading">¶</a></h2>
 <p>Converting between coordinate systems:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Convert global to local coordinates</span>
 <span class="n">Vector3</span><span class="w"> </span><span class="nf">globalToLocal</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GlobalPosition</span><span class="o">&amp;</span><span class="w"> </span><span class="n">global</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -321,7 +330,7 @@ enabling simulation across an entire planet while maintaining numerical precisio
 </section>
 </section>
 <section id="performance-considerations">
-<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<h1>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h1>
 <p>The hybrid precision approach introduces some overhead:</p>
 <ul class="simple">
 <li><p><strong>Coordinate transformation cost</strong> - Performed during critical operations</p></li>
@@ -335,19 +344,18 @@ to minimize performance impact.</p>
 </div>
 </section>
 <section id="related-technical-concepts">
-<h2>Related Technical Concepts<a class="headerlink" href="#related-technical-concepts" title="Link to this heading">¶</a></h2>
+<h1>Related Technical Concepts<a class="headerlink" href="#related-technical-concepts" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p><span class="xref std std-doc">godot</span> - Engine modifications to support 64-bit coordinates</p></li>
-<li><p><a class="reference internal" href="physics.html"><span class="doc">Flight Physics Engine</span></a> - Integration with the physics system</p></li>
+<li><p><a class="reference internal" href="physics.html"><span class="doc">Core Forces</span></a> - Integration with the physics system</p></li>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>Kerbal Space Program’s floating origin system</p></li>
 <li><p>NASA technical papers on planetary simulation</p></li>
 </ul>
-</section>
 </section>
 
         </article>
@@ -360,7 +368,7 @@ to minimize performance impact.</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Flight Physics Engine</div>
+                <div class="title">Core Forces</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -393,36 +401,8 @@ to minimize performance impact.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Hybrid Precision World Model</a><ul>
-<li><a class="reference internal" href="#core-concept">Core Concept</a></li>
-<li><a class="reference internal" href="#floating-origin-system">Floating Origin System</a></li>
-<li><a class="reference internal" href="#implementation-details">Implementation Details</a><ul>
-<li><a class="reference internal" href="#global-positioning">Global Positioning</a></li>
-<li><a class="reference internal" href="#coordinate-transformation">Coordinate Transformation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
-<li><a class="reference internal" href="#related-technical-concepts">Related Technical Concepts</a></li>
-<li><a class="reference internal" href="#references">References</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

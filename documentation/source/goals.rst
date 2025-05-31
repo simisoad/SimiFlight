@@ -5,10 +5,10 @@ Goals
 SimiFlight aims to achieve several key objectives across different aspects of the simulation.
 
 Realism
-======
+=======
 
 Flight Physics
--------------
+--------------
 
 SimiFlight implements a physics-based flight model that includes:
 
@@ -18,7 +18,7 @@ SimiFlight implements a physics-based flight model that includes:
 * **Mach effects**, including Prandtl-Glauert correction up to Mach 0.85
 
 Modular Approach
----------------
+----------------
 
 The simulation adopts a modular approach to realism:
 
@@ -32,10 +32,10 @@ The simulation adopts a modular approach to realism:
    focusing instead on the experience of flight itself.
 
 World & Scale
-============
+=============
 
 Planetary Simulation
--------------------
+--------------------
 
 A key technical goal is the implementation of a full planetary model:
 
@@ -44,7 +44,7 @@ A key technical goal is the implementation of a full planetary model:
 * **Dynamic weather systems** spanning the globe
 
 Technical Implementation
------------------------
+------------------------
 
 To achieve this scale, SimiFlight employs advanced techniques:
 
@@ -54,10 +54,10 @@ To achieve this scale, SimiFlight employs advanced techniques:
 * Sophisticated **object culling** to maintain performance
 
 Gameplay
-=======
+========
 
 Hybrid Experience
-----------------
+-----------------
 
 SimiFlight creates a "sim-lite" experience that combines:
 
@@ -66,7 +66,7 @@ SimiFlight creates a "sim-lite" experience that combines:
 * **Progressive difficulty** options for various player skill levels
 
 Game Elements
-------------
+-------------
 
 The simulator incorporates various gameplay elements:
 

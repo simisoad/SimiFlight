@@ -208,8 +208,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">Core Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#floating-origin-system">Floating Origin System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#implementation-details">Implementation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -265,17 +276,12 @@
 <section id="floating-point-precision-in-large-worlds">
 <h2>Floating-Point Precision in Large Worlds<a class="headerlink" href="#floating-point-precision-in-large-worlds" title="Link to this heading">¶</a></h2>
 <p>The core challenge in simulating large (planetary-scale) worlds is managing the limitations of 32-bit floating-point numbers (<code class="docutils literal notranslate"><span class="pre">float</span></code>).</p>
-<ul>
-<li><p><strong>32-bit Floats (``float``)</strong>: Offer limited significant digits. As objects move further from the origin (0,0,0) of the coordinate system, the representable gap between consecutive numbers increases.
-*   <strong>Consequences</strong>:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
+<li><p><strong>32-bit Floats (``float``)</strong>: Offer limited significant digits. As objects move further from the origin (0,0,0) of the coordinate system, the representable gap between consecutive numbers increases.</p></li>
+<li><p><strong>Consequences</strong>:</p></li>
 <li><p><strong>Jittering</strong>: Objects may appear to shake or jump as their exact position can no longer be precisely represented.</p></li>
 <li><p><strong>Physics Instability</strong>: Collision detection and physics calculations become inaccurate, leading to objects passing through each other or other erroneous behaviors.</p></li>
 <li><p><strong>Rendering Artifacts</strong>: Vertex positions can suffer from precision loss, causing visual glitches, especially in shaders relying on accurate positional data.</p></li>
-</ul>
-</div></blockquote>
-</li>
 <li><p><strong>64-bit Floats (``double``)</strong>: Provide significantly more precision, drastically reducing precision loss over vast distances. This allows for accurate positioning of objects on a planetary scale.</p></li>
 </ul>
 </section>
@@ -289,78 +295,83 @@
 <section id="techniques-for-simulating-large-worlds-with-32-bit-limitations">
 <h2>Techniques for Simulating Large Worlds with 32-bit Limitations<a class="headerlink" href="#techniques-for-simulating-large-worlds-with-32-bit-limitations" title="Link to this heading">¶</a></h2>
 <p>Several techniques are employed to overcome 32-bit float limitations, primarily by keeping high-precision calculations local.</p>
-<ol class="arabic">
-<li><p><strong>Floating Origin (Origin Rebasing)</strong>:
-*   <strong>Concept</strong>: This is the <strong>most crucial and common technique</strong>. Instead of a single, static world origin, the local coordinate system’s origin (0,0,0) dynamically moves with or near the player/camera.
-*   <strong>Workflow</strong>:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
+<li><p><strong>Floating Origin (Origin Rebasing)</strong>:</p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Concept</strong>: This is the <strong>most crucial and common technique</strong>. Instead of a single, static world origin, the local coordinate system’s origin (0,0,0) dynamically moves with or near the player/camera.</p></li>
+<li><p><strong>Workflow</strong>:</p></li>
+</ul>
+<ol class="arabic simple">
 <li><p>The player’s (and other key objects’) <strong>global position</strong> is stored with high precision (e.g., using 64-bit floats or a custom <cite>Vector3d</cite> type on the CPU).</p></li>
 <li><p>All objects and calculations (physics, rendering) occurring <strong>near the player</strong> are transformed into a <strong>local 32-bit coordinate system</strong> whose origin is close to the player.</p></li>
-<li><p>When the player moves too far from this local origin, the origin is “rebased” (re-centered):
-*   The global 64-bit position of the player (or the new origin point) is updated.
-*   All relevant nearby objects have their local 32-bit coordinates recalculated relative to this <em>new</em> local origin (typically by subtracting a large offset corresponding to the origin shift).</p></li>
+<li><p>When the player moves too far from this local origin, the origin is “rebased” (re-centered):</p></li>
 </ol>
-</div></blockquote>
 <ul class="simple">
+<li><p>The global 64-bit position of the player (or the new origin point) is updated.</p></li>
+<li><p>All relevant nearby objects have their local 32-bit coordinates recalculated relative to this <em>new</em> local origin (typically by subtracting a large offset corresponding to the origin shift).</p></li>
 <li><p><strong>Advantage</strong>: High-precision calculations (physics, rendering of nearby objects) always occur near the local 32-bit origin, where precision is highest, mitigating issues like jittering.</p></li>
 <li><p><strong>Consideration</strong>: Requires careful management of coordinate transformations and object repositioning during origin shifts.</p></li>
 </ul>
-</li>
-<li><p><strong>Hybrid Precision</strong>:
-*   <strong>Concept</strong>: Use 64-bit floats only where absolutely necessary (e.g., for storing global celestial body positions, or the aircraft’s global planetary coordinates) and 32-bit floats for most other operations (local physics, rendering data sent to the GPU).
-*   <strong>Integration</strong>: Often used in conjunction with a Floating Origin system. The global position is 64-bit, while the local scene around the floating origin uses 32-bit.</p></li>
-<li><p><strong>“Double-Single” Emulation (Less Relevant for SimiFlight’s CPU-side Global Positions)</strong>:
-*   <strong>Concept</strong>: Representing a high-precision number (like a 64-bit <cite>double</cite>) as the sum of two 32-bit <cite>float</cite> numbers (one મુખ્ય <cite>head</cite> and one <cite>tail</cite> for the remainder/error).
-*   <strong>Application</strong>: Primarily a workaround for environments lacking native <cite>double</cite> support (e.g., some GPU shaders).
-*   <strong>Relevance to SimiFlight</strong>: For CPU-side global coordinate storage, using native 64-bit <cite>double</cite> types (e.g., via a custom <cite>Vector3d</cite> or modified Godot <cite>Vector3d</cite>) is far more straightforward and efficient than emulating them.</p></li>
+<ol class="arabic simple" start="2">
+<li><p><strong>Hybrid Precision</strong>:</p></li>
 </ol>
+<ul class="simple">
+<li><p><strong>Concept</strong>: Use 64-bit floats only where absolutely necessary (e.g., for storing global celestial body positions, or the aircraft’s global planetary coordinates) and 32-bit floats for most other operations (local physics, rendering data sent to the GPU).</p></li>
+<li><p><strong>Integration</strong>: Often used in conjunction with a Floating Origin system. The global position is 64-bit, while the local scene around the floating origin uses 32-bit.</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p><strong>“Double-Single” Emulation (Less Relevant for SimiFlight’s CPU-side Global Positions)</strong>:</p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Concept</strong>: Representing a high-precision number (like a 64-bit <cite>double</cite>) as the sum of two 32-bit <cite>float</cite> numbers (one મુખ્ય <cite>head</cite> and one <cite>tail</cite> for the remainder/error).</p></li>
+<li><p><strong>Application</strong>: Primarily a workaround for environments lacking native <cite>double</cite> support (e.g., some GPU shaders).</p></li>
+<li><p><strong>Relevance to SimiFlight</strong>: For CPU-side global coordinate storage, using native 64-bit <cite>double</cite> types (e.g., via a custom <cite>Vector3d</cite> or modified Godot <cite>Vector3d</cite>) is far more straightforward and efficient than emulating them.</p></li>
+</ul>
 </section>
 <section id="floating-origin-and-ai-multiple-distant-objects">
 <h2>Floating Origin and AI / Multiple Distant Objects<a class="headerlink" href="#floating-origin-and-ai-multiple-distant-objects" title="Link to this heading">¶</a></h2>
 <p>Managing multiple objects, such as AI aircraft, that can be far from the player and each other, within a Floating Origin system presents choices:</p>
-<ol class="arabic">
-<li><p><strong>Single Player-Centric Floating Origin (Simplest Start)</strong>:
-*   <strong>Concept</strong>: Only one active local origin, tied to the player.
-*   <strong>AI Positioning</strong>: AI aircraft store their global 64-bit positions. For local simulation (physics, rendering near the player), their positions are transformed into the player’s local 32-bit space: <code class="docutils literal notranslate"><span class="pre">ai_local_pos32</span> <span class="pre">=</span> <span class="pre">ai_global_pos64</span> <span class="pre">-</span> <span class="pre">player_local_origin64</span></code>.
-*   <strong>Pros</strong>: Easier to implement initially.
-*   <strong>Cons</strong>:</p>
-<blockquote>
-<div><ul class="simple">
+<ol class="arabic simple">
+<li><p><strong>Single Player-Centric Floating Origin (Simplest Start)</strong>:</p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Concept</strong>: Only one active local origin, tied to the player.</p></li>
+<li><p><strong>AI Positioning</strong>: AI aircraft store their global 64-bit positions. For local simulation (physics, rendering near the player), their positions are transformed into the player’s local 32-bit space: <code class="docutils literal notranslate"><span class="pre">ai_local_pos32</span> <span class="pre">=</span> <span class="pre">ai_global_pos64</span> <span class="pre">-</span> <span class="pre">player_local_origin64</span></code>.</p></li>
+<li><p><strong>Pros</strong>: Easier to implement initially.</p></li>
+<li><p><strong>Cons</strong>:</p></li>
 <li><p>Far-distant AI suffers from precision loss in <em>their</em> local representation relative to the player’s origin.</p></li>
 <li><p>Interactions (e.g., physics, collision) between two AI aircraft that are both far from the player would use these less precise local coordinates.</p></li>
 </ul>
-</div></blockquote>
-</li>
-<li><p><strong>Multiple Floating Origins (“Bubbles”) (More Complex, Higher Fidelity)</strong>:
-*   <strong>Concept</strong>: Each significant entity (player, each AI aircraft, or groups of AI) maintains its own local floating origin bubble.
-*   <strong>AI Positioning</strong>: Each AI aircraft performs its own physics and behavior calculations with high precision relative to its <em>own</em> local origin.
-*   <strong>Interaction Challenge</strong>: Interactions between different bubbles (e.g., player shooting at a distant AI, or two AIs interacting) require transforming coordinates between bubbles or performing calculations in a common (possibly temporary) high-precision reference frame, or directly using global 64-bit coordinates if the physics system supports it performantly.
-*   <strong>Pros</strong>: Highest precision for all actively simulated entities.
-*   <strong>Cons</strong>: Significantly more complex to implement, manage, and synchronize, especially for inter-bubble interactions.</p></li>
-<li><p><strong>Level of Detail (LOD) for AI Precision (Pragmatic Enhancement)</strong>:
-*   <strong>Concept</strong>: Often combined with a player-centric origin. The simulation fidelity of distant AI is reduced.
-*   <strong>Implementation</strong>:</p>
-<blockquote>
-<div><ul class="simple">
+<ol class="arabic simple" start="2">
+<li><p><strong>Multiple Floating Origins (“Bubbles”) (More Complex, Higher Fidelity)</strong>:</p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Concept</strong>: Each significant entity (player, each AI aircraft, or groups of AI) maintains its own local floating origin bubble.</p></li>
+<li><p><strong>AI Positioning</strong>: Each AI aircraft performs its own physics and behavior calculations with high precision relative to its <em>own</em> local origin.</p></li>
+<li><p><strong>Interaction Challenge</strong>: Interactions between different bubbles (e.g., player shooting at a distant AI, or two AIs interacting) require transforming coordinates between bubbles or performing calculations in a common (possibly temporary) high-precision reference frame, or directly using global 64-bit coordinates if the physics system supports it performantly.</p></li>
+<li><p><strong>Pros</strong>: Highest precision for all actively simulated entities.</p></li>
+<li><p><strong>Cons</strong>: Significantly more complex to implement, manage, and synchronize, especially for inter-bubble interactions.</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p><strong>Level of Detail (LOD) for AI Precision (Pragmatic Enhancement)</strong>:</p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Concept</strong>: Often combined with a player-centric origin. The simulation fidelity of distant AI is reduced.</p></li>
+<li><p><strong>Implementation</strong>:</p></li>
 <li><p><strong>Physics LOD</strong>: Distant AI uses simplified physics or path-following with global coordinates, rather than full aerodynamic simulation.</p></li>
 <li><p><strong>Behavioral LOD</strong>: Simpler decision-making for distant AI.</p></li>
-</ul>
-</div></blockquote>
-<ul class="simple">
 <li><p><strong>Pros</strong>: Good performance/accuracy trade-off.</p></li>
 <li><p><strong>Cons</strong>: Behavior of distant AI is not physically accurate.</p></li>
 </ul>
-</li>
-</ol>
 <p><strong>Recommendation for SimiFlight’s Development Path</strong>:</p>
 <ul class="simple">
 <li><p><strong>Start with a Player-Centric Floating Origin (Approach 1)</strong>. This establishes the core system for handling large scales relative to the player’s experience.</p></li>
 <li><p><strong>Architect for Global Coordinates</strong>: Ensure all entities internally manage their true global 64-bit positions, even if local simulations use transformed 32-bit coordinates.</p></li>
 <li><p><strong>Defer Complex AI Precision</strong>: Address the precision issues for distant AI or inter-AI interactions later. If AI is part of an early milestone (e.g., Bachelor thesis), initially accept the precision limitations for AI far from the player’s local origin.</p></li>
-<li><p><strong>Iterate Towards Higher Fidelity</strong>: Once the core player experience and a single floating origin are robust, consider:
-*   Implementing <strong>AI LOD (Approach 3)</strong> as a first step to manage many AI entities.
-*   If absolutely necessary for specific gameplay mechanics (e.g., highly accurate long-range engagements between multiple entities), then explore <strong>Multiple Floating Origins (Approach 2)</strong>, being mindful of its complexity.</p></li>
+<li><p><strong>Iterate Towards Higher Fidelity</strong>: Once the core player experience and a single floating origin are robust, consider:</p></li>
+<li><p>Implementing <strong>AI LOD (Approach 3)</strong> as a first step to manage many AI entities.</p></li>
+<li><p>If absolutely necessary for specific gameplay mechanics (e.g., highly accurate long-range engagements between multiple entities), then explore <strong>Multiple Floating Origins (Approach 2)</strong>, being mindful of its complexity.</p></li>
 </ul>
 <p>This phased approach allows for manageable development milestones while keeping the long-term vision of a fully realized, precise, and scalable planetary simulation achievable.</p>
 </section>

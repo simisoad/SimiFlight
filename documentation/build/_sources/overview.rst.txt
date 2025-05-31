@@ -3,7 +3,7 @@ Overview
 ========
 
 Vision & Project Overview
-========================
+=========================
 
 SimiFlight is a modular flight simulator being developed with **Godot Engine 4.4** that aims
 to strike a balance between realistic physics and sandbox-style exploration.
@@ -26,7 +26,7 @@ SimiFlight seeks to balance:
 * **Casual gameplay** - avoiding overly complex cockpit systems and procedures
 
 Long-Term Vision
----------------
+----------------
 
 The long-term vision for SimiFlight includes:
 
@@ -35,7 +35,7 @@ The long-term vision for SimiFlight includes:
 * Progressive levels of realism that users can adjust to their preferences
 
 Technologies
------------
+------------
 
 SimiFlight leverages several technologies:
 
@@ -50,7 +50,7 @@ SimiFlight leverages several technologies:
    *The SimiFlight technology stack combines Godot, C++, and Python*
 
 Related Pages
-============
+=============
 
 * :doc:`motivation` - Personal motivation behind the project
 * :doc:`goals` - Project goals and objectives

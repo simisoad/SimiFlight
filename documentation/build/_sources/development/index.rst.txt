@@ -12,7 +12,7 @@ This section covers information relevant to developers working on the SimiFlight
    roadmap
 
 Development Philosophy
-=====================
+======================
 
 SimiFlight development follows these core principles:
 
@@ -22,7 +22,7 @@ SimiFlight development follows these core principles:
 * **Performance awareness** - Considering optimization early in design
 
 Getting Started
-==============
+===============
 
 To begin working on SimiFlight:
 
@@ -34,7 +34,7 @@ To begin working on SimiFlight:
 .. _repository-structure:
 
 Repository Structure
-===================
+====================
 
 The SimiFlight repository is organized into several key components:
 
@@ -55,7 +55,7 @@ For more details, see :doc:`structure`.
 .. _development-roadmap:
 
 Development Roadmap
-==================
+===================
 
 The current development roadmap follows these major phases:
 
@@ -69,7 +69,7 @@ The current development roadmap follows these major phases:
 For a detailed timeline and milestones, see :doc:`roadmap`.
 
 Contributing
-===========
+============
 
 Contributions to SimiFlight are welcome! Please follow these guidelines:
 
@@ -79,7 +79,7 @@ Contributions to SimiFlight are welcome! Please follow these guidelines:
 * Submit pull requests with clear descriptions
 
 Code Style
-=========
+==========
 
 SimiFlight follows these coding standards:
 
@@ -88,7 +88,7 @@ SimiFlight follows these coding standards:
 * **Python** - Follow PEP 8 style guidelines
 
 Documentation Standards
-======================
+=======================
 
 All code should be documented following these principles:
 
