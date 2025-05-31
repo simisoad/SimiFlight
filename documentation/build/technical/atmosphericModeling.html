@@ -6,8 +6,8 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Insights on Large World Simulation and Precision for SimiFlight" href="simiflight_world_precision_insights.html" /><link rel="prev" title="Flight Physics Engine" href="physics.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/atmosphericModeling.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>&lt;no title&gt; - SimiFlightDocumentation develop documentation</title>
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
+        <title>Atmospheric Modeling Concepts - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -200,17 +200,25 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../systemOverview_planningTopics.html">SimiFlight – System Overview and Planning Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview02.html">}</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview02.html">SimiFlight – Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">SimiFlight Sphinx Documentation Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheels.html">Wheel Suspension Example (Godot 4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheels.html#wheelsuspension-gd">WheelSuspension.gd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 
 </div>
@@ -245,15 +253,17 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <p># Atmospheric Modeling Concepts</p>
+          <section id="atmospheric-modeling-concepts">
+<h1>Atmospheric Modeling Concepts<a class="headerlink" href="#atmospheric-modeling-concepts" title="Link to this heading">¶</a></h1>
 <p>This document outlines scalable concepts and ideas for integrating wind, turbulence, and updraft simulation into the SimiFlight flight simulator. The approach focuses on flexibility and extensibility, starting from simple implementations and building toward more advanced atmospheric effects.</p>
-<p>## Overview of Effects</p>
+<section id="overview-of-effects">
+<h2>Overview of Effects<a class="headerlink" href="#overview-of-effects" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line">Effect             | Description                                    | Complexity | Planned Priority |</div>
 <div class="line">—————— | ———————————————- | ———- | —————- |</div>
@@ -264,9 +274,12 @@
 <div class="line">Wake / Downwash    | Complex airflow around obstacles or aircraft   | High       | ⬜ Optional       |</div>
 </div>
 <p>—</p>
-<p>## Wind System Architecture</p>
+</section>
+<section id="wind-system-architecture">
+<h2>Wind System Architecture<a class="headerlink" href="#wind-system-architecture" title="Link to this heading">¶</a></h2>
 <p>The wind model should be implemented as a dedicated and modular system, for example:</p>
-<p>### Singleton: WindManager</p>
+<section id="singleton-windmanager">
+<h3>Singleton: WindManager<a class="headerlink" href="#singleton-windmanager" title="Link to this heading">¶</a></h3>
 <p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>gdscript
 class_name WindManager
 var global_wind := Vector3(5, 0, 0)  # default eastward wind</p>
@@ -277,7 +290,10 @@ var global_wind := Vector3(5, 0, 0)  # default eastward wind</p>
 <p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
 <p>This system allows aircraft to query wind conditions at any position and is future-proof for expansion.</p>
 <p>—</p>
-<p>## Gusts and Turbulence</p>
+</section>
+</section>
+<section id="gusts-and-turbulence">
+<h2>Gusts and Turbulence<a class="headerlink" href="#gusts-and-turbulence" title="Link to this heading">¶</a></h2>
 <p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>gdscript
 var gust_timer := 0.0
 var gust_strength := 0.0</p>
@@ -295,7 +311,9 @@ return global_wind + Vector3(gust_strength, 0, 0)</p>
 </dl>
 <p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
 <p>—</p>
-<p>## Thermal Simulation (Volumetric Zones)</p>
+</section>
+<section id="thermal-simulation-volumetric-zones">
+<h2>Thermal Simulation (Volumetric Zones)<a class="headerlink" href="#thermal-simulation-volumetric-zones" title="Link to this heading">¶</a></h2>
 <p>Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:</p>
 <p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>gdscript
 class ThermicZone:</p>
@@ -317,7 +335,9 @@ if d &gt; radius:</p>
 <p>Aircraft query nearby thermal zones and apply resulting vertical force.</p>
 <p>Future enhancement: Automatically generate thermals based on terrain slope, sun angle, or elevation.</p>
 <p>—</p>
-<p>## Terrain and Hang Lift (Advanced)</p>
+</section>
+<section id="terrain-and-hang-lift-advanced">
+<h2>Terrain and Hang Lift (Advanced)<a class="headerlink" href="#terrain-and-hang-lift-advanced" title="Link to this heading">¶</a></h2>
 <p>Orographic lift occurs when wind is forced upwards by terrain:</p>
 <ul class="simple">
 <li><p>Requires terrain slope and wind direction analysis</p></li>
@@ -325,15 +345,21 @@ if d &gt; radius:</p>
 </ul>
 <p>Planned as a future extension.</p>
 <p>—</p>
-<p>## Visualization and Debugging</p>
+</section>
+<section id="visualization-and-debugging">
+<h2>Visualization and Debugging<a class="headerlink" href="#visualization-and-debugging" title="Link to this heading">¶</a></h2>
 <p>To test and visualize airflow:</p>
 <ul class="simple">
 <li><p>Use particle systems or vector arrows to show wind fields</p></li>
 <li><p>Enable toggleable debug drawing for thermal zones</p></li>
 </ul>
 <p>—</p>
-<p>## Conclusion</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
 <p>The atmospheric simulation in SimiFlight should grow organically with project needs. Starting with a solid API (<cite>WindManager</cite>) allows early integration of wind effects, and opens the door for realism upgrades such as thermals and mountain updrafts without reworking core systems.</p>
+</section>
+</section>
 
         </article>
       </div>
@@ -378,14 +404,42 @@ if d &gt; radius:</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Atmospheric Modeling Concepts</a><ul>
+<li><a class="reference internal" href="#overview-of-effects">Overview of Effects</a></li>
+<li><a class="reference internal" href="#wind-system-architecture">Wind System Architecture</a><ul>
+<li><a class="reference internal" href="#singleton-windmanager">Singleton: WindManager</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gusts-and-turbulence">Gusts and Turbulence</a></li>
+<li><a class="reference internal" href="#thermal-simulation-volumetric-zones">Thermal Simulation (Volumetric Zones)</a></li>
+<li><a class="reference internal" href="#terrain-and-hang-lift-advanced">Terrain and Hang Lift (Advanced)</a></li>
+<li><a class="reference internal" href="#visualization-and-debugging">Visualization and Debugging</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=fd2318e6"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
     </body>

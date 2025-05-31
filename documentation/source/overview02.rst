@@ -1,10 +1,16 @@
-# SimiFlight – Project Overview
+SimiFlight – Project Overview
+=============================
 
-## Vision
+
+Vision
+------
+
 
 SimiFlight aims to combine the physical realism of advanced flight simulators with the freedom and creativity of sandbox-style exploration games. It is designed to be engaging for enthusiasts of aviation physics while avoiding overly complex cockpit systems. The long-term goal is to simulate flight on a spherical world, respecting scientific accuracy and offering an immersive, scalable experience.
 
-## Personal Motivation
+Personal Motivation
+-------------------
+
 
 * The name “SimiFlight” is derived from “Simon” in the Luzerner Hinterland dialect (“Simi”).
 * Inspired by a lifelong passion for aviation and the experience of building a physical flight simulator prototype in Unreal Engine for the Matura thesis.
@@ -12,16 +18,22 @@ SimiFlight aims to combine the physical realism of advanced flight simulators wi
 * Strong desire to include a spherical world because a flat Earth is scientifically inaccurate.
 * Deep emotional connection to certain aircraft, especially the Canadair CL-415 "Super Scooper", which has become a symbol of hope, precision, and airborne heroism.
 
-## Goals
+Goals
+-----
 
-### Realism
+
+Realism
+^^^^^^^
+
 
 * Physics-based flight model including lift, drag, G-forces, and stalling behavior.
 * Modular realism options: toggle simplified controls, auto-trim, wind effects, etc.
 * No need to simulate every switch; focus is on flying, not cold-start procedures.
 * Accurate aircraft behaviors based on airframe types (e.g., STOL, delta wings, heavy cargo jets).
 
-### World & Scale
+World & Scale
+^^^^^^^^^^^^^
+
 
 * Full spherical planet (no flat terrain).
 * Large-world coordinates with 64-bit precision for accurate global positioning.
@@ -29,7 +41,9 @@ SimiFlight aims to combine the physical realism of advanced flight simulators wi
 * Dynamic level of detail and object culling.
 * Potential integration of natural environments and weather systems (e.g., wind, updrafts, wildfires).
 
-### Gameplay
+Gameplay
+^^^^^^^^
+
 
 * Game/simulator hybrid ("sim-lite").
 * Freedom of exploration.
@@ -37,7 +51,9 @@ SimiFlight aims to combine the physical realism of advanced flight simulators wi
 * Optional arcade elements: assistive HUDs, simplified physics, AI traffic, etc.
 * Support for unique mission types like aerial firefighting (e.g., CL-415 operations).
 
-### Modding and Extensibility
+Modding and Extensibility
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 * SimiFlight is being designed as a **modular, extensible simulator framework**.
 * Focus on clear structure and scalability from the beginning.
@@ -50,9 +66,13 @@ SimiFlight aims to combine the physical realism of advanced flight simulators wi
   * Sandbox mission editor with GUI.
   * Community mod folder and loader structure.
 
-## Software Architecture and Development Concepts
+Software Architecture and Development Concepts
+----------------------------------------------
 
-### Principles
+
+Principles
+^^^^^^^^^^
+
 
 * **Clean Code**: readable, maintainable, testable
 * **Single Responsibility Principle (SRP)**: each class/script has one job
@@ -60,7 +80,9 @@ SimiFlight aims to combine the physical realism of advanced flight simulators wi
 * **High Modularity**: small, replaceable parts for aircraft, missions, systems
 * **Ease of Extension**: mods and aircraft can be created by others
 
-### Proposed Project Structure
+Proposed Project Structure
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 ```
 res://
@@ -74,13 +96,17 @@ res://
 └── utils/          # General-purpose utilities
 ```
 
-### Communication Between Modules
+Communication Between Modules
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 * Use **signals** for event-driven communication
 * Use **autoload singletons** for global systems (Input, WorldManager)
 * Optional: central **EventBus** to dispatch global events
 
-### Code Structure Example (SRP)
+Code Structure Example (SRP)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 For an aircraft:
 
@@ -92,7 +118,9 @@ Cessna.gd
 ├── Visual.gd            → visuals
 ```
 
-### Data-Driven Design
+Data-Driven Design
+^^^^^^^^^^^^^^^^^^
+
 
 Aircraft and config stored in external files (e.g., JSON):
 
@@ -111,12 +139,16 @@ var plane_data = load_json("res://aircraft/cl415/data.json")
 plane.load_from_data(plane_data)
 ```
 
-### Testing
+Testing
+^^^^^^^
+
 
 * Use **GUT** for unit tests (flight models, math functions, mission logic)
 * Separate logic and rendering to allow headless testing
 
-## Aircraft Testing & Development Philosophy
+Aircraft Testing & Development Philosophy
+-----------------------------------------
+
 
 * Initial test aircraft will cover different aerodynamic profiles:
 
@@ -130,7 +162,9 @@ plane.load_from_data(plane_data)
   * Precision water drop mechanics
 * Flexible physics to allow diverse aircraft types and roles.
 
-## Inspirations
+Inspirations
+------------
+
 
 | Game                 | Why it's relevant                                                        |
 | -------------------- | ------------------------------------------------------------------------ |
@@ -140,7 +174,9 @@ plane.load_from_data(plane_data)
 | SimplePlanes         | Physics-focused, sandbox-style flight.                                   |
 | FlightGear           | Open-source flight simulator; useful for reference and data.             |
 
-## Development Tools
+Development Tools
+-----------------
+
 
 * **Godot Engine**: Modified version for 64-bit precision and planetary rendering.
 * **Python**: Used for external tools like the curve editor or aerodynamic modeling.
@@ -148,7 +184,9 @@ plane.load_from_data(plane_data)
 * **GitHub**: Project hosting (`simiflight` repository), structured into sub-projects.
 * **CLion / C++**: For performance-critical modules (e.g. physics engine)
 
-## Repository Structure
+Repository Structure
+--------------------
+
 
 ```
 simiflight/

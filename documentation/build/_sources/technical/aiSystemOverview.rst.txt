@@ -1,12 +1,14 @@
-.. \_ai\_system\_overview:
+AI System Overview – SimiFlight
+===============================
 
-# AI System Overview – SimiFlight
 
 This document outlines the concepts and architecture for integrating AI-controlled aircraft in the SimiFlight simulator. The AI system is modular and designed to scale from simple path-following behavior to complex dogfight and BVR combat logic.
 
 ---
 
-## Core Concept
+Core Concept
+------------
+
 
 The aircraft AI is built on a perception-decision-action cycle:
 
@@ -16,7 +18,9 @@ The aircraft AI is built on a perception-decision-action cycle:
 
 ---
 
-## Modular Architecture
+Modular Architecture
+--------------------
+
 
 .. code-block:: text
 
@@ -36,7 +40,9 @@ This separation allows reuse and testing of each component independently.
 
 ---
 
-## AI Types (Progressive Development)
+AI Types (Progressive Development)
+----------------------------------
+
 
 1. **Target Dummy AI** – Static or very simple scripted flight
 2. **Path-Following AI** – Navigation through waypoints or race track
@@ -48,7 +54,9 @@ This separation allows reuse and testing of each component independently.
 
 ---
 
-## Core AI Behaviors
+Core AI Behaviors
+-----------------
+
 
 * Chase target
 * Evade or retreat
@@ -59,7 +67,9 @@ This separation allows reuse and testing of each component independently.
 
 ---
 
-## Design Patterns & Tools
+Design Patterns & Tools
+-----------------------
+
 
 * **Finite State Machine (FSM)** – Simple behavior switching
 * **Behavior Tree** – Modular complex decision structures
@@ -69,7 +79,9 @@ This separation allows reuse and testing of each component independently.
 
 ---
 
-## Simplified AI Flight Model
+Simplified AI Flight Model
+--------------------------
+
 
 AI aircraft may use a reduced-physics model:
 
@@ -81,7 +93,9 @@ Can still integrate into main simulation pipeline for consistency.
 
 ---
 
-## Future Considerations
+Future Considerations
+---------------------
+
 
 * Personality traits (aggressive, cautious, erratic)
 * Voice & radio comms (immersion)
@@ -90,7 +104,9 @@ Can still integrate into main simulation pipeline for consistency.
 
 ---
 
-## Development Strategy
+Development Strategy
+--------------------
+
 
 Start small:
 

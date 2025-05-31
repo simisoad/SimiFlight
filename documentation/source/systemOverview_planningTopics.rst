@@ -1,12 +1,16 @@
 .. \_simiflight\_topics\_overview:
 
-# SimiFlight – System Overview and Planning Topics
+SimiFlight – System Overview and Planning Topics
+================================================
+
 
 This document lists key topics, features, and systems relevant to the design and development of the SimiFlight simulator. It serves as a central planning reference and will be expanded and prioritized as development continues.
 
 ---
 
-## Flight Physics & Aerodynamics
+Flight Physics & Aerodynamics
+-----------------------------
+
 
 * Lift and Drag curves based on angle of attack (Alpha)
 * Center of pressure shift (especially for delta wings)
@@ -18,7 +22,9 @@ This document lists key topics, features, and systems relevant to the design and
 * Relative airflow computation from motion and wind
 * Multiple propulsion types: propeller, jet, rocket
 
-## World & Environment
+World & Environment
+-------------------
+
 
 * Spherical planetary world
 * Large-scale coordinate system with 64-bit support
@@ -30,7 +36,9 @@ This document lists key topics, features, and systems relevant to the design and
 * Humidity and air density (optional)
 * Temperature model (for thermals and engine efficiency)
 
-## Propulsion & Aircraft Systems
+Propulsion & Aircraft Systems
+-----------------------------
+
 
 * Thrust-based propulsion forces
 * Engine definitions per type (prop, jet, rocket)
@@ -38,7 +46,9 @@ This document lists key topics, features, and systems relevant to the design and
 * Fuel system and center-of-gravity impact
 * Optional engine startup sequences
 
-## Flight Control & Input
+Flight Control & Input
+----------------------
+
 
 * Manual control surfaces mapping (elevator, aileron, rudder)
 * Optional autopilot / assist systems
@@ -46,7 +56,9 @@ This document lists key topics, features, and systems relevant to the design and
 * Per-aircraft control logic
 * Trim systems for fine-tuned input
 
-## Simulation & Debugging
+Simulation & Debugging
+----------------------
+
 
 * Visualization of forces and lift points
 * Flight data logging for testing
@@ -54,14 +66,18 @@ This document lists key topics, features, and systems relevant to the design and
 * Frame-stepped simulation mode
 * Replay or timeline system (future feature)
 
-## Collision & Damage Modeling
+Collision & Damage Modeling
+---------------------------
+
 
 * G-force structural limits and failures
 * Stall/spin behavior and recovery
 * Gear damage from hard landings
 * Damage influencing flight behavior
 
-## Architecture & Modularity
+Architecture & Modularity
+-------------------------
+
 
 * Clean Code principles (e.g. SRP)
 * Signal-based module communication
@@ -70,7 +86,9 @@ This document lists key topics, features, and systems relevant to the design and
 * Configurable aircraft definitions (e.g. YAML/JSON)
 * Maintained Sphinx-based documentation
 
-## Tools & Editor Extensions
+Tools & Editor Extensions
+-------------------------
+
 
 * Curve editor for aerodynamic curves
 * Aircraft configuration editor
@@ -78,7 +96,9 @@ This document lists key topics, features, and systems relevant to the design and
 * In-game debug console (e.g. GameConsole plugin)
 * Extended Godot inspector integration
 
-## Gameplay and Features (Later)
+Gameplay and Features (Later)
+-----------------------------
+
 
 * Mission framework or sandbox scenarios
 * Training mode / flight school

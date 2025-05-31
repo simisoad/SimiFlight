@@ -1,4 +1,6 @@
-# SimiFlight Sphinx Documentation Structure
+SimiFlight Sphinx Documentation Structure
+=========================================
+
 
 Here's how your Sphinx documentation structure could look:
 

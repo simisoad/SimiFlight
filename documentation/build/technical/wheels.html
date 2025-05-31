@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="&lt;no title&gt;" href="aiSystemOverview.html" /><link rel="prev" title="&lt;no title&gt;" href="steeringWheel_LiftDeltaWing_VortexLift.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="AI System Overview – SimiFlight" href="aiSystemOverview.html" /><link rel="prev" title="Nose Gear Steering and Aerodynamic Lift Modeling" href="steeringWheel_LiftDeltaWing_VortexLift.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/wheels.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>&lt;no title&gt; - SimiFlightDocumentation develop documentation</title>
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
+        <title>Wheel Suspension Example (Godot 4) - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -200,17 +200,25 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../systemOverview_planningTopics.html">SimiFlight – System Overview and Planning Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview02.html">}</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview02.html">SimiFlight – Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">SimiFlight Sphinx Documentation Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../goals.html">Goals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Technical Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="world.html">Hybrid Precision World Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Wheel Suspension Example (Godot 4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wheelsuspension-gd">WheelSuspension.gd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 
 </div>
@@ -245,15 +253,17 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <p># Wheel Suspension Example (Godot 4)</p>
+          <section id="wheel-suspension-example-godot-4">
+<h1>Wheel Suspension Example (Godot 4)<a class="headerlink" href="#wheel-suspension-example-godot-4" title="Link to this heading">¶</a></h1>
 <p>This document demonstrates a stable and realistic way to simulate aircraft landing gear wheels using GDScript in Godot 4. Instead of using physical wheel constraints, we simulate spring and friction forces using RayCast3D.</p>
-<p>## Overview</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>This approach:</p>
 <ul class="simple">
 <li><p>Uses RayCast3D to detect ground contact</p></li>
@@ -262,14 +272,18 @@
 <li><p>Optionally rotates the visual wheel mesh</p></li>
 <li><p>Avoids physics instability caused by hinge joints</p></li>
 </ul>
-<p>## GDScript Code</p>
+</section>
+<section id="gdscript-code">
+<h2>GDScript Code<a class="headerlink" href="#gdscript-code" title="Link to this heading">¶</a></h2>
 <div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<p># WheelSuspension.gd
-<a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></p>
-<blockquote>
-<div><blockquote>
+</section>
+</section>
+<section id="wheelsuspension-gd">
+<h1>WheelSuspension.gd<a class="headerlink" href="#wheelsuspension-gd" title="Link to this heading">¶</a></h1>
+<dl>
+<dt><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></dt><dd><blockquote>
 <div><p>extends Node3D
 class_name WheelSuspension</p>
 <p>&#64;export var suspension_length := 0.5  # maximum spring extension (m)
@@ -312,15 +326,19 @@ if rotate_wheel_visual:</p>
 current_rotation += (forward_speed / wheel_radius) * delta
 wheel_mesh.rotation.x = current_rotation</p>
 </div></blockquote>
-</div></blockquote>
+</dd>
+</dl>
 <p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
-<p>## Scene Structure</p>
+<section id="scene-structure">
+<h2>Scene Structure<a class="headerlink" href="#scene-structure" title="Link to this heading">¶</a></h2>
 <p>::</p>
 <p>PlaneBody (RigidBody3D)
 └── WheelNode (Node3D)
 ├── RayCast3D (points downward)
 └── WheelMesh (visual model)</p>
-<p>## Tips</p>
+</section>
+<section id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Place one WheelSuspension per wheel (main gear, nose gear, etc.)</p></li>
 <li><p>Tune spring and damping values to match aircraft mass</p></li>
@@ -328,6 +346,8 @@ wheel_mesh.rotation.x = current_rotation</p>
 <li><p>Detect landings via compression threshold</p></li>
 </ul>
 <p>This method offers stability and simplicity, while being visually and physically convincing for most simulation needs.</p>
+</section>
+</section>
 
         </article>
       </div>
@@ -339,7 +359,7 @@ wheel_mesh.rotation.x = current_rotation</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">&lt;no title&gt;</div>
+                <div class="title">AI System Overview – SimiFlight</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -350,7 +370,7 @@ wheel_mesh.rotation.x = current_rotation</p>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">&lt;no title&gt;</div>
+                <div class="title">Nose Gear Steering and Aerodynamic Lift Modeling</div>
                 
               </div>
             </a>
@@ -372,14 +392,39 @@ wheel_mesh.rotation.x = current_rotation</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Wheel Suspension Example (Godot 4)</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#gdscript-code">GDScript Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wheelsuspension-gd">WheelSuspension.gd</a><ul>
+<li><a class="reference internal" href="#scene-structure">Scene Structure</a></li>
+<li><a class="reference internal" href="#tips">Tips</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=fd2318e6"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
     </body>

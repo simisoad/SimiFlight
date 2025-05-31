@@ -1,10 +1,14 @@
 .. \_wheel\_suspension\_example:
 
-# Wheel Suspension Example (Godot 4)
+Wheel Suspension Example (Godot 4)
+==================================
+
 
 This document demonstrates a stable and realistic way to simulate aircraft landing gear wheels using GDScript in Godot 4. Instead of using physical wheel constraints, we simulate spring and friction forces using RayCast3D.
 
-## Overview
+Overview
+--------
+
 
 This approach:
 
@@ -14,11 +18,15 @@ This approach:
 * Optionally rotates the visual wheel mesh
 * Avoids physics instability caused by hinge joints
 
-## GDScript Code
+GDScript Code
+-------------
+
 
 .. code-block:: gdscript
 
-# WheelSuspension.gd
+WheelSuspension.gd
+==================
+
 ```
     extends Node3D
     class\_name WheelSuspension
@@ -72,7 +80,9 @@ This approach:
        wheel_mesh.rotation.x = current_rotation
 ```
 
-## Scene Structure
+Scene Structure
+---------------
+
 
 \::
 
@@ -81,7 +91,9 @@ PlaneBody (RigidBody3D)
 ├── RayCast3D (points downward)
 └── WheelMesh (visual model)
 
-## Tips
+Tips
+----
+
 
 * Place one WheelSuspension per wheel (main gear, nose gear, etc.)
 * Tune spring and damping values to match aircraft mass

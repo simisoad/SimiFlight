@@ -1,8 +1,12 @@
-# Atmospheric Modeling Concepts
+Atmospheric Modeling Concepts
+=============================
+
 
 This document outlines scalable concepts and ideas for integrating wind, turbulence, and updraft simulation into the SimiFlight flight simulator. The approach focuses on flexibility and extensibility, starting from simple implementations and building toward more advanced atmospheric effects.
 
-## Overview of Effects
+Overview of Effects
+-------------------
+
 
 | Effect             | Description                                    | Complexity | Planned Priority |
 | ------------------ | ---------------------------------------------- | ---------- | ---------------- |
@@ -14,11 +18,15 @@ This document outlines scalable concepts and ideas for integrating wind, turbule
 
 ---
 
-## Wind System Architecture
+Wind System Architecture
+------------------------
+
 
 The wind model should be implemented as a dedicated and modular system, for example:
 
-### Singleton: WindManager
+Singleton: WindManager
+^^^^^^^^^^^^^^^^^^^^^^
+
 
 ```gdscript
 class_name WindManager
@@ -32,7 +40,9 @@ This system allows aircraft to query wind conditions at any position and is futu
 
 ---
 
-## Gusts and Turbulence
+Gusts and Turbulence
+--------------------
+
 
 ```gdscript
 var gust_timer := 0.0
@@ -51,7 +61,9 @@ func get_wind_at(position: Vector3) -> Vector3:
 
 ---
 
-## Thermal Simulation (Volumetric Zones)
+Thermal Simulation (Volumetric Zones)
+-------------------------------------
+
 
 Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:
 
@@ -74,7 +86,9 @@ Future enhancement: Automatically generate thermals based on terrain slope, sun 
 
 ---
 
-## Terrain and Hang Lift (Advanced)
+Terrain and Hang Lift (Advanced)
+--------------------------------
+
 
 Orographic lift occurs when wind is forced upwards by terrain:
 
@@ -85,7 +99,9 @@ Planned as a future extension.
 
 ---
 
-## Visualization and Debugging
+Visualization and Debugging
+---------------------------
+
 
 To test and visualize airflow:
 
@@ -94,6 +110,8 @@ To test and visualize airflow:
 
 ---
 
-## Conclusion
+Conclusion
+----------
+
 
 The atmospheric simulation in SimiFlight should grow organically with project needs. Starting with a solid API (`WindManager`) allows early integration of wind effects, and opens the door for realism upgrades such as thermals and mountain updrafts without reworking core systems.

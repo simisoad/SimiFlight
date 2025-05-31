@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="&lt;no title&gt;" href="systemOverview_planningTopics.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="SimiFlight – System Overview and Planning Topics" href="systemOverview_planningTopics.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/index.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
@@ -201,16 +201,24 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="systemOverview_planningTopics.html">SimiFlight – System Overview and Planning Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="overview02.html">}</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview02.html">SimiFlight – Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">SimiFlight Sphinx Documentation Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goals.html">Goals</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="technical/world.html">Hybrid Precision World Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/wheels.html">Wheel Suspension Example (Godot 4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/wheels.html#wheelsuspension-gd">WheelSuspension.gd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 
 </div>
@@ -261,12 +269,35 @@ simulator that blends realistic physics with sandbox-style exploration.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="systemOverview_planningTopics.html">SimiFlight – System Overview and Planning Topics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#flight-physics-aerodynamics">Flight Physics &amp; Aerodynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#world-environment">World &amp; Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#propulsion-aircraft-systems">Propulsion &amp; Aircraft Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#flight-control-input">Flight Control &amp; Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#simulation-debugging">Simulation &amp; Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#collision-damage-modeling">Collision &amp; Damage Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#architecture-modularity">Architecture &amp; Modularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#tools-editor-extensions">Tools &amp; Editor Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemOverview_planningTopics.html#gameplay-and-features-later">Gameplay and Features (Later)</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#vision-project-overview">Vision &amp; Project Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#related-pages">Related Pages</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="overview02.html">}</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview02.html">SimiFlight – Project Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#vision">Vision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#personal-motivation">Personal Motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#goals">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#software-architecture-and-development-concepts">Software Architecture and Development Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#aircraft-testing-development-philosophy">Aircraft Testing &amp; Development Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#inspirations">Inspirations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#development-tools">Development Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview02.html#repository-structure">Repository Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">SimiFlight Sphinx Documentation Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="motivation.html#personal-background">Personal Background</a></li>
 <li class="toctree-l2"><a class="reference internal" href="motivation.html#project-goals">Project Goals</a></li>
@@ -281,9 +312,21 @@ simulator that blends realistic physics with sandbox-style exploration.</p>
 <li class="toctree-l1"><a class="reference internal" href="technical/index.html">Technical Concepts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="technical/world.html">Hybrid Precision World Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/wheels.html">Wheel Suspension Example (Godot 4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/wheels.html#wheelsuspension-gd">WheelSuspension.gd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/index.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/index.html#technical-implementation">Technical Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development/ai_developers.html#ava-senior-c-engineer">1. Ava — Senior C++ Engineer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/ai_developers.html#pedro-python-data-tooling-expert">2. Pedro — Python Data &amp; Tooling Expert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/ai_developers.html#dr-wind-aerodynamics-professor">3. Dr. Wind — Aerodynamics Professor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/ai_developers.html#riley-project-manager-integrator">4. Riley — Project Manager &amp; Integrator</a></li>
 </ul>
 </li>
 </ul>
@@ -327,7 +370,7 @@ on realistic aerodynamics without overwhelming users with complex cockpit proced
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">&lt;no title&gt;</div>
+                <div class="title">SimiFlight – System Overview and Planning Topics</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -378,7 +421,7 @@ on realistic aerodynamics without overwhelming users with complex cockpit proced
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=fd2318e6"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
     </body>

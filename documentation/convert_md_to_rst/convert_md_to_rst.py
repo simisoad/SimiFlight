@@ -18,7 +18,7 @@ def convert_rst_headers(file_path):
         match = re.match(r'^(#{1,4})\s+(.*)', line)
         if match:
             level, title = match.groups()
-            underline = HEADER_STYLES.get(level, '-') * len(title)
+            underline = HEADER_STYLES.get(level, '-') * len(title.strip())
             new_lines.append(f'{title}\n{underline}\n\n')
         else:
             new_lines.append(line)
@@ -34,4 +34,4 @@ def convert_directory(path):
         convert_rst_headers(file)
 
 # Usage example:
-# convert_directory("./source")
+convert_directory("../source")

@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="&lt;no title&gt;" href="structure.html" /><link rel="prev" title="Overview" href="overview.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="SimiFlight Sphinx Documentation Structure" href="structure.html" /><link rel="prev" title="Overview" href="overview.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/overview02.html" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>} - SimiFlightDocumentation develop documentation</title>
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
+        <title>SimiFlight – Project Overview - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -201,16 +201,24 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="systemOverview_planningTopics.html">SimiFlight – System Overview and Planning Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">}</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SimiFlight – Project Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">SimiFlight Sphinx Documentation Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goals.html">Goals</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="technical/world.html">Hybrid Precision World Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/wheels.html">Wheel Suspension Example (Godot 4)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/wheels.html#wheelsuspension-gd">WheelSuspension.gd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 
 </div>
@@ -245,16 +253,20 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <p># SimiFlight – Project Overview</p>
-<p>## Vision</p>
+          <section id="simiflight-project-overview">
+<h1>SimiFlight – Project Overview<a class="headerlink" href="#simiflight-project-overview" title="Link to this heading">¶</a></h1>
+<section id="vision">
+<h2>Vision<a class="headerlink" href="#vision" title="Link to this heading">¶</a></h2>
 <p>SimiFlight aims to combine the physical realism of advanced flight simulators with the freedom and creativity of sandbox-style exploration games. It is designed to be engaging for enthusiasts of aviation physics while avoiding overly complex cockpit systems. The long-term goal is to simulate flight on a spherical world, respecting scientific accuracy and offering an immersive, scalable experience.</p>
-<p>## Personal Motivation</p>
+</section>
+<section id="personal-motivation">
+<h2>Personal Motivation<a class="headerlink" href="#personal-motivation" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>The name “SimiFlight” is derived from “Simon” in the Luzerner Hinterland dialect (“Simi”).</p></li>
 <li><p>Inspired by a lifelong passion for aviation and the experience of building a physical flight simulator prototype in Unreal Engine for the Matura thesis.</p></li>
@@ -262,15 +274,20 @@
 <li><p>Strong desire to include a spherical world because a flat Earth is scientifically inaccurate.</p></li>
 <li><p>Deep emotional connection to certain aircraft, especially the Canadair CL-415 “Super Scooper”, which has become a symbol of hope, precision, and airborne heroism.</p></li>
 </ul>
-<p>## Goals</p>
-<p>### Realism</p>
+</section>
+<section id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Link to this heading">¶</a></h2>
+<section id="realism">
+<h3>Realism<a class="headerlink" href="#realism" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Physics-based flight model including lift, drag, G-forces, and stalling behavior.</p></li>
 <li><p>Modular realism options: toggle simplified controls, auto-trim, wind effects, etc.</p></li>
 <li><p>No need to simulate every switch; focus is on flying, not cold-start procedures.</p></li>
 <li><p>Accurate aircraft behaviors based on airframe types (e.g., STOL, delta wings, heavy cargo jets).</p></li>
 </ul>
-<p>### World &amp; Scale</p>
+</section>
+<section id="world-scale">
+<h3>World &amp; Scale<a class="headerlink" href="#world-scale" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Full spherical planet (no flat terrain).</p></li>
 <li><p>Large-world coordinates with 64-bit precision for accurate global positioning.</p></li>
@@ -278,7 +295,9 @@
 <li><p>Dynamic level of detail and object culling.</p></li>
 <li><p>Potential integration of natural environments and weather systems (e.g., wind, updrafts, wildfires).</p></li>
 </ul>
-<p>### Gameplay</p>
+</section>
+<section id="gameplay">
+<h3>Gameplay<a class="headerlink" href="#gameplay" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Game/simulator hybrid (“sim-lite”).</p></li>
 <li><p>Freedom of exploration.</p></li>
@@ -286,7 +305,9 @@
 <li><p>Optional arcade elements: assistive HUDs, simplified physics, AI traffic, etc.</p></li>
 <li><p>Support for unique mission types like aerial firefighting (e.g., CL-415 operations).</p></li>
 </ul>
-<p>### Modding and Extensibility</p>
+</section>
+<section id="modding-and-extensibility">
+<h3>Modding and Extensibility<a class="headerlink" href="#modding-and-extensibility" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>SimiFlight is being designed as a <strong>modular, extensible simulator framework</strong>.</p></li>
 <li><p>Focus on clear structure and scalability from the beginning.</p></li>
@@ -301,8 +322,12 @@
 </ul>
 </li>
 </ul>
-<p>## Software Architecture and Development Concepts</p>
-<p>### Principles</p>
+</section>
+</section>
+<section id="software-architecture-and-development-concepts">
+<h2>Software Architecture and Development Concepts<a class="headerlink" href="#software-architecture-and-development-concepts" title="Link to this heading">¶</a></h2>
+<section id="principles">
+<h3>Principles<a class="headerlink" href="#principles" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>Clean Code</strong>: readable, maintainable, testable</p></li>
 <li><p><strong>Single Responsibility Principle (SRP)</strong>: each class/script has one job</p></li>
@@ -310,7 +335,9 @@
 <li><p><strong>High Modularity</strong>: small, replaceable parts for aircraft, missions, systems</p></li>
 <li><p><strong>Ease of Extension</strong>: mods and aircraft can be created by others</p></li>
 </ul>
-<p>### Proposed Project Structure</p>
+</section>
+<section id="proposed-project-structure">
+<h3>Proposed Project Structure<a class="headerlink" href="#proposed-project-structure" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
 <span class="pre">res://</span>
 <span class="pre">├──</span> <span class="pre">core/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Core</span> <span class="pre">systems:</span> <span class="pre">Input,</span> <span class="pre">Config,</span> <span class="pre">Logger</span>
@@ -322,13 +349,17 @@
 <span class="pre">├──</span> <span class="pre">scenes/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Game</span> <span class="pre">scenes</span> <span class="pre">(menu,</span> <span class="pre">world,</span> <span class="pre">flight)</span>
 <span class="pre">└──</span> <span class="pre">utils/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">General-purpose</span> <span class="pre">utilities</span>
 <span class="pre">`</span></code></p>
-<p>### Communication Between Modules</p>
+</section>
+<section id="communication-between-modules">
+<h3>Communication Between Modules<a class="headerlink" href="#communication-between-modules" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Use <strong>signals</strong> for event-driven communication</p></li>
 <li><p>Use <strong>autoload singletons</strong> for global systems (Input, WorldManager)</p></li>
 <li><p>Optional: central <strong>EventBus</strong> to dispatch global events</p></li>
 </ul>
-<p>### Code Structure Example (SRP)</p>
+</section>
+<section id="code-structure-example-srp">
+<h3>Code Structure Example (SRP)<a class="headerlink" href="#code-structure-example-srp" title="Link to this heading">¶</a></h3>
 <p>For an aircraft:</p>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
 <span class="pre">Cessna.gd</span>
@@ -337,7 +368,9 @@
 <span class="pre">├──</span> <span class="pre">Engine.gd</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">→</span> <span class="pre">thrust</span> <span class="pre">and</span> <span class="pre">fuel</span>
 <span class="pre">├──</span> <span class="pre">Visual.gd</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">→</span> <span class="pre">visuals</span>
 <span class="pre">`</span></code></p>
-<p>### Data-Driven Design</p>
+</section>
+<section id="data-driven-design">
+<h3>Data-Driven Design<a class="headerlink" href="#data-driven-design" title="Link to this heading">¶</a></h3>
 <p>Aircraft and config stored in external files (e.g., JSON):</p>
 <p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>json
 {</p>
@@ -349,17 +382,23 @@
 “lift_curve”: “<a class="reference external" href="res://curves/cl415_lift.json">res://curves/cl415_lift.json</a>”</p>
 </div></blockquote>
 <section id="id5">
-<h1>}<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
+<h4>}<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">`gdscript</span>
 <span class="pre">var</span> <span class="pre">plane_data</span> <span class="pre">=</span> <span class="pre">load_json(&quot;res://aircraft/cl415/data.json&quot;)</span>
 <span class="pre">plane.load_from_data(plane_data)</span>
 <span class="pre">`</span></code></p>
-<p>### Testing</p>
+</section>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Use <strong>GUT</strong> for unit tests (flight models, math functions, mission logic)</p></li>
 <li><p>Separate logic and rendering to allow headless testing</p></li>
 </ul>
-<p>## Aircraft Testing &amp; Development Philosophy</p>
+</section>
+</section>
+<section id="aircraft-testing-development-philosophy">
+<h2>Aircraft Testing &amp; Development Philosophy<a class="headerlink" href="#aircraft-testing-development-philosophy" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Initial test aircraft will cover different aerodynamic profiles:</p>
 <ul>
@@ -377,7 +416,9 @@
 </li>
 <li><p>Flexible physics to allow diverse aircraft types and roles.</p></li>
 </ul>
-<p>## Inspirations</p>
+</section>
+<section id="inspirations">
+<h2>Inspirations<a class="headerlink" href="#inspirations" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line">Game                 | Why it’s relevant                                                        |</div>
 <div class="line">——————– | ———————————————————————— |</div>
@@ -387,7 +428,9 @@
 <div class="line">SimplePlanes         | Physics-focused, sandbox-style flight.                                   |</div>
 <div class="line">FlightGear           | Open-source flight simulator; useful for reference and data.             |</div>
 </div>
-<p>## Development Tools</p>
+</section>
+<section id="development-tools">
+<h2>Development Tools<a class="headerlink" href="#development-tools" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Godot Engine</strong>: Modified version for 64-bit precision and planetary rendering.</p></li>
 <li><p><strong>Python</strong>: Used for external tools like the curve editor or aerodynamic modeling.</p></li>
@@ -395,7 +438,9 @@
 <li><p><strong>GitHub</strong>: Project hosting (<cite>simiflight</cite> repository), structured into sub-projects.</p></li>
 <li><p><strong>CLion / C++</strong>: For performance-critical modules (e.g. physics engine)</p></li>
 </ul>
-<p>## Repository Structure</p>
+</section>
+<section id="repository-structure">
+<h2>Repository Structure<a class="headerlink" href="#repository-structure" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
 <span class="pre">simiflight/</span>
 <span class="pre">├──</span> <span class="pre">Godot/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Main</span> <span class="pre">game</span> <span class="pre">project</span>
@@ -406,6 +451,7 @@
 <span class="pre">`</span></code></p>
 <p>—</p>
 <p>This document is an evolving concept and early-stage idea collection for the SimiFlight project. It may contain duplicate ideas or inconsistent structure. A refactored and structured version will follow as the project matures.</p>
+</section>
 </section>
 
         </article>
@@ -418,7 +464,7 @@
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">&lt;no title&gt;</div>
+                <div class="title">SimiFlight Sphinx Documentation Structure</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -451,14 +497,57 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SimiFlight – Project Overview</a><ul>
+<li><a class="reference internal" href="#vision">Vision</a></li>
+<li><a class="reference internal" href="#personal-motivation">Personal Motivation</a></li>
+<li><a class="reference internal" href="#goals">Goals</a><ul>
+<li><a class="reference internal" href="#realism">Realism</a></li>
+<li><a class="reference internal" href="#world-scale">World &amp; Scale</a></li>
+<li><a class="reference internal" href="#gameplay">Gameplay</a></li>
+<li><a class="reference internal" href="#modding-and-extensibility">Modding and Extensibility</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#software-architecture-and-development-concepts">Software Architecture and Development Concepts</a><ul>
+<li><a class="reference internal" href="#principles">Principles</a></li>
+<li><a class="reference internal" href="#proposed-project-structure">Proposed Project Structure</a></li>
+<li><a class="reference internal" href="#communication-between-modules">Communication Between Modules</a></li>
+<li><a class="reference internal" href="#code-structure-example-srp">Code Structure Example (SRP)</a></li>
+<li><a class="reference internal" href="#data-driven-design">Data-Driven Design</a><ul>
+<li><a class="reference internal" href="#id5">}</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aircraft-testing-development-philosophy">Aircraft Testing &amp; Development Philosophy</a></li>
+<li><a class="reference internal" href="#inspirations">Inspirations</a></li>
+<li><a class="reference internal" href="#development-tools">Development Tools</a></li>
+<li><a class="reference internal" href="#repository-structure">Repository Structure</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=fd2318e6"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
     </body>

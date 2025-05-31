@@ -1,6 +1,8 @@
 .. \_nose\_gear\_and\_lift\_modeling:
 
-# Nose Gear Steering and Aerodynamic Lift Modeling
+Nose Gear Steering and Aerodynamic Lift Modeling
+================================================
+
 
 This document covers two important aspects of flight dynamics simulation for SimiFlight:
 
@@ -9,21 +11,27 @@ This document covers two important aspects of flight dynamics simulation for Sim
 
 ---
 
-## Part 1: Nose Gear Steering
+Part 1: Nose Gear Steering
+--------------------------
+
 
 **Goal**: Simulate realistic ground steering by applying lateral friction forces at the nose wheel.
 
 **Key Idea**:
 The steering effect should not rotate the aircraft directly, but instead come from the lateral resistance of the ground reacting to the nose wheel's sideways force.
 
-### Physics Principle
+Physics Principle
+^^^^^^^^^^^^^^^^^
+
 
 * The engine generates pure forward thrust
 * The nose wheel turns to the left/right (steering input)
 * The lateral velocity at the contact point generates a side force
 * This force rotates the aircraft naturally
 
-### GDScript Outline
+GDScript Outline
+^^^^^^^^^^^^^^^^
+
 
 ```gdscript
 @export var is_steerable := false
@@ -52,7 +60,9 @@ func _physics_process(delta):
     get_parent().apply_central_force(total_force)
 ```
 
-### Notes
+Notes
+^^^^^
+
 
 * Use local velocity at the wheel point to determine real effect
 * Add forward spring force as described in `WheelSuspension`
@@ -60,13 +70,17 @@ func _physics_process(delta):
 
 ---
 
-## Part 2: Dynamic Lift Point for Delta Wings
+Part 2: Dynamic Lift Point for Delta Wings
+------------------------------------------
+
 
 **Goal**: Model realistic lift behavior for delta wings and other advanced geometries.
 
 **Problem**: With delta wings, the aerodynamic center (lift point) shifts depending on angle of attack (Alpha), which affects pitch stability.
 
-### Strategy: Dynamic Center of Pressure
+Strategy: Dynamic Center of Pressure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 Calculate the center of lift based on a formula or curve that shifts with Alpha:
 
@@ -80,18 +94,24 @@ func get_lift_point(alpha_deg: float) -> Vector3:
     return global_transform.origin + global_transform.basis.xform(local_point)
 ```
 
-### Result
+Result
+^^^^^^
+
 
 * More realistic pitch behavior for delta wings
 * Smooth stall behavior with less sudden drop
 
 ---
 
-## Part 3: Vortex Lift Approximation
+Part 3: Vortex Lift Approximation
+---------------------------------
+
 
 Delta wings generate additional lift through vortex effects at high Alpha. This can be simulated without CFD.
 
-### Simplified Vortex Model:
+Simplified Vortex Model:
+^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 ```gdscript
 func compute_lift(alpha_deg: float) -> float:
@@ -101,7 +121,9 @@ func compute_lift(alpha_deg: float) -> float:
     return cl_linear + cl_vortex
 ```
 
-### Alternative: Curve-Based Lift Model
+Alternative: Curve-Based Lift Model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 Use a custom `Curve` to describe:
 
@@ -109,7 +131,9 @@ Use a custom `Curve` to describe:
 * Vortex-enhanced lift bump
 * Soft stall zone
 
-### Advantages
+Advantages
+^^^^^^^^^^
+
 
 * Stable behavior for Mirage, Su-27, Gripen, etc.
 * Empirically tunable without fluid simulation
