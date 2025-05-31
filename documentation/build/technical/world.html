@@ -220,7 +220,6 @@
 <li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -229,7 +228,12 @@
 <li class="toctree-l2"><a class="reference internal" href="aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Major Phases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html#release-versioning">Release Versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -280,12 +284,6 @@ enabling simulation across an entire planet while maintaining numerical precisio
 <li><p><strong>Global coordinates</strong> (64-bit) - Used for planetary positioning</p></li>
 <li><p><strong>Coordinate transformation</strong> - Dynamic mapping between local and global space</p></li>
 </ul>
-<figure class="align-center" id="id1">
-<img alt="Hybrid Precision Model" src="_static/hybrid_precision.png" />
-<figcaption>
-<p><span class="caption-text"><em>Diagram illustrating the transformation between global and local coordinate spaces</em></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
 </section>
 <section id="floating-origin-system">
 <h1>Floating Origin System<a class="headerlink" href="#floating-origin-system" title="Link to this heading">¶</a></h1>
@@ -346,7 +344,6 @@ to minimize performance impact.</p>
 <section id="related-technical-concepts">
 <h1>Related Technical Concepts<a class="headerlink" href="#related-technical-concepts" title="Link to this heading">¶</a></h1>
 <ul class="simple">
-<li><p><span class="xref std std-doc">godot</span> - Engine modifications to support 64-bit coordinates</p></li>
 <li><p><a class="reference internal" href="physics.html"><span class="doc">Core Forces</span></a> - Integration with the physics system</p></li>
 </ul>
 </section>

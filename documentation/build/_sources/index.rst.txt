@@ -4,9 +4,7 @@ SimiFlight
 
 *A modular flight simulator built with Godot Engine 4.4*
 
-.. image:: _static/simiflight_logo.png
-   :alt: SimiFlight Logo
-   :align: center
+
 
 **Version:** 0.2
 
@@ -24,7 +22,7 @@ simulator that blends realistic physics with sandbox-style exploration.
    motivation
    goals
    technical/index
-   development/ai_developers
+   development/index
    roadmap
 
 Project Vision

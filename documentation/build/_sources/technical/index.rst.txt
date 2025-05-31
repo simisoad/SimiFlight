@@ -85,4 +85,4 @@ The technical implementation of SimiFlight follows these principles:
 * **Validation** - Physics models compared against real-world data
 * **Scalability** - Systems designed to handle planetary-scale simulation
 
-For development tools and infrastructure, see :doc:`../development/tools`.
+

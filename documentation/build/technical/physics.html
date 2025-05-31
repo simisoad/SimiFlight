@@ -220,7 +220,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#performance-optimization">Performance Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#integration-with-curve-tool">Integration with Curve Tool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#code-example">Code Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -229,7 +228,12 @@
 <li class="toctree-l2"><a class="reference internal" href="aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Major Phases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html#release-versioning">Release Versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -281,12 +285,6 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 <li><p><strong>Weight</strong> - Gravitational force pulling the aircraft down</p></li>
 <li><p><strong>Thrust</strong> - Propulsive force from engines</p></li>
 </ul>
-<figure class="align-center" id="id1">
-<img alt="Core Forces Diagram" src="_static/core_forces.png" />
-<figcaption>
-<p><span class="caption-text"><em>The four fundamental forces acting on an aircraft in flight</em></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
 </section>
 <section id="physics-model">
 <h1>Physics Model<a class="headerlink" href="#physics-model" title="Link to this heading">¶</a></h1>
@@ -327,12 +325,6 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 <li><p><strong>Moment coefficients</strong> for rotational forces</p></li>
 <li><p><strong>Ground effect</strong> modifications near terrain</p></li>
 </ul>
-<figure class="align-center" id="id2">
-<img alt="Lift Curve" src="_static/lift_curve.png" />
-<figcaption>
-<p><span class="caption-text"><em>Example lift curve showing coefficient of lift vs. angle of attack</em></span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
 </section>
 <section id="special-conditions">
 <h2>Special Conditions<a class="headerlink" href="#special-conditions" title="Link to this heading">¶</a></h2>
@@ -368,7 +360,7 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 </section>
 <section id="integration-with-curve-tool">
 <h1>Integration with Curve Tool<a class="headerlink" href="#integration-with-curve-tool" title="Link to this heading">¶</a></h1>
-<p>The physics engine consumes data from the <span class="xref std std-doc">curve</span> to model aerodynamic behaviors:</p>
+<p>The physics engine consumes data from a curve to model aerodynamic behaviors:</p>
 <ul class="simple">
 <li><p><strong>Load curves</strong> at aircraft initialization</p></li>
 <li><p><strong>Interpolate values</strong> during runtime calculations</p></li>
@@ -385,13 +377,6 @@ providing realistic aerodynamic behavior based on physical principles.</p>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">lift_force</span>
 </pre></div>
 </div>
-</section>
-<section id="related-technical-concepts">
-<h1>Related Technical Concepts<a class="headerlink" href="#related-technical-concepts" title="Link to this heading">¶</a></h1>
-<ul class="simple">
-<li><p><span class="xref std std-doc">curve</span> - Generation of aerodynamic data</p></li>
-<li><p><span class="xref std std-doc">integration</span> - Connection with Python aerodynamic tools</p></li>
-</ul>
 </section>
 
         </article>

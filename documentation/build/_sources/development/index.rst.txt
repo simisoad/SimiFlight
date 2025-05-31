@@ -6,10 +6,9 @@ This section covers information relevant to developers working on the SimiFlight
 
 .. toctree::
    :maxdepth: 2
-   
-   tools
-   structure
+
    roadmap
+   ai_developers
 
 Development Philosophy
 ======================
@@ -50,7 +49,7 @@ The SimiFlight repository is organized into several key components:
    ├── Python/                # Shared physics utilities (optional)  
    └── README.md              # Project overview  
 
-For more details, see :doc:`structure`.
+
 
 .. _development-roadmap:
 

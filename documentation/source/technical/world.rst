@@ -14,11 +14,7 @@ SimiFlight uses a dual coordinate system approach:
 * **Global coordinates** (64-bit) - Used for planetary positioning
 * **Coordinate transformation** - Dynamic mapping between local and global space
 
-.. figure:: ../_static/hybrid_precision.png
-   :alt: Hybrid Precision Model
-   :align: center
-   
-   *Diagram illustrating the transformation between global and local coordinate spaces*
+
 
 Floating Origin System
 ======================
@@ -82,7 +78,6 @@ The hybrid precision approach introduces some overhead:
 Related Technical Concepts
 ==========================
 
-* :doc:`godot` - Engine modifications to support 64-bit coordinates
 * :doc:`physics` - Integration with the physics system
 
 References

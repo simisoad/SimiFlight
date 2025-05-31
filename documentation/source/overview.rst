@@ -43,11 +43,7 @@ SimiFlight leverages several technologies:
 * **C++ GDExtensions** - For performance-critical physics calculations
 * **Python 3.x** - For aerodynamic curve generation and external tools
 
-.. figure:: _static/tech_stack.png
-   :alt: SimiFlight Technology Stack
-   :align: center
 
-   *The SimiFlight technology stack combines Godot, C++, and Python*
 
 Related Pages
 =============

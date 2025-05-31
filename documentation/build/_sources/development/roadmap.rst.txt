@@ -31,46 +31,31 @@ Phase 1: Prototype Curve Tool
 .. list-table::
     :widths: 10 50 20 20
     :header-rows: 1
-   
+
     * - Task
-
-    - Description
-
-    - Status
-
-    - Priority
+      - Description
+      - Status
+      - Priority
 
     * - Python Backend
-
-    - Implement basic lift/drag calculations
-
-    - In Progress
-
-    - High
+      - Implement basic lift/drag calculations
+      - In Progress
+      - High
 
     * - Simple UI
-
-    - Create minimal Godot interface
-
-    - Planned
-
-    - Medium
+      - Create minimal Godot interface
+      - Planned
+      - Medium
 
     * - Data Export
-
-    - Define and implement data format
-
-    - Not Started
-
-    - Medium
+      - Define and implement data format
+      - Not Started
+      - Medium
 
     * - Validation
-
-    - Test against NACA airfoil data
-
-    - Not Started
-
-    - High
+      - Test against NACA airfoil data
+      - Not Started
+      - High
 
 
 Phase 2: Physics Core
@@ -172,14 +157,6 @@ Phase 6: Documentation
 
 **Timeline**: Continuous
 
-Milestone Chart
-===============
-
-.. figure:: ../_static/roadmap_chart.png
-   :alt: Roadmap Timeline
-   :align: center
-   
-   *SimiFlight development roadmap timeline*
 
 Release Versioning
 ==================

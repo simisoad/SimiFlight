@@ -76,10 +76,5 @@ The simulator incorporates various gameplay elements:
 * **Delivery systems** for cargo transport
 * **Optional assists** for new players
 
-.. figure:: _static/gameplay_elements.png
-   :alt: Gameplay Elements
-   :align: center
-   
-   *Illustration of SimiFlight's gameplay elements*
 
 Technical goals are further detailed in the :doc:`technical/index` section.

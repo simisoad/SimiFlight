@@ -15,11 +15,6 @@ The physics engine models four fundamental forces:
 * **Weight** - Gravitational force pulling the aircraft down
 * **Thrust** - Propulsive force from engines
 
-.. figure:: ../_static/core_forces.png
-   :alt: Core Forces Diagram
-   :align: center
-   
-   *The four fundamental forces acting on an aircraft in flight*
 
 Physics Model
 =============
@@ -63,11 +58,7 @@ SimiFlight uses precomputed aerodynamic tables:
 * **Moment coefficients** for rotational forces
 * **Ground effect** modifications near terrain
 
-.. figure:: ../_static/lift_curve.png
-   :alt: Lift Curve
-   :align: center
-   
-   *Example lift curve showing coefficient of lift vs. angle of attack*
+
 
 Special Conditions
 ------------------
@@ -104,7 +95,7 @@ The physics engine utilizes multi-threading for performance:
 Integration with Curve Tool
 ===========================
 
-The physics engine consumes data from the :doc:`curve` to model aerodynamic behaviors:
+The physics engine consumes data from a curve to model aerodynamic behaviors:
 
 * **Load curves** at aircraft initialization
 * **Interpolate values** during runtime calculations
@@ -122,8 +113,6 @@ Code Example
        var lift_force = lift_coefficient * dynamic_pressure * wing_area
        return lift_force
 
-Related Technical Concepts
-==========================
 
-* :doc:`curve` - Generation of aerodynamic data
-* :doc:`integration` - Connection with Python aerodynamic tools
+
+

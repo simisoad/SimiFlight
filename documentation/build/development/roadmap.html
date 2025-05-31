@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="SimiFlight AI Team — Persona Definitions" href="ai_developers.html" /><link rel="prev" title="Development" href="index.html" />
         <link rel="canonical" href="https://simisoad.github.io/SimiFlight/development/roadmap.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
@@ -200,7 +200,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../systemOverview_planningTopics.html">SimiFlight – System Overview and Planning Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../overview02.html">SimiFlight – Project Overview</a></li>
@@ -220,7 +220,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#performance-optimization">Performance Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#code-example">Code Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../technical/physics.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../technical/steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
@@ -229,7 +228,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../technical/aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Development</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Major Phases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-versioning">Release Versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -286,6 +290,45 @@ priorities, and estimated timelines.</p>
 </ul>
 <p><strong>Timeline</strong>: Q3 2025</p>
 <p><strong>Key Tasks</strong>:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 50.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Priority</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python Backend</p></td>
+<td><p>Implement basic lift/drag calculations</p></td>
+<td><p>In Progress</p></td>
+<td><p>High</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simple UI</p></td>
+<td><p>Create minimal Godot interface</p></td>
+<td><p>Planned</p></td>
+<td><p>Medium</p></td>
+</tr>
+<tr class="row-even"><td><p>Data Export</p></td>
+<td><p>Define and implement data format</p></td>
+<td><p>Not Started</p></td>
+<td><p>Medium</p></td>
+</tr>
+<tr class="row-odd"><td><p>Validation</p></td>
+<td><p>Test against NACA airfoil data</p></td>
+<td><p>Not Started</p></td>
+<td><p>High</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="phase-2-physics-core">
 <h2>Phase 2: Physics Core<a class="headerlink" href="#phase-2-physics-core" title="Link to this heading">¶</a></h2>
@@ -359,15 +402,6 @@ priorities, and estimated timelines.</p>
 <p><strong>Timeline</strong>: Continuous</p>
 </section>
 </section>
-<section id="milestone-chart">
-<h1>Milestone Chart<a class="headerlink" href="#milestone-chart" title="Link to this heading">¶</a></h1>
-<figure class="align-center" id="id1">
-<img alt="Roadmap Timeline" src="_static/roadmap_chart.png" />
-<figcaption>
-<p><span class="caption-text"><em>SimiFlight development roadmap timeline</em></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
-</section>
 <section id="release-versioning">
 <h1>Release Versioning<a class="headerlink" href="#release-versioning" title="Link to this heading">¶</a></h1>
 <p>SimiFlight follows semantic versioning:</p>
@@ -383,8 +417,26 @@ priorities, and estimated timelines.</p>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="ai_developers.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SimiFlight AI Team — Persona Definitions</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Development</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -424,7 +476,6 @@ priorities, and estimated timelines.</p>
 <li><a class="reference internal" href="#phase-6-documentation">Phase 6: Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#milestone-chart">Milestone Chart</a></li>
 <li><a class="reference internal" href="#release-versioning">Release Versioning</a></li>
 </ul>
 

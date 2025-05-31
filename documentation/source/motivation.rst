@@ -40,11 +40,6 @@ A core principle of SimiFlight is the implementation of a spherical world model:
 * Inspired by games like **Kerbal Space Program** and **Outerra**
 * Commitment to scientific accuracy balanced with technical feasibility
 
-.. figure:: _static/spherical_world.png
-   :alt: Spherical World Model
-   :align: center
-   
-   *Conceptual illustration of SimiFlight's spherical world model*
 
 Project Goals
 =============

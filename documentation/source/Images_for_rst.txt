@@ -1,0 +1,3 @@
+.. image:: _static/simiflight_logo.png
+   :alt: SimiFlight Logo
+   :align: center
