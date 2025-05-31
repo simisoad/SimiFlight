@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Atmospheric Modeling Concepts" href="atmosphericModeling.html" /><link rel="prev" title="Core Concept" href="world.html" />
-        <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/physics.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Insights on Large World Simulation and Precision for SimiFlight" href="simiflight_world_precision_insights.html" /><link rel="prev" title="Core Forces" href="physics.html" />
+        <link rel="canonical" href="https://simisoad.github.io/SimiFlight/technical/atmosphericModeling.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>Core Forces - SimiFlightDocumentation develop documentation</title>
+        <title>Atmospheric Modeling Concepts - SimiFlightDocumentation develop documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -214,13 +214,14 @@
 <li class="toctree-l2"><a class="reference internal" href="world.html#performance-considerations">Performance Considerations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="world.html#related-technical-concepts">Related Technical Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="world.html#references">References</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Core Forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#physics-model">Physics Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aerodynamic-data">Aerodynamic Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#performance-optimization">Performance Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#integration-with-curve-tool">Integration with Curve Tool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#code-example">Code Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="atmosphericModeling.html">Atmospheric Modeling Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html">Core Forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#physics-model">Physics Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#aerodynamic-data">Aerodynamic Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#performance-optimization">Performance Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#integration-with-curve-tool">Integration with Curve Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#code-example">Code Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics.html#related-technical-concepts">Related Technical Concepts</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Atmospheric Modeling Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="steeringWheel_LiftDeltaWing_VortexLift.html">Nose Gear Steering and Aerodynamic Lift Modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wheels.html">Wheel Suspension Example (Godot 4)</a></li>
@@ -228,12 +229,7 @@
 <li class="toctree-l2"><a class="reference internal" href="aiSystemOverview.html">AI System Overview – SimiFlight</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Development</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Development</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html">Major Phases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../development/roadmap.html#release-versioning">Release Versioning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/ai_developers.html">SimiFlight AI Team — Persona Definitions</a></li>
 </ul>
 
 </div>
@@ -254,7 +250,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../_sources/technical/physics.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/technical/atmosphericModeling.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -268,115 +264,117 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <p>The Flight Physics Engine is the heart of SimiFlight’s simulation capabilities,
-providing realistic aerodynamic behavior based on physical principles.</p>
-<section id="core-forces">
-<h1>Core Forces<a class="headerlink" href="#core-forces" title="Link to this heading">¶</a></h1>
-<p>The physics engine models four fundamental forces:</p>
-<ul class="simple">
-<li><p><strong>Lift</strong> - Perpendicular force generated by airflow over airfoils</p></li>
-<li><p><strong>Drag</strong> - Resistance force opposing motion through air</p></li>
-<li><p><strong>Weight</strong> - Gravitational force pulling the aircraft down</p></li>
-<li><p><strong>Thrust</strong> - Propulsive force from engines</p></li>
-</ul>
+          <section id="atmospheric-modeling-concepts">
+<h1>Atmospheric Modeling Concepts<a class="headerlink" href="#atmospheric-modeling-concepts" title="Link to this heading">¶</a></h1>
+<p>This document outlines scalable concepts and ideas for integrating wind, turbulence, and updraft simulation into the SimiFlight flight simulator. The approach focuses on flexibility and extensibility, starting from simple implementations and building toward more advanced atmospheric effects.</p>
+<section id="overview-of-effects">
+<h2>Overview of Effects<a class="headerlink" href="#overview-of-effects" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Effect             | Description                                    | Complexity | Planned Priority |</div>
+<div class="line">—————— | ———————————————- | ———- | —————- |</div>
+<div class="line">Constant Wind      | Uniform wind vector across entire scene        | Low        | ✅ Early support  |</div>
+<div class="line">Gusts / Turbulence | Randomized short-term changes in wind strength | Medium     | ✅ Planned        |</div>
+<div class="line">Thermals           | Vertical updrafts from heated surfaces         | Medium     | ✅ Planned        |</div>
+<div class="line">Orographic Lift    | Updraft from wind hitting slopes or terrain    | High       | ⬜ Future         |</div>
+<div class="line">Wake / Downwash    | Complex airflow around obstacles or aircraft   | High       | ⬜ Optional       |</div>
+</div>
+<p>—</p>
 </section>
-<section id="physics-model">
-<h1>Physics Model<a class="headerlink" href="#physics-model" title="Link to this heading">¶</a></h1>
-<section id="implementation-approach">
-<h2>Implementation Approach<a class="headerlink" href="#implementation-approach" title="Link to this heading">¶</a></h2>
-<p>The flight physics system is implemented in layers:</p>
-<ol class="arabic simple">
-<li><p><strong>Prototype layer</strong> - Initial implementation in GDScript</p></li>
-<li><p><strong>Performance layer</strong> - Critical components ported to C++ GDExtensions</p></li>
-<li><p><strong>Integration layer</strong> - Connection to Godot’s physics system</p></li>
-</ol>
-</section>
-<section id="multi-point-force-application">
-<h2>Multi-point Force Application<a class="headerlink" href="#multi-point-force-application" title="Link to this heading">¶</a></h2>
-<p>Forces are applied at specific control points:</p>
-<ul class="simple">
-<li><p><strong>Wings</strong> - Main lifting surfaces with variable control points</p></li>
-<li><p><strong>Control surfaces</strong> - Ailerons, elevators, rudders with separate force calculations</p></li>
-<li><p><strong>Engines</strong> - Thrust vectors with proper positioning</p></li>
-</ul>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">ForcePoint</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Vector3</span><span class="w"> </span><span class="n">position</span><span class="p">;</span><span class="w">   </span><span class="c1">// Relative to aircraft center</span>
-<span class="w">    </span><span class="n">Vector3</span><span class="w"> </span><span class="n">direction</span><span class="p">;</span><span class="w">  </span><span class="c1">// Force direction vector</span>
-<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">magnitude</span><span class="p">;</span><span class="w">    </span><span class="c1">// Force magnitude</span>
-<span class="p">};</span>
+<section id="wind-system-architecture">
+<h2>Wind System Architecture<a class="headerlink" href="#wind-system-architecture" title="Link to this heading">¶</a></h2>
+<p>The wind model should be implemented as a dedicated and modular system, for example:</p>
+<section id="singleton-windmanager">
+<h3>Singleton: WindManager<a class="headerlink" href="#singleton-windmanager" title="Link to this heading">¶</a></h3>
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="k">class_name</span><span class="w"> </span><span class="n">WindManager</span>
+<span class="k">var</span><span class="w"> </span><span class="n">global_wind</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="c1"># default eastward wind</span>
+
+<span class="k">func</span><span class="w"> </span><span class="n">get_wind_at</span><span class="p">(</span><span class="n">position</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">:</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">global_wind</span>
 </pre></div>
 </div>
-</section>
-</section>
-<section id="aerodynamic-data">
-<h1>Aerodynamic Data<a class="headerlink" href="#aerodynamic-data" title="Link to this heading">¶</a></h1>
-<section id="curve-based-approach">
-<h2>Curve-Based Approach<a class="headerlink" href="#curve-based-approach" title="Link to this heading">¶</a></h2>
-<p>SimiFlight uses precomputed aerodynamic tables:</p>
-<ul class="simple">
-<li><p><strong>Lift coefficients</strong> by angle of attack and Mach number</p></li>
-<li><p><strong>Drag coefficients</strong> by angle of attack and Mach number</p></li>
-<li><p><strong>Moment coefficients</strong> for rotational forces</p></li>
-<li><p><strong>Ground effect</strong> modifications near terrain</p></li>
-</ul>
-</section>
-<section id="special-conditions">
-<h2>Special Conditions<a class="headerlink" href="#special-conditions" title="Link to this heading">¶</a></h2>
-<p>The physics model accounts for special flight conditions:</p>
-<ul class="simple">
-<li><p><strong>Stall</strong> - Separation of airflow at high angles of attack</p></li>
-<li><p><strong>Compressibility</strong> - Air behavior changes at high subsonic speeds</p></li>
-<li><p><strong>Prandtl-Glauert correction</strong> - Applied up to Mach 0.85</p></li>
-<li><p><strong>Ground effect</strong> - Modified lift near terrain</p></li>
-</ul>
-</section>
-</section>
-<section id="performance-optimization">
-<h1>Performance Optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading">¶</a></h1>
-<section id="multi-threading">
-<h2>Multi-threading<a class="headerlink" href="#multi-threading" title="Link to this heading">¶</a></h2>
-<p>The physics engine utilizes multi-threading for performance:</p>
-<ul class="simple">
-<li><p><strong>Force calculations</strong> distributed across worker threads</p></li>
-<li><p><strong>Aerodynamic lookups</strong> processed in parallel</p></li>
-<li><p><strong>Thread synchronization</strong> for consistent physics</p></li>
-</ul>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Multi-threaded force calculation example</span>
-<span class="kt">void</span><span class="w"> </span><span class="nf">calculateForcesThreaded</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">AircraftState</span><span class="o">&amp;</span><span class="w"> </span><span class="n">state</span><span class="p">,</span>
-<span class="w">                            </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ForcePoint</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">forces</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// Divide force points among threads</span>
-<span class="w">    </span><span class="c1">// Process each thread&#39;s workload</span>
-<span class="w">    </span><span class="c1">// Synchronize results</span>
-<span class="p">}</span>
+<div class="highlight-``````````````````` notranslate"><div class="highlight"><pre><span></span>   This system allows aircraft to query wind conditions at any position and is future-proof for expansion.
+
+   ---
+
+   Gusts and Turbulence
+   --------------------
+
+
+.. code-block:: gdscript
+
+   var gust_timer := 0.0
+   var gust_strength := 0.0
+
+   func update_gusts(delta):
+       gust_timer -= delta
+       if gust_timer &lt;= 0:
+           gust_strength = randf_range(-2.0, 2.0)
+           gust_timer = randf_range(0.5, 2.0)
+
+   func get_wind_at(position: Vector3) -&gt; Vector3:
+       update_gusts(get_process_delta_time())
+       return global_wind + Vector3(gust_strength, 0, 0)
+
+
+---
+
+Thermal Simulation (Volumetric Zones)
+-------------------------------------
+
+
+Thermals can be approximated as spherical or ellipsoidal volumes where vertical wind is applied:
 </pre></div>
 </div>
-</section>
-</section>
-<section id="integration-with-curve-tool">
-<h1>Integration with Curve Tool<a class="headerlink" href="#integration-with-curve-tool" title="Link to this heading">¶</a></h1>
-<p>The physics engine consumes data from a curve to model aerodynamic behaviors:</p>
-<ul class="simple">
-<li><p><strong>Load curves</strong> at aircraft initialization</p></li>
-<li><p><strong>Interpolate values</strong> during runtime calculations</p></li>
-<li><p><strong>Cache frequent lookups</strong> for performance</p></li>
-</ul>
-</section>
-<section id="code-example">
-<h1>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h1>
-<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simplified lift calculation in GDScript</span>
-<span class="k">func</span><span class="w"> </span><span class="n">calculate_lift</span><span class="p">(</span><span class="n">airfoil_data</span><span class="p">,</span><span class="w"> </span><span class="n">angle_of_attack</span><span class="p">,</span><span class="w"> </span><span class="n">airspeed</span><span class="p">,</span><span class="w"> </span><span class="n">air_density</span><span class="p">,</span><span class="w"> </span><span class="n">wing_area</span><span class="p">):</span>
-<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">lift_coefficient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">airfoil_data</span><span class="o">.</span><span class="n">get_lift_coefficient</span><span class="p">(</span><span class="n">angle_of_attack</span><span class="p">)</span>
-<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">dynamic_pressure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">air_density</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">airspeed</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">airspeed</span>
-<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">lift_force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lift_coefficient</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dynamic_pressure</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">wing_area</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">lift_force</span>
+<div class="highlight-gdscript notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="n">ThermicZone</span><span class="p">:</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">center</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">Vector3</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">radius</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">strength</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">float</span>
+
+<span class="w">    </span><span class="k">func</span><span class="w"> </span><span class="n">get_vertical_lift_at</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span><span class="w"> </span><span class="nb nb-Type">Vector3</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb nb-Type">float</span><span class="p">:</span>
+<span class="w">        </span><span class="k">var</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">center</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">radius</span><span class="p">:</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">strength</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">radius</span><span class="p">))</span>
 </pre></div>
 </div>
+<div class="highlight-``````````````````````````````````````````` notranslate"><div class="highlight"><pre><span></span>Aircraft query nearby thermal zones and apply resulting vertical force.
+
+Future enhancement: Automatically generate thermals based on terrain slope, sun angle, or elevation.
+
+---
+
+Terrain and Hang Lift (Advanced)
+--------------------------------
+
+
+Orographic lift occurs when wind is forced upwards by terrain:
+</pre></div>
+</div>
+<ul>
+<li><p>Requires terrain slope and wind direction analysis</p></li>
+<li><p>Can be approximated using local surface normals and comparing them with wind vectors</p>
+<blockquote>
+<div><p>Planned as a future extension.</p>
+<p>—</p>
+<p>To test and visualize airflow:</p>
+</div></blockquote>
+</li>
+<li><p>Use particle systems or vector arrows to show wind fields</p></li>
+<li><p>Enable toggleable debug drawing for thermal zones</p>
+<blockquote>
+<div><p>—</p>
+<p>The atmospheric simulation in SimiFlight should grow organically with project needs. Starting with a solid API (<cite>WindManager</cite>) allows early integration of wind effects, and opens the door for realism upgrades such as thermals and mountain updrafts without reworking core systems.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+</section>
 </section>
 
         </article>
@@ -384,23 +382,23 @@ providing realistic aerodynamic behavior based on physical principles.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="atmosphericModeling.html">
+          <a class="next-page" href="simiflight_world_precision_insights.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Atmospheric Modeling Concepts</div>
+                <div class="title">Insights on Large World Simulation and Precision for SimiFlight</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="world.html">
+          <a class="prev-page" href="physics.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Core Concept</div>
+                <div class="title">Core Forces</div>
                 
               </div>
             </a>
@@ -422,8 +420,31 @@ providing realistic aerodynamic behavior based on physical principles.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Atmospheric Modeling Concepts</a><ul>
+<li><a class="reference internal" href="#overview-of-effects">Overview of Effects</a></li>
+<li><a class="reference internal" href="#wind-system-architecture">Wind System Architecture</a><ul>
+<li><a class="reference internal" href="#singleton-windmanager">Singleton: WindManager</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
