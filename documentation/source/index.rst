@@ -4,6 +4,7 @@ SimiFlight
 
 *A modular flight simulator built with Godot Engine 4.4*
 
+Note, this documentation is work in progress.
 
 
 **Version:** 0.2
