@@ -1,0 +1,465 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="&lt;no title&gt;" href="structure.html" /><link rel="prev" title="Overview" href="overview.html" />
+        <link rel="canonical" href="https://simisoad.github.io/SimiFlight/overview02.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+        <title>} - SimiFlightDocumentation develop documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">SimiFlightDocumentation develop documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">SimiFlightDocumentation develop documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">}</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goals.html">Goals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="technical/index.html">Technical Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Technical Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="technical/world.html">Hybrid Precision World Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/physics.html">Flight Physics Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/simiflight_world_precision_insights.html">Insights on Large World Simulation and Precision for SimiFlight</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/overview02.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <p># SimiFlight – Project Overview</p>
+<p>## Vision</p>
+<p>SimiFlight aims to combine the physical realism of advanced flight simulators with the freedom and creativity of sandbox-style exploration games. It is designed to be engaging for enthusiasts of aviation physics while avoiding overly complex cockpit systems. The long-term goal is to simulate flight on a spherical world, respecting scientific accuracy and offering an immersive, scalable experience.</p>
+<p>## Personal Motivation</p>
+<ul class="simple">
+<li><p>The name “SimiFlight” is derived from “Simon” in the Luzerner Hinterland dialect (“Simi”).</p></li>
+<li><p>Inspired by a lifelong passion for aviation and the experience of building a physical flight simulator prototype in Unreal Engine for the Matura thesis.</p></li>
+<li><p>Preference for realistic physics (e.g., DCS World) but without the complexity of full instrumentation.</p></li>
+<li><p>Strong desire to include a spherical world because a flat Earth is scientifically inaccurate.</p></li>
+<li><p>Deep emotional connection to certain aircraft, especially the Canadair CL-415 “Super Scooper”, which has become a symbol of hope, precision, and airborne heroism.</p></li>
+</ul>
+<p>## Goals</p>
+<p>### Realism</p>
+<ul class="simple">
+<li><p>Physics-based flight model including lift, drag, G-forces, and stalling behavior.</p></li>
+<li><p>Modular realism options: toggle simplified controls, auto-trim, wind effects, etc.</p></li>
+<li><p>No need to simulate every switch; focus is on flying, not cold-start procedures.</p></li>
+<li><p>Accurate aircraft behaviors based on airframe types (e.g., STOL, delta wings, heavy cargo jets).</p></li>
+</ul>
+<p>### World &amp; Scale</p>
+<ul class="simple">
+<li><p>Full spherical planet (no flat terrain).</p></li>
+<li><p>Large-world coordinates with 64-bit precision for accurate global positioning.</p></li>
+<li><p>Floating origin technique to avoid precision errors far from origin.</p></li>
+<li><p>Dynamic level of detail and object culling.</p></li>
+<li><p>Potential integration of natural environments and weather systems (e.g., wind, updrafts, wildfires).</p></li>
+</ul>
+<p>### Gameplay</p>
+<ul class="simple">
+<li><p>Game/simulator hybrid (“sim-lite”).</p></li>
+<li><p>Freedom of exploration.</p></li>
+<li><p>Potential for missions, challenges, races, or delivery systems.</p></li>
+<li><p>Optional arcade elements: assistive HUDs, simplified physics, AI traffic, etc.</p></li>
+<li><p>Support for unique mission types like aerial firefighting (e.g., CL-415 operations).</p></li>
+</ul>
+<p>### Modding and Extensibility</p>
+<ul class="simple">
+<li><p>SimiFlight is being designed as a <strong>modular, extensible simulator framework</strong>.</p></li>
+<li><p>Focus on clear structure and scalability from the beginning.</p></li>
+<li><p>Aircraft, missions, and world elements are modular and plug-in based.</p></li>
+<li><p>Goal is to make it <strong>easy for others to create mods</strong>, from simple aircraft to complex avionics.</p></li>
+<li><p>Support for:</p>
+<ul>
+<li><p>Aircraft plugins with physical models, 3D models, and sound packages.</p></li>
+<li><p>Scripting API in Python, GDScript, or possibly Lua.</p></li>
+<li><p>Sandbox mission editor with GUI.</p></li>
+<li><p>Community mod folder and loader structure.</p></li>
+</ul>
+</li>
+</ul>
+<p>## Software Architecture and Development Concepts</p>
+<p>### Principles</p>
+<ul class="simple">
+<li><p><strong>Clean Code</strong>: readable, maintainable, testable</p></li>
+<li><p><strong>Single Responsibility Principle (SRP)</strong>: each class/script has one job</p></li>
+<li><p><strong>Loose Coupling</strong>: avoid hard dependencies, use interfaces and signals</p></li>
+<li><p><strong>High Modularity</strong>: small, replaceable parts for aircraft, missions, systems</p></li>
+<li><p><strong>Ease of Extension</strong>: mods and aircraft can be created by others</p></li>
+</ul>
+<p>### Proposed Project Structure</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">res://</span>
+<span class="pre">├──</span> <span class="pre">core/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Core</span> <span class="pre">systems:</span> <span class="pre">Input,</span> <span class="pre">Config,</span> <span class="pre">Logger</span>
+<span class="pre">├──</span> <span class="pre">physics/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Flight</span> <span class="pre">physics,</span> <span class="pre">environment,</span> <span class="pre">forces</span>
+<span class="pre">├──</span> <span class="pre">aircraft/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Aircraft</span> <span class="pre">logic</span> <span class="pre">and</span> <span class="pre">definitions</span>
+<span class="pre">├──</span> <span class="pre">systems/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">HUD,</span> <span class="pre">camera,</span> <span class="pre">missions</span>
+<span class="pre">├──</span> <span class="pre">world/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Terrain,</span> <span class="pre">fire</span> <span class="pre">systems,</span> <span class="pre">atmosphere</span>
+<span class="pre">├──</span> <span class="pre">ui/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">User</span> <span class="pre">interface</span>
+<span class="pre">├──</span> <span class="pre">scenes/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Game</span> <span class="pre">scenes</span> <span class="pre">(menu,</span> <span class="pre">world,</span> <span class="pre">flight)</span>
+<span class="pre">└──</span> <span class="pre">utils/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">General-purpose</span> <span class="pre">utilities</span>
+<span class="pre">`</span></code></p>
+<p>### Communication Between Modules</p>
+<ul class="simple">
+<li><p>Use <strong>signals</strong> for event-driven communication</p></li>
+<li><p>Use <strong>autoload singletons</strong> for global systems (Input, WorldManager)</p></li>
+<li><p>Optional: central <strong>EventBus</strong> to dispatch global events</p></li>
+</ul>
+<p>### Code Structure Example (SRP)</p>
+<p>For an aircraft:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">Cessna.gd</span>
+<span class="pre">├──</span> <span class="pre">FlightController.gd</span>&#160; <span class="pre">→</span> <span class="pre">handles</span> <span class="pre">input</span>
+<span class="pre">├──</span> <span class="pre">Aerodynamics.gd</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">→</span> <span class="pre">lift/drag</span> <span class="pre">calculations</span>
+<span class="pre">├──</span> <span class="pre">Engine.gd</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">→</span> <span class="pre">thrust</span> <span class="pre">and</span> <span class="pre">fuel</span>
+<span class="pre">├──</span> <span class="pre">Visual.gd</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">→</span> <span class="pre">visuals</span>
+<span class="pre">`</span></code></p>
+<p>### Data-Driven Design</p>
+<p>Aircraft and config stored in external files (e.g., JSON):</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>json
+{</p>
+<blockquote>
+<div><p>“name”: “CL-415”,
+“mass”: 12100,
+“engines”: 2,
+“type”: “turboprop”,
+“lift_curve”: “<a class="reference external" href="res://curves/cl415_lift.json">res://curves/cl415_lift.json</a>”</p>
+</div></blockquote>
+<section id="id5">
+<h1>}<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">`gdscript</span>
+<span class="pre">var</span> <span class="pre">plane_data</span> <span class="pre">=</span> <span class="pre">load_json(&quot;res://aircraft/cl415/data.json&quot;)</span>
+<span class="pre">plane.load_from_data(plane_data)</span>
+<span class="pre">`</span></code></p>
+<p>### Testing</p>
+<ul class="simple">
+<li><p>Use <strong>GUT</strong> for unit tests (flight models, math functions, mission logic)</p></li>
+<li><p>Separate logic and rendering to allow headless testing</p></li>
+</ul>
+<p>## Aircraft Testing &amp; Development Philosophy</p>
+<ul class="simple">
+<li><p>Initial test aircraft will cover different aerodynamic profiles:</p>
+<ul>
+<li><p>Cessna 172 (standard general aviation, low speed, propeller-driven)</p></li>
+<li><p>Messerschmitt Bf-109 (WWII-era propeller aircraft)</p></li>
+<li><p>Mirage III (delta wing supersonic jet – useful for stress-testing lift modeling)</p></li>
+</ul>
+</li>
+<li><p>Long-term integration of the Canadair CL-415 as a dedicated aerial firefighting aircraft:</p>
+<ul>
+<li><p>Amphibious water landing and scooping mechanics</p></li>
+<li><p>Fire zone simulation with smoke, heat, and wind</p></li>
+<li><p>Precision water drop mechanics</p></li>
+</ul>
+</li>
+<li><p>Flexible physics to allow diverse aircraft types and roles.</p></li>
+</ul>
+<p>## Inspirations</p>
+<div class="line-block">
+<div class="line">Game                 | Why it’s relevant                                                        |</div>
+<div class="line">——————– | ———————————————————————— |</div>
+<div class="line">DCS World            | Excellent flight physics, but too complex for casual gameplay.           |</div>
+<div class="line">Kerbal Space Program | Blends science with fun; great handling of spherical worlds and physics. |</div>
+<div class="line">Outerra              | Real spherical world with terrain streaming and flight.                  |</div>
+<div class="line">SimplePlanes         | Physics-focused, sandbox-style flight.                                   |</div>
+<div class="line">FlightGear           | Open-source flight simulator; useful for reference and data.             |</div>
+</div>
+<p>## Development Tools</p>
+<ul class="simple">
+<li><p><strong>Godot Engine</strong>: Modified version for 64-bit precision and planetary rendering.</p></li>
+<li><p><strong>Python</strong>: Used for external tools like the curve editor or aerodynamic modeling.</p></li>
+<li><p><strong>Markdown &amp; PyCharm</strong>: Project documentation and scripting.</p></li>
+<li><p><strong>GitHub</strong>: Project hosting (<cite>simiflight</cite> repository), structured into sub-projects.</p></li>
+<li><p><strong>CLion / C++</strong>: For performance-critical modules (e.g. physics engine)</p></li>
+</ul>
+<p>## Repository Structure</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">simiflight/</span>
+<span class="pre">├──</span> <span class="pre">Godot/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Main</span> <span class="pre">game</span> <span class="pre">project</span>
+<span class="pre">├──</span> <span class="pre">simiflight-curvetool/</span>&#160; <span class="pre">#</span> <span class="pre">Python</span> <span class="pre">GUI</span> <span class="pre">for</span> <span class="pre">aerodynamic</span> <span class="pre">curve</span> <span class="pre">editing</span>
+<span class="pre">├──</span> <span class="pre">simiflight-docs/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Markdown</span> <span class="pre">documentation</span>
+<span class="pre">├──</span> <span class="pre">assets/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">3D</span> <span class="pre">models,</span> <span class="pre">textures,</span> <span class="pre">sounds</span>
+<span class="pre">└──</span> <span class="pre">README.md</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">Project</span> <span class="pre">overview</span>
+<span class="pre">`</span></code></p>
+<p>—</p>
+<p>This document is an evolving concept and early-stage idea collection for the SimiFlight project. It may contain duplicate ideas or inconsistent structure. A refactored and structured version will follow as the project matures.</p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="structure.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">&lt;no title&gt;</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="overview.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Overview</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, Simi
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=fd2318e6"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>
