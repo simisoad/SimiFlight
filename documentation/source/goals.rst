@@ -77,4 +77,4 @@ The simulator incorporates various gameplay elements:
 * **Optional assists** for new players
 
 
-Technical goals are further detailed in the :doc:`technical/index` section.
+Technical goals are further detailed in the :doc:`technical/technical_index` section.

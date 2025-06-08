@@ -50,4 +50,4 @@ Related Pages
 
 * :doc:`motivation` - Personal motivation behind the project
 * :doc:`goals` - Project goals and objectives
-* :doc:`technical/index` - Technical concepts and implementation details
+* :doc:`technical/technical_index` - Technical concepts and implementation details

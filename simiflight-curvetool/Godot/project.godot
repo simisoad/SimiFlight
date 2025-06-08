@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="SimiFlight-CurveTool"
-run/main_scene="uid://dwbhwc07efop"
+run/main_scene="uid://bild3b6ce41e2"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/folder_structure_export/plugin.cfg", "res://addons/god_plot/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+
+[folder_structure_export]
+
+exclusions/excluded_dirs=["addons", ".godot", ".git", "build"]
+exclusions/output_path="folder_structure.txt"
 
 [rendering]
 

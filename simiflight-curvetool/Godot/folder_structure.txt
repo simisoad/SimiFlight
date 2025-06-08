@@ -1,0 +1,31 @@
+Godot
+├───assets
+├───data
+│   └───airfoils
+│   │   ├───naca_632012.tres
+│   │   └───naca_632012.txt
+├───scenes
+│   ├───main.tscn
+│   ├───main.tscn6435697529.tmp
+│   ├───plot.gd
+│   ├───plot.gd.uid
+│   ├───plot_test.gd
+│   └───plot_test.gd.uid
+├───scripts
+│   ├───airfoil_profile.gd
+│   ├───airfoil_profile.gd.uid
+│   ├───curve_simulator.gd
+│   ├───curve_simulator.gd.uid
+│   ├───export_manager.gd
+│   ├───export_manager.gd.uid
+│   ├───plot_manager.gd
+│   └───plot_manager.gd.uid
+├───ui
+│   └───elements
+├───LICENSE
+├───README.md
+├───folder_structure.txt
+├───icon.svg
+├───main.gd
+├───main.gd.uid
+└───project.godot

@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bild3b6ce41e2"]
+
+[ext_resource type="Script" uid="uid://bs38s0qv34k6m" path="res://scenes/plot_test.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="1_o5qli"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0wfyh")
+metadata/_edit_lock_ = true
+
+[node name="Plot" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o5qli")
+x_min = -180.0
+x_max = 180.0
+x_tick_count = 12
+y_min = -2.5
+y_max = 2.5
+axis_thickness = 4.0
+metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+metadata/_edit_lock_ = true

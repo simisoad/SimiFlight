@@ -22,8 +22,8 @@ simulator that blends realistic physics with sandbox-style exploration.
    structure
    motivation
    goals
-   technical/index
-   development/index
+   technical/technical_index
+   development/development_index
    roadmap
 
 Project Vision
