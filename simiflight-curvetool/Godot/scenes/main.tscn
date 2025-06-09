@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bild3b6ce41e2"]
+[gd_scene load_steps=5 format=3 uid="uid://bild3b6ce41e2"]
 
 [ext_resource type="Script" uid="uid://bs38s0qv34k6m" path="res://scenes/plot_test.gd" id="1_0wfyh"]
 [ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="1_o5qli"]
+[ext_resource type="StyleBox" uid="uid://6m6n7cp316nd" path="res://ui/elements/BlackBackgroundPanel.tres" id="2_sugp2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_sugp2"]
+font_size = 56
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -11,22 +15,213 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0wfyh")
+mach_number = 0.3
 metadata/_edit_lock_ = true
 
-[node name="Plot" type="Control" parent="."]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Title" type="Panel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+theme_override_styles/panel = ExtResource("2_sugp2")
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/Title"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_sugp2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Plot" type="Control" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("1_o5qli")
 x_min = -180.0
 x_max = 180.0
 x_tick_count = 12
-y_min = -2.5
-y_max = 2.5
+y_min = -3.0
+y_max = 3.0
+background_color = Color(0.172833, 0.172833, 0.172833, 1)
+horizontal_title = "Alpha"
+vertical_title = "CL / CD"
 axis_thickness = 4.0
 metadata/_custom_type_script = "uid://2wcgnx78i6bw"
 metadata/_edit_lock_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.33
+
+[node name="Airfoil_Panel" type="Control" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+script = ExtResource("1_o5qli")
+x_max = 1.0
+x_decimal_places = 4
+y_min = -0.1
+y_max = 0.1
+y_decimal_places = 4
+background_color = Color(0.172549, 0.172549, 0.172549, 1)
+show_tick_labels = false
+metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+
+[node name="Infos" type="Panel" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+theme_override_styles/panel = ExtResource("2_sugp2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Infos"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MaxLiftLabel" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Max Lift:"
+vertical_alignment = 1
+
+[node name="MaxDragLabel" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Max Lift:"
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CalcCLCDButton" type="Button" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+size_flags_vertical = 2
+size_flags_stretch_ratio = 0.0
+text = "Calculate CL and CD!"
+
+[node name="CreateLUTs" type="Button" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+size_flags_vertical = 2
+size_flags_stretch_ratio = 0.0
+text = "Create LUTs!"
+
+[node name="CreateLUTsCombineMethods" type="Button" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+size_flags_vertical = 2
+size_flags_stretch_ratio = 0.0
+text = "Create LUTs, with both Methods!"
+
+[node name="Settings" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.0
+
+[node name="StallAngle" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings"]
+layout_mode = 2
+size_flags_vertical = 6
+size_flags_stretch_ratio = 0.0
+
+[node name="LabelPositiveStallAngle" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/StallAngle"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+text = "Assumed Stall Angle:"
+
+[node name="LineEditPositiveStallAngle" type="LineEdit" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/StallAngle"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+
+[node name="MachNumber" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings"]
+layout_mode = 2
+size_flags_vertical = 6
+size_flags_stretch_ratio = 0.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/MachNumber"]
+layout_mode = 2
+text = "Mach Number:"
+
+[node name="LineEditMachNumber" type="LineEdit" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/MachNumber"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+
+[node name="ReynoldsNumber" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings"]
+layout_mode = 2
+size_flags_vertical = 6
+size_flags_stretch_ratio = 0.0
+
+[node name="LabelReynoldsNumber" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/ReynoldsNumber"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+text = "Reynolds Number:"
+
+[node name="LineEditReynoldsNumber" type="LineEdit" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/ReynoldsNumber"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+
+[node name="Sharpness" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings"]
+layout_mode = 2
+size_flags_vertical = 6
+size_flags_stretch_ratio = 0.0
+
+[node name="LabelSharpness" type="Label" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/Sharpness"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+text = "Sharpness m2:"
+
+[node name="LineEditSharpness" type="LineEdit" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/Sharpness"]
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Infos/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer4/CalcCLCDButton" to="." method="_on_calc_clcd_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer4/CreateLUTs" to="." method="_on_create_lu_ts_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/VBoxContainer4/CreateLUTsCombineMethods" to="." method="_on_create_lu_ts_combine_methods_pressed"]
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/StallAngle/LineEditPositiveStallAngle" to="." method="_on_line_edit_positive_stall_angle_text_submitted"]
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/MachNumber/LineEditMachNumber" to="." method="_on_line_edit_mach_number_text_submitted"]
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/ReynoldsNumber/LineEditReynoldsNumber" to="." method="_on_line_edit_reynolds_number_text_submitted"]
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/Infos/HBoxContainer/Settings/Sharpness/LineEditSharpness" to="." method="_on_line_edit_sharpness_text_submitted"]

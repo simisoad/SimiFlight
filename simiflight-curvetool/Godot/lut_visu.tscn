@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://x2f41jlstfi1"]
+
+[ext_resource type="Script" uid="uid://dioivwyau0vs1" path="res://lut_visu.gd" id="1_st0r0"]
+[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="2_4jniy"]
+
+[node name="LUT_Visu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_st0r0")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Mach-Zahl:"
+
+[node name="MachSelector" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Flughöhe (m):"
+
+[node name="AltitudeSelector" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Plot" type="Control" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_4jniy")
+x_min = -180.0
+x_max = 180.0
+y_min = -3.0
+y_max = 3.0
+metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer/MachSelector" to="." method="_on_selection_changed"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer/AltitudeSelector" to="." method="_on_selection_changed"]

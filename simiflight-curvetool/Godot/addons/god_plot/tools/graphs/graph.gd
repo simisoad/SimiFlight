@@ -102,6 +102,7 @@ func _build_graph_title():
 	graph_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	graph_title.text = title
 	graph_title.visible = !title.is_empty()
+	
 
 func _build_pair_of_axes():
 	graph_v_box.add_child(pair_of_axes)
@@ -112,6 +113,9 @@ func _build_pair_of_axes():
 func _build_y_axis_title():
 	pair_of_axes.add_child(y_axis_title)
 	_update_y_axis_title_rotation_and_position()
+	
+	
+	
 	y_axis_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	y_axis_title.set_anchors_preset(Control.PRESET_CENTER_LEFT)	
 	y_axis_title.text = vertical_title
