@@ -25,19 +25,19 @@ var NACA_632012 = preload('res://data/airfoils/naca_632012.tres')
 var Naca632012LiftCurve = preload('res://data/LiftCurves/Naca632012LiftCurve.gd')
 var javaFoilLift: NACA632012LiftCurve
 func _ready():
-	
+
 	curves = {"cl_curve": lift_curve_plot, "cd_curve": drag_curve_plot, "cd_curve_minR": drag_curve_min_reynolds, "cl_curve_minR": lift_curve_plot_min_reynolds }
 	javaFoilLift = Naca632012LiftCurve.new()
-	
+
 	# ohne await, werden die x und y Achse von GodPlot leit verschoben dargestellt...
-	await self.get_tree().create_timer(0.01).timeout 
+	await self.get_tree().create_timer(0.01).timeout
 	_perpare_airfoil()
-	await self.get_tree().create_timer(0.01).timeout 
+	await self.get_tree().create_timer(0.01).timeout
 	_draw_graph_aerodynamic_curves(curves)
-	await self.get_tree().create_timer(0.01).timeout 
-	
-	#_draw_graph_aerodynamic_curves(1) 
-	
+	await self.get_tree().create_timer(0.01).timeout
+
+	#_draw_graph_aerodynamic_curves(1)
+
 func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 	for i in range(javaFoilLift.NACA0012_WINDTUNNEL.size()):
 		self.lift_curve_from_JavaFoil.add_point_vector(javaFoilLift.NACA0012_WINDTUNNEL[i])
@@ -47,13 +47,13 @@ func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 	#self.plot.add_series(self.lift_curve_from_JavaFoil2)
 	#self.plot.add_series(self.lift_curve_from_JavaFoil)
 	await self.get_tree().create_timer(0.1).timeout
-	
+
 	var aerodynamic_curves: Dictionary = _compute_aerodynamic_curves_from_geometry(self.alpha_min,self.alpha_max,self.alpha_step)
 	var cl_data: Array = aerodynamic_curves.get("cl")
 	var cd_data: Array = aerodynamic_curves.get("cd")
 	var cd_mR_data: Array = aerodynamic_curves.get("cd_minR")
 	var cl_data_minR: Array = aerodynamic_curves.get("cl_minR")
-	
+
 	var lift_curve: LineSeries = curves.get("cl_curve")
 	var drag_curve: LineSeries = curves.get("cd_curve")
 	var cd_curve_minR: LineSeries = curves.get("cd_curve_minR")
@@ -66,7 +66,7 @@ func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 	for angle in cl_data.size():
 		lift_curve.add_point_vector(cl_data[angle])
 	for angle in cd_data.size():
-		drag_curve.add_point_vector(cd_data[angle])	
+		drag_curve.add_point_vector(cd_data[angle])
 		if cd_data[angle].y > max_drag:
 			max_drag = cd_data[angle].y
 	for angle in cd_mR_data.size():
@@ -74,15 +74,15 @@ func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 	for angle in cl_data_minR.size():
 		lift_curve_minR.add_point_vector(cl_data_minR[angle])
 	%MaxDragLabel.text = ("Max Drag: " + str(max_drag))
-		
+
 	self.plot.add_series(lift_curve)
 	self.plot.add_series(drag_curve)
 	#self.plot.add_series(cd_curve_minR)
 	#self.plot.add_series(lift_curve_minR)
 	#self.plot.add_series(scatter_series)
 	#print(cl_data)
-	
-	
+
+
 func _perpare_airfoil() -> void:
 	self.NACA_632012.airfoil_path = 'res://data/airfoils/NACA0006_Supersonic.txt'
 	self.NACA_632012.airfoil_path = 'res://data/airfoils/Naca0015.txt'
@@ -104,7 +104,7 @@ func _perpare_airfoil() -> void:
 	%Airfoil_Panel.y_max = .1 * ratio/2
 	%Airfoil_Panel.y_min = -0.1 * ratio/2
 	%Airfoil_Panel.x_max = 1.0
-	
+
 	%Airfoil_Panel.add_series(airfoil_vis_upper)
 	%Airfoil_Panel.add_series(airfoil_vis_lower)
 	self.plot.title = String(
@@ -128,26 +128,26 @@ func _get_camber_line() -> Array:
 func _get_max_thickness_and_camber() -> Dictionary:
 	var max_thickness = 0.0
 	var max_camber = 0.0
-	
+
 	var count = min(upper_surface.size(), lower_surface.size())
 	if count == 0:
 		return {"thickness": 0.0, "camber": 0.0}
 
-	# Wir nehmen an, dass upper_surface[i] und lower_surface[i] 
+	# Wir nehmen an, dass upper_surface[i] und lower_surface[i]
 	# eine ähnliche x-Koordinate haben.
 	for i in range(count):
 		var y_upper = upper_surface[i].y
 		var y_lower = lower_surface[i].y
-		
+
 		var thickness = y_upper - y_lower
 		if thickness > max_thickness:
 			max_thickness = thickness
-			
+
 		var camber_y = (y_upper + y_lower) / 2.0
 		if abs(camber_y) > abs(max_camber):
 			max_camber = camber_y
-			
-	return {"thickness": max_thickness, "camber": max_camber}	
+
+	return {"thickness": max_thickness, "camber": max_camber}
 
 func _compute_aerodynamic_curves_from_geometry(p_alpha_min: float = -180.0, p_alpha_max: float = 180.0, p_step: float = 1.0) -> Dictionary:
 	var camber_line = _get_camber_line()
@@ -178,20 +178,20 @@ func _compute_aerodynamic_curves_from_geometry(p_alpha_min: float = -180.0, p_al
 		# Das Integral wird mit der Schrittweite multipliziert und normalisiert
 		alpha_0 *= PI / float(N - 1) # Schrittweite d(theta)
 		alpha_0 *= -1.0 / PI          # Faktor -1/PI
-		
+
 	print("Korrigierter alpha_0 (rad): ", alpha_0, " (deg): ", rad_to_deg(alpha_0))
 	#print("alpha_0: ", alpha_0)
 	# Holen wir uns die Geometrie-Daten einmal am Anfang
 	var geometry = _get_max_thickness_and_camber()
 	print("Geometrie-Analyse: ", geometry)
-	
+
 	# Berechne Lift-Kurve (CL über Alpha)
 	var cl_data: Array = []
-	var cd_data: Array = [] 
+	var cd_data: Array = []
 	var cd_min_reynolds: Array = []
 	var cl_min_reynolds: Array = []
 	#var alpha_deg: float = p_alpha_min
-	
+
 	#while alpha_deg <= p_alpha_max:
 		#var alpha_rad = deg_to_rad(alpha_deg)
 		#print("alpha_deg: ", alpha_deg)
@@ -207,11 +207,11 @@ func _compute_aerodynamic_curves_from_geometry(p_alpha_min: float = -180.0, p_al
 		cl_min_reynolds.append(Vector2(alpha_deg, aero_coeffs.cl))
 		alpha_deg += p_step
 	return {"cl": cl_data, "cd": cd_data, "cd_minR": cd_min_reynolds, "cl_minR": cl_min_reynolds}
-	
+
 
 func _calculate_cl_primary(
 	angle_rad: float,
- 	current_alpha_0: float, 
+ 	current_alpha_0: float,
 	sharpness_pos: float,
 	alpha_stall_pos_re: float,
 	sharpness_neg: float,
@@ -220,15 +220,15 @@ func _calculate_cl_primary(
 	var cl_linear = cl_slope * (angle_rad - current_alpha_0)
 	var cd_max = 2.1 # An Windtunnel-Daten angepasst
 	var cl_post_stall = cd_max * sin(angle_rad - current_alpha_0) * cos(angle_rad)
-	
+
 	var sigma_pos = 1.0 / (1.0 + exp(sharpness_pos * (angle_rad - alpha_stall_pos_re)))
 	var sigma_neg = 1.0 / (1.0 + exp(-sharpness_neg * (angle_rad - alpha_stall_neg_re)))
 	var sigma = min(sigma_pos, sigma_neg)
-	
+
 	return sigma * cl_linear + (1.0 - sigma) * cl_post_stall
 # DIE FINALE, PRODUKTIONSREIFE MASTER-FUNKTION
 func _compute_final_aero_curves(alpha_rad: float, alpha_0: float, geometry: Dictionary, mach_number: float, reynolds_number: float) -> Dictionary:
-	
+
 	var thickness = geometry.thickness
 
 	# --- GEMEINSAME PARAMETER ---
@@ -246,7 +246,7 @@ func _compute_final_aero_curves(alpha_rad: float, alpha_0: float, geometry: Dict
 	var blend_sharpness_90 = 8.0
 	var sigma_90 = 1.0 / (1.0 + exp(blend_sharpness_90 * (abs(alpha_rad) - deg_to_rad(90.0))))
 	var final_cl = sigma_90 * cl_primary + (1.0 - sigma_90) * cl_mirrored
-	
+
 	# --- TEIL 2: CD-BERECHNUNG (mit finalem Feinschliff) ---
 	var cf = 0.074 / pow(reynolds_number, 0.2)
 	var cd_min = 2.0 * cf * (1.0 + 2.0 * thickness)
@@ -254,12 +254,12 @@ func _compute_final_aero_curves(alpha_rad: float, alpha_0: float, geometry: Dict
 	var ar_eff = 50.0
 	var cd_i = pow(final_cl, 2) / (PI * ar_eff * oswald_eff)
 	var cd_pre_stall = cd_min + cd_i
-	
+
 	# DER LETZTE FEINSCHLIFF: Mache CD_max selbst Re-abhängig
 	var cd_max_drag_base = 2.1 # Angepasst an deine Windtunnel-Daten
 	var cd_max_drag_re = cd_max_drag_base * (1.0 + 5.0 / sqrt(reynolds_number)) # Heuristik für Re-Einfluss
 	var cd_post_stall = cd_max_drag_re * pow(sin(alpha_rad), 2)
-	
+
 	# Blending
 	var sigma_pos_cd = 1.0 / (1.0 + exp(sharpness_pos * (alpha_rad - alpha_stall_pos_re)))
 	var sigma_neg_cd = 1.0 / (1.0 + exp(-sharpness_neg * (alpha_rad - alpha_stall_neg_re)))
@@ -282,5 +282,5 @@ func _compute_final_aero_curves(alpha_rad: float, alpha_0: float, geometry: Dict
 			cd_wave = peak_drag * decay_factor
 
 	var final_cd = sigma_cd * cd_pre_stall + (1.0 - sigma_cd) * cd_post_stall + cd_wave
-	
+
 	return {"cl": final_cl, "cd": final_cd}

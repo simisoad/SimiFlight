@@ -28,7 +28,7 @@ static func generate_and_save_lut_old(airfoil_profile: AirfoilProfile, save_path
 	lut.alpha_points = _get_alpha_grid()
 	lut.mach_points = mach_points
 	lut.altitude_points = altitude_points
-	
+
 	# Initialisiere die Daten-Arrays, nicht nötig und geht so sowieso nicht
 	#lut.cl_data = []
 	#lut.cd_data = []
@@ -36,7 +36,7 @@ static func generate_and_save_lut_old(airfoil_profile: AirfoilProfile, save_path
 	# Holen der geometrischen Daten des Profils (einmalig)
 	var geometry = _get_max_thickness_and_camber(airfoil_profile)
 	var alpha_0 = _calculate_alpha_0(airfoil_profile)
-	
+
 	# Die große Dreifach-Schleife
 	for altitude in lut.altitude_points:
 		var atm = _get_isa_atmosphere(altitude)
@@ -46,16 +46,16 @@ static func generate_and_save_lut_old(airfoil_profile: AirfoilProfile, save_path
 		for mach in lut.mach_points:
 			var velocity = mach * speed_of_sound
 			var reynolds = _calculate_reynolds(atm.density, velocity, WING_CHORD, atm.temperature)
-			
+
 			for alpha_deg in lut.alpha_points:
 				var alpha_rad = deg_to_rad(alpha_deg)
-				
+
 				# Rufe die Master-Funktion auf (jetzt Teil dieser Klasse)
 				var aero_coeffs = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
-				
+
 				lut.cl_data.append(aero_coeffs.cl)
 				lut.cd_data.append(aero_coeffs.cd)
-	
+
 	# Speichere die fertige Ressource
 	var err = ResourceSaver.save(lut, save_path)
 	if err == OK:
@@ -74,26 +74,26 @@ static func generate_and_save_lut(airfoil_profile: AirfoilProfile, save_path: St
 	lut.mach_points = mach_points
 	# Repräsentative Reynolds-Zahlen (von kleinen bis zu grossen Flugzeugen)
 	lut.reynolds_points = reynolds_points
-	
+
 	#lut.cl_data = []
 	#lut.cd_data = []
 
 	var geometry = _get_max_thickness_and_camber(airfoil_profile)
 	var alpha_0 = _calculate_alpha_0(airfoil_profile)
-	
+
 	# Die neue große Dreifach-Schleife: Re -> Mach -> Alpha
 	for reynolds in lut.reynolds_points:
 		print("  Calculating for Reynolds: %.1d" % reynolds)
 		for mach in lut.mach_points:
 			for alpha_deg in lut.alpha_points:
 				var alpha_rad = deg_to_rad(alpha_deg)
-				
+
 				# Rufe die Master-Funktion mit den direkten Werten auf
 				var aero_coeffs = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
-				
+
 				lut.cl_data.append(aero_coeffs.cl)
 				lut.cd_data.append(aero_coeffs.cd)
-	
+
 	var err = ResourceSaver.save(lut, save_path)
 	if err == OK:
 		print("Successfully saved (alpha, Mach, Re) LUT to: ", save_path)
@@ -108,7 +108,7 @@ static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile,
 	lut.alpha_points = _get_alpha_grid()
 	lut.mach_points = mach_points
 	lut.reynolds_points = reynolds_points
-	
+
 	# Initialisiere die Daten-Arrays
 	#lut.cl_data = []
 	#lut.cd_data = []
@@ -116,7 +116,7 @@ static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile,
 	# Holen der geometrischen Daten des Profils (einmalig)
 	var geometry = _get_max_thickness_and_camber(airfoil_profile)
 	var alpha_0 = _calculate_alpha_0(airfoil_profile)
-	
+
 	# Die große Dreifach-Schleife
 	for reynolds in lut.reynolds_points:
 		print("  Calculating for Reynolds: %.1d" % reynolds)
@@ -129,7 +129,7 @@ static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile,
 			var cd_data_m2: Array[Vector2] = []
 			for alpha_deg in lut.alpha_points:
 				var alpha_rad = deg_to_rad(alpha_deg)
-				
+
 				# Rufe die Master-Funktion auf (jetzt Teil dieser Klasse)
 				var aero_coeffs_m1: Dictionary = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
 				var aero_coeffs_m2: Dictionary = _compute_final_aero_curves_m2(alpha_rad, alpha_0, geometry, mach, reynolds)
@@ -137,19 +137,19 @@ static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile,
 				cl_data_m2.append(Vector2(alpha_deg, aero_coeffs_m2.cl))
 				cd_data_m1.append(Vector2(alpha_deg, aero_coeffs_m1.cd))
 				cd_data_m2.append(Vector2(alpha_deg, aero_coeffs_m2.cd))
-				
+
 			var final_lift_coeffs: Array[float] = _combine_curves(cl_data_m1, cl_data_m2, true)
 			var final_drag_coeffs: Array[float] = _combine_curves(cd_data_m1, cd_data_m2)
 			lut.cl_data.append_array(final_lift_coeffs)
 			lut.cd_data.append_array(final_drag_coeffs)
-	
+
 	# Speichere die fertige Ressource
 	var err = ResourceSaver.save(lut, save_path)
 	if err == OK:
 		print("Successfully saved LUT to: ", save_path)
 	else:
 		push_error("Failed to save LUT file!")
-		
+
 static func _combine_curves(p_curve_01: Array, p_curve_02: Array, p_is_lift_curve: bool = false) -> Array:
 	var new_y: float = 0.0
 	var new_curve: Array[float] = []
@@ -182,17 +182,17 @@ static func _calculate_cl_primary(angle_rad, current_alpha_0, geometry, mach_num
 	var cl_linear = cl_slope * (angle_rad - current_alpha_0)
 	var cd_max = 2.1
 	var cl_post_stall = cd_max * sin(angle_rad - current_alpha_0) * cos(angle_rad)
-	
+
 	var re_factor = 1.0 - 0.3 / (1.0 + reynolds_number / 5.0e5)
 	var alpha_stall_pos = deg_to_rad(11.0 + 50.0 * thickness) * re_factor
 	var alpha_stall_neg = deg_to_rad(-7.0 - 50.0 * thickness) * re_factor
 	var sharpness_pos = 15.0
 	var sharpness_neg = 8.0
-	
+
 	var sigma_pos = 1.0 / (1.0 + exp(sharpness_pos * (angle_rad - alpha_stall_pos)))
 	var sigma_neg = 1.0 / (1.0 + exp(-sharpness_neg * (angle_rad - alpha_stall_neg)))
 	var sigma = min(sigma_pos, sigma_neg)
-	
+
 	return sigma * cl_linear + (1.0 - sigma) * cl_post_stall
 
 static func _compute_final_aero_curves_m1(alpha_rad: float, alpha_0: float, geometry: Dictionary, mach_number: float, reynolds_number: float) -> Dictionary:
@@ -203,18 +203,18 @@ static func _compute_final_aero_curves_m1(alpha_rad: float, alpha_0: float, geom
 	var blend_sharpness_90 = 8.0
 	var sigma_90 = 1.0 / (1.0 + exp(blend_sharpness_90 * (abs(alpha_rad) - deg_to_rad(90.0))))
 	var final_cl = sigma_90 * cl_primary + (1.0 - sigma_90) * cl_mirrored
-	
+
 	var cf = 0.074 / pow(reynolds_number, 0.2)
 	var cd_min = 2.0 * cf * (1.0 + 2.0 * thickness)
 	var oswald_eff = 0.95
 	var ar_eff = 50.0
 	var cd_i = pow(final_cl, 2) / (PI * ar_eff * oswald_eff)
 	var cd_pre_stall = cd_min + cd_i
-	
+
 	var cd_max_drag_base = 2.1
 	var cd_max_drag_re = cd_max_drag_base * (1.0 + 5.0 / sqrt(reynolds_number))
 	var cd_post_stall = cd_max_drag_re * pow(sin(alpha_rad), 2)
-	
+
 	var re_factor = 1.0 - 0.3 / (1.0 + reynolds_number / 5.0e5)
 	var alpha_stall_pos_cd = deg_to_rad(11.0 + 50.0 * thickness) * re_factor
 	var alpha_stall_neg_cd = deg_to_rad(-7.0 - 50.0 * thickness) * re_factor
@@ -235,43 +235,43 @@ static func _compute_final_aero_curves_m1(alpha_rad: float, alpha_0: float, geom
 			cd_wave = peak_drag * decay_factor
 
 	var final_cd = sigma_cd * cd_pre_stall + (1.0 - sigma_cd) * cd_post_stall + cd_wave
-	
+
 	return {"cl": final_cl, "cd": final_cd}
-	
+
 static func _compute_final_aero_curves_m2(alpha_rad: float, alpha_0: float, geometry: Dictionary, mach_number: float, reynolds_number: float) -> Dictionary:
 	var thickness = geometry.thickness
-	
+
 	# 1. REYNOLDS-EINFLUSS (logarithmisch)
 	var re_exponent = clamp(log(reynolds_number) / log(1e6), 0.7, 1.3)
 	var alpha_stall_base = deg_to_rad(10.0 + 45.0 * thickness)
 	var alpha_stall_pos_re = alpha_stall_base * re_exponent
-	
+
 	# 2. CD-MAX BERECHNUNG (dickere Profile > höherer CD)
 	var cd_max = 1.8 + 0.6 * thickness
-	
+
 	# 3. CL-BERECHNUNG
 	var cl_slope = (2.0 * PI) / sqrt(1.0 - pow(min(mach_number, 0.95), 2))
 	var cl_linear = cl_slope * (alpha_rad - alpha_0)
 	var cl_post_stall = (cd_max / 2) * sin(2 * alpha_rad)  # Viterna-Methode
-	
+
 	var sharpness = 12.0
 	var sigma = 1.0 / (1.0 + exp(sharpness * (abs(alpha_rad) - alpha_stall_pos_re)))
 	var final_cl = sigma * cl_linear + (1.0 - sigma) * cl_post_stall
-	
+
 	# 4. CD-BERECHNUNG (KORRIGIERT)
 	# a) Reibungswiderstand (Prandtl-Schlichting)
 	var cf = 0.455 / pow(log(reynolds_number)/log(10), 2.58)
 	var cd_friction = 2.0 * cf * (1.0 + 2.2 * thickness + 100 * pow(thickness, 4))
-	
+
 	# b) Induzierter Widerstand
 	var oswald_eff = 0.85 + 0.15 * (1 - exp(-reynolds_number/1e6)) - 0.1 * thickness
 	var ar_eff = 50.0  # Effektive Streckung
 	var cd_induced = pow(final_cl, 2) / (PI * ar_eff * oswald_eff)
 	var cd_pre_stall = cd_friction + cd_induced
-	
+
 	# c) Post-Stall Widerstand
 	var cd_post_stall = cd_max * pow(sin(alpha_rad), 2) * (1.0 + 0.5 * (1 - re_exponent))
-	
+
 	# d) Mach-Effekte (KORRIGIERT)
 	var m_crit = 0.7 + 0.1 * thickness
 	var cd_wave = 0.0
@@ -283,13 +283,13 @@ static func _compute_final_aero_curves_m2(alpha_rad: float, alpha_0: float, geom
 		else:
 			var beta = max(sqrt(mach_number * mach_number - 1.0), 0.01)
 			cd_wave = 4 * thickness * thickness / beta
-	
+
 	# e) Finales CD mit Blending
 	var sigma_cd = 1.0 / (1.0 + exp(sharpness * (abs(alpha_rad) - alpha_stall_pos_re)))
 	var final_cd = sigma_cd * cd_pre_stall + (1.0 - sigma_cd) * cd_post_stall + cd_wave
-	
+
 	return {"cl": final_cl, "cd": final_cd}
-	
+
 # --- Physikalische Hilfsfunktionen ---
 
 static func _get_isa_atmosphere(altitude_m: float) -> Dictionary:
