@@ -15,11 +15,12 @@ const ADIABATIC_INDEX = 1.4
 const MU_REF = 1.716e-5 # [Pa*s] bei T_REF
 const T_REF = 273.15 # [K]
 const SUTHERLAND_CONST = 110.4 # [K]
-const mach_points: Array[float]= [0.1, 0.3, 0.5, 0.7, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.5, 2.0]
-const altitude_points: Array [float] = [0, 2500, 5000, 7500, 11000]# [m]
+const mach_points: Array[float]= [0.1, 0.3, 0.5, 0.7, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.5, 2.0, 2.5, 3.0]
+const altitude_points: Array[float] = [0, 100, 500, 1000, 2500, 5000, 7500, 11000, 12000, 15000, 18000, 24000, 400000]# [m]
+const reynolds_points: Array[float] = [1.0e5, 5.0e5, 1.0e6, 5.0e6, 1.0e7, 3.0e7, 5.0e7]
 # --- Öffentliche API ---
 # Die Hauptfunktion, die alles ausführt.
-static func generate_and_save_lut(airfoil_profile: AirfoilProfile, save_path: String):
+static func generate_and_save_lut_old(airfoil_profile: AirfoilProfile, save_path: String):
 	print("Starting LUT generation for: ", airfoil_profile.name)
 	var lut = AirfoilLut.new()
 
@@ -61,7 +62,43 @@ static func generate_and_save_lut(airfoil_profile: AirfoilProfile, save_path: St
 		print("Successfully saved LUT to: ", save_path)
 	else:
 		push_error("Failed to save LUT file!")
+# --- Öffentliche API ---
 
+# Die Hauptfunktion, die alles ausführt.
+static func generate_and_save_lut(airfoil_profile: AirfoilProfile, save_path: String):
+	print("Starting (alpha, Mach, Re) LUT generation for: ", airfoil_profile.name)
+	var lut = AirfoilLut.new()
+
+	# Definiere das Grid für die LUT
+	lut.alpha_points = _get_alpha_grid()
+	lut.mach_points = mach_points
+	# Repräsentative Reynolds-Zahlen (von kleinen bis zu grossen Flugzeugen)
+	lut.reynolds_points = reynolds_points
+	
+	#lut.cl_data = []
+	#lut.cd_data = []
+
+	var geometry = _get_max_thickness_and_camber(airfoil_profile)
+	var alpha_0 = _calculate_alpha_0(airfoil_profile)
+	
+	# Die neue große Dreifach-Schleife: Re -> Mach -> Alpha
+	for reynolds in lut.reynolds_points:
+		print("  Calculating for Reynolds: %.1d" % reynolds)
+		for mach in lut.mach_points:
+			for alpha_deg in lut.alpha_points:
+				var alpha_rad = deg_to_rad(alpha_deg)
+				
+				# Rufe die Master-Funktion mit den direkten Werten auf
+				var aero_coeffs = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
+				
+				lut.cl_data.append(aero_coeffs.cl)
+				lut.cd_data.append(aero_coeffs.cd)
+	
+	var err = ResourceSaver.save(lut, save_path)
+	if err == OK:
+		print("Successfully saved (alpha, Mach, Re) LUT to: ", save_path)
+	else:
+		push_error("Failed to save LUT file!")
 # Die Hauptfunktion, die alles ausführt.
 static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile, save_path: String):
 	print("Starting LUT generation for: ", airfoil_profile.name)
@@ -70,7 +107,7 @@ static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile,
 	# Definiere das Grid für die LUT
 	lut.alpha_points = _get_alpha_grid()
 	lut.mach_points = mach_points
-	lut.altitude_points = altitude_points
+	lut.reynolds_points = reynolds_points
 	
 	# Initialisiere die Daten-Arrays
 	#lut.cl_data = []
@@ -81,14 +118,11 @@ static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile,
 	var alpha_0 = _calculate_alpha_0(airfoil_profile)
 	
 	# Die große Dreifach-Schleife
-	for altitude in lut.altitude_points:
-		var atm = _get_isa_atmosphere(altitude)
-		var speed_of_sound = _get_speed_of_sound(atm.temperature)
-		print("  Calculating for Altitude: %d m" % altitude)
-
+	for reynolds in lut.reynolds_points:
+		print("  Calculating for Reynolds: %.1d" % reynolds)
 		for mach in lut.mach_points:
-			var velocity = mach * speed_of_sound
-			var reynolds = _calculate_reynolds(atm.density, velocity, WING_CHORD, atm.temperature)
+			#var velocity = mach * speed_of_sound
+			#var reynolds = _calculate_reynolds(atm.density, velocity, WING_CHORD, atm.temperature)
 			var cl_data_m1: Array[Vector2] = []
 			var cl_data_m2: Array[Vector2] = []
 			var cd_data_m1: Array[Vector2] = []

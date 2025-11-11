@@ -24,11 +24,6 @@ window/size/viewport_height=1080
 
 enabled=PackedStringArray("res://addons/folder_structure_export/plugin.cfg", "res://addons/god_plot/plugin.cfg", "res://addons/script-ide/plugin.cfg")
 
-[folder_structure_export]
-
-exclusions/excluded_dirs=["addons", ".godot", ".git", "build"]
-exclusions/output_path="folder_structure.txt"
-
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

@@ -90,8 +90,8 @@ func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 	
 	
 	var final_cl_data: Array = blend_curve(cl_data, cl_data_minR)
-	var final_cd_data: Array = _combine_curves(cd_data, cd_mR_data)
-	#var final_cd_data: Array = _combine_curves_simple(cl_data, cl_data_minR, true)
+	var final_cd_data: Array = _blend_drag_curve(cd_data, cd_mR_data)
+	#var final_cd_data: Array = _blend_drag_curve(cl_data, cl_data_minR, true)
 	
 	var lift_curve: LineSeries = curves.get("cl_curve")
 	var drag_curve: LineSeries = curves.get("cd_curve")
@@ -132,11 +132,11 @@ func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 	
 	self.plot.add_series(lift_curve)
 	self.plot.add_series(lift_curve_minR)
-	#self.plot.add_series(drag_curve)
-	#self.plot.add_series(drag_curve_min_reynolds)
+	self.plot.add_series(drag_curve)
+	self.plot.add_series(drag_curve_min_reynolds)
 	
 	self.plot.add_series(self.final_lift_curve)
-	#self.plot.add_series(self.final_drag_curve)
+	self.plot.add_series(self.final_drag_curve)
 	#self.plot.add_series(scatter_series)
 	#print(cl_data)
 func _combine_curves(curve1: Array, curve2: Array, is_lift: bool = false) -> Array:
@@ -230,7 +230,7 @@ func blend_curve(
 		
 		# Die Gewichtung für Kurve A ist einfach der Rest zu 1.0
 		var weight_a: float = 1.0 - weight_b
-		print("alpha: ", alpha, "weight_a: ", weight_a, ", weight_b: ", weight_b)
+		#print("alpha: ", alpha, "weight_a: ", weight_a, ", weight_b: ", weight_b)
 		# Den neuen Y-Wert durch lineare Interpolation (lerp) der beiden Kurvenpunkte bestimmen
 		var blended_y: float = weight_a * point_a.y + weight_b * point_b.y
 		
@@ -262,25 +262,12 @@ func blend_curves(curve_a: Array, curve_b: Array) -> Array:
 	
 
 
-func _combine_curves_simple(p_curve_01: Array, p_curve_02: Array, p_is_lift_curve: bool = false) -> Array:
+func _blend_drag_curve(p_curve_01: Array, p_curve_02: Array) -> Array:
 	var new_y: float = 0.0
 	var new_curve: Array[Vector2] = []
 	var factor_c_01: float = 1.0
-	var factor_c_02: float = 1.0
+	var factor_c_02: float = 20.0
 	for i in p_curve_01.size():
-		if p_is_lift_curve:
-			if i < 90:
-				factor_c_01 = 20.0
-				factor_c_02 = 1.0
-			elif i < 180:
-				factor_c_01 = 1.0
-				factor_c_02 = 8.0
-			elif i < 270:
-				factor_c_01 = 1.0
-				factor_c_02 = 8.0
-			else:
-				factor_c_01 = 20.0
-				factor_c_02 = 1.0
 		new_y = p_curve_01[i].y*factor_c_01 + p_curve_02[i].y*factor_c_02
 		new_y /= (factor_c_01+factor_c_02)
 		new_curve.append(Vector2(p_curve_01[i].x, new_y))
@@ -290,8 +277,8 @@ func _perpare_airfoil() -> void:
 	
 	self.NACA_632012.airfoil_path = 'res://data/airfoils/NACA0006_Supersonic.txt'
 	self.NACA_632012.airfoil_path = 'res://data/airfoils/Naca0015.txt'
-	self.NACA_632012.airfoil_path = 'res://data/airfoils/naca_632012_leerz.txt'
-	self.NACA_632012.airfoil_path = 'res://data/airfoils/Bikonvexprofil8%.txt'
+	self.NACA_632012.airfoil_path = 'res://data/airfoils/NACA64-2012.txt'
+	#self.NACA_632012.airfoil_path = 'res://data/airfoils/Bikonvexprofil8%.txt'
 	
 	self.NACA_632012.load_from_dat(NACA_632012.airfoil_path)
 	self.upper_surface = NACA_632012.upper_surface
@@ -331,7 +318,7 @@ func _get_camber_line() -> Array:
 	return camber
 # Gibt die maximale Dicke und Wölbung des Profils zurück.
 # Benötigt, dass upper_surface und lower_surface von x=0 bis x=1 sortiert sind.
-func _get_max_thickness_and_camber() -> Dictionary:
+func _get_max_thickness_and_camber_old() -> Dictionary:
 	var max_thickness = 0.0
 	var max_camber = 0.0
 	
@@ -352,7 +339,39 @@ func _get_max_thickness_and_camber() -> Dictionary:
 		var camber_y = (y_upper + y_lower) / 2.0
 		if abs(camber_y) > abs(max_camber):
 			max_camber = camber_y
-			
+	print("thickness: ", max_thickness, ", camber: ", max_camber)	
+	return {"thickness": max_thickness, "camber": max_camber}
+func _get_max_thickness_and_camber() -> Dictionary:
+	var max_thickness = 0.0
+	var max_camber = 0.0
+
+	var count = min(upper_surface.size(), lower_surface.size())
+	if count < 2:
+		return {"thickness": 0.0, "camber": 0.0}
+	
+	for i in range(count - 1):
+		var x0 = upper_surface[i].x
+		var x1 = upper_surface[i + 1].x
+
+		var yu0 = upper_surface[i].y
+		var yu1 = upper_surface[i + 1].y
+		var yl0 = lower_surface[i].y
+		var yl1 = lower_surface[i + 1].y
+
+		# Lineare Interpolation in feinerem Bereich
+		var steps = 10
+		for j in range(steps + 1):
+			var t = j / float(steps)
+			var y_upper = lerp(yu0, yu1, t)
+			var y_lower = lerp(yl0, yl1, t)
+			var camber = (y_upper + y_lower) * 0.5
+			var thickness = y_upper - y_lower
+
+			if thickness > max_thickness:
+				max_thickness = thickness
+			if abs(camber) > abs(max_camber):
+				max_camber = camber
+
 	return {"thickness": max_thickness, "camber": max_camber}
 
 func _compute_aerodynamic_curves_from_geometry(p_alpha_min: float = -180.0, p_alpha_max: float = 180.0, p_step: float = 1.0) -> Dictionary:
@@ -469,8 +488,9 @@ func _compute_final_aero_curves(alpha_rad: float, alpha_0: float, geometry: Dict
 	var use_compute_cd_max_realistic: bool = false
 		# 1. Basis-CD_max abhängig von Profildicke (dickere Profile > CD_max)
 	
-	var cd_max_base: float = 1.8 + 0.6 * thickness
-
+	var cd_max_base: float = _compute_cd_max_realistic(mach_number, thickness,reynolds_number)
+	#var cd_max_base: float = 1.8 + 0.6 * thickness
+	
 	var cl_primary: float = _calculate_cl_primary(alpha_rad, alpha_0,sharpness_pos,alpha_stall_pos_re, sharpness_neg,alpha_stall_neg_re, cd_max_base)
 	var mirrored_alpha: float = alpha_rad - PI if alpha_rad > 0 else alpha_rad + PI
 	var cl_mirrored: float = _calculate_cl_primary(mirrored_alpha, -alpha_0,sharpness_pos,alpha_stall_pos_re, sharpness_neg,alpha_stall_neg_re, cd_max_base)
@@ -622,7 +642,7 @@ func _compute_final_aero_curves2(alpha_rad: float, alpha_0: float, geometry: Dic
 
 func _calculate_luts(combine_methos: bool = false) -> void:
 	var airfoil_to_process = preload("res://data/airfoils/naca_632012.tres")
-	airfoil_to_process.airfoil_path = 'res://data/airfoils/naca_632012_leerz.txt'
+	airfoil_to_process.airfoil_path = 'res://data/airfoils/Bikonvexprofil8%.txt'
 	airfoil_to_process.load_from_dat(airfoil_to_process.airfoil_path)
 	
 	var save_path = "res://data/luts/naca_632012_lut.tres"
