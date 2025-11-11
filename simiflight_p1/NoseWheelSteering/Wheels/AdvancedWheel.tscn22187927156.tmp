@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://cumfrg2ygae4l"]
+
+[ext_resource type="Script" uid="uid://b673newuxuwxh" path="res://NoseWheelSteering/Wheels/AdvancedWheel.gd" id="1_0l1nt"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vuhr0"]
+top_radius = 0.176
+bottom_radius = 0.176
+height = 0.088
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vuhr0"]
+albedo_color = Color(0.0338533, 0.0338533, 0.0338533, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0l1nt"]
+radius = 1.0
+
+[node name="Wheels" type="Node3D"]
+script = ExtResource("1_0l1nt")
+rolling_resistance = 1.0
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+target_position = Vector3(0, -5, 0)
+
+[node name="Wheel_Model" type="CSGMesh3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_vuhr0")
+material = SubResource("StandardMaterial3D_vuhr0")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("SphereShape3D_0l1nt")
+target_position = Vector3(0, -5, 0)
+max_results = 1
+
+[node name="RecoveryRay" type="RayCast3D" parent="."]
+target_position = Vector3(0, -5, 0)
+hit_back_faces = false

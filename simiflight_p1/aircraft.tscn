@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dccthftuerrxg"]
+
+[ext_resource type="Script" uid="uid://4g5epf71s5qp" path="res://Aircraft.gd" id="1_1fs1r"]
+
+[node name="Aircraft" type="Node3D"]
+script = ExtResource("1_1fs1r")
+metadata/_custom_type_script = "uid://4g5epf71s5qp"

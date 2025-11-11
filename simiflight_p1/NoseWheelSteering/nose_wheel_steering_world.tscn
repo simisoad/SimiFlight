@@ -1,0 +1,108 @@
+[gd_scene load_steps=16 format=3 uid="uid://yqsmfxp138v0"]
+
+[ext_resource type="Script" uid="uid://dgmtrdd5maxev" path="res://NoseWheelSteering/nose_wheel_steering_world.gd" id="1_mmcyq"]
+[ext_resource type="Script" uid="uid://4g5epf71s5qp" path="res://Aircraft.gd" id="2_kik33"]
+[ext_resource type="PackedScene" uid="uid://4klp2y0hsh2q" path="res://NoseWheelSteering/test_aircraft_advancedWheels.tscn" id="2_whsuq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kik33"]
+size = Vector3(4000, 0.25, 4000)
+
+[sub_resource type="Gradient" id="Gradient_i7ed5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kik33"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_whsuq"]
+width = 2048
+height = 2048
+seamless = true
+color_ramp = SubResource("Gradient_i7ed5")
+noise = SubResource("FastNoiseLite_kik33")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mmcyq"]
+albedo_texture = SubResource("NoiseTexture2D_whsuq")
+uv1_scale = Vector3(100, 100, 100)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i7ed5"]
+
+[sub_resource type="Sky" id="Sky_kik33"]
+sky_material = SubResource("ProceduralSkyMaterial_i7ed5")
+
+[sub_resource type="Environment" id="Environment_i7ed5"]
+background_mode = 2
+sky = SubResource("Sky_kik33")
+ambient_light_source = 3
+reflected_light_source = 2
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_kik33"]
+
+[sub_resource type="Compositor" id="Compositor_whsuq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kik33"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_kik33"]
+size = Vector3(50, 2, 50)
+
+[node name="NoseWheelSteering_World" type="Node3D"]
+script = ExtResource("1_mmcyq")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+use_collision = true
+mesh = SubResource("BoxMesh_kik33")
+material = SubResource("StandardMaterial3D_mmcyq")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_i7ed5")
+camera_attributes = SubResource("CameraAttributesPhysical_kik33")
+compositor = SubResource("Compositor_whsuq")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.976038, 0.217598, 0, -0.217598, 0.976038, 0, 408.812, 0)
+light_energy = 2.0
+shadow_enabled = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="CoM_Label" type="Label" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CoM: (-0.021823, 1.322853, -0.12814), 0.0 km/h"
+
+[node name="Aircraft" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.08879, 1.15316, -9.36916)
+script = ExtResource("2_kik33")
+metadata/_custom_type_script = "uid://4g5epf71s5qp"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Aircraft"]
+shape = SubResource("BoxShape3D_kik33")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Aircraft"]
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 13.5566, 0.874795, -24.148)
+use_collision = true
+mesh = SubResource("PrismMesh_kik33")
+
+[node name="TestAircraft" parent="." instance=ExtResource("2_whsuq")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.4023, 2.43662, 0)
+center_of_mass = Vector3(-0.022444, 1.16299, -0.756601)
