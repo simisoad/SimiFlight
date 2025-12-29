@@ -1,327 +1,400 @@
-# res://scripts/LutGenerator.gd
 class_name LutGenerator
-extends Node
+extends RefCounted
 
-# --- Physikalische Konstanten ---
-const WING_CHORD = 1.0 # [m] Repräsentative Flügeltiefe, anpassen für dein Flugzeug!
+# --- Konstanten ---
+const MACH_POINTS: Array[float] = [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5,0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0,7.0, 8.0, 9.0, 10]
+const REYNOLDS_POINTS: Array[float] = [1.0e4,0.5e5,1.0e5, 5.0e5, 1.0e6, 5.0e6, 1.0e7, 3.0e7, 5.0e7, 10.0e7]
 
-# Internationale Standardatmosphäre (ISA) Konstanten
-const SEA_LEVEL_TEMP_K = 288.15 # [K]
-const SEA_LEVEL_DENSITY = 1.225 # [kg/m^3]
-const LAPSE_RATE = 0.0065 # [K/m]
-const GAS_CONSTANT_AIR = 287.05 # [J/(kg*K)]
-const ADIABATIC_INDEX = 1.4
-# Sutherland's Law Konstanten für Viskosität
-const MU_REF = 1.716e-5 # [Pa*s] bei T_REF
-const T_REF = 273.15 # [K]
-const SUTHERLAND_CONST = 110.4 # [K]
-const mach_points: Array[float]= [0.1, 0.3, 0.5, 0.7, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.5, 2.0, 2.5, 3.0]
-const altitude_points: Array[float] = [0, 100, 500, 1000, 2500, 5000, 7500, 11000, 12000, 15000, 18000, 24000, 400000]# [m]
-const reynolds_points: Array[float] = [1.0e5, 5.0e5, 1.0e6, 5.0e6, 1.0e7, 3.0e7, 5.0e7]
-# --- Öffentliche API ---
-# Die Hauptfunktion, die alles ausführt.
-static func generate_and_save_lut_old(airfoil_profile: AirfoilProfile, save_path: String):
-	print("Starting LUT generation for: ", airfoil_profile.name)
-	var lut = AirfoilLut.new()
+enum CalculationMethod { METHOD_1,METHOD_1A, METHOD_2, COMBINED }
 
-	# Definiere das Grid für die LUT
-	lut.alpha_points = _get_alpha_grid()
-	lut.mach_points = mach_points
-	lut.altitude_points = altitude_points
+var lut_curves_density: float = 1.0
 
-	# Initialisiere die Daten-Arrays, nicht nötig und geht so sowieso nicht
-	#lut.cl_data = []
-	#lut.cd_data = []
 
-	# Holen der geometrischen Daten des Profils (einmalig)
-	var geometry = _get_max_thickness_and_camber(airfoil_profile)
-	var alpha_0 = _calculate_alpha_0(airfoil_profile)
+class GeneratorConfig:
+	var method: CalculationMethod = CalculationMethod.METHOD_1A
 
-	# Die große Dreifach-Schleife
-	for altitude in lut.altitude_points:
-		var atm = _get_isa_atmosphere(altitude)
-		var speed_of_sound = _get_speed_of_sound(atm.temperature)
-		print("  Calculating for Altitude: %d m" % altitude)
+	# Physik Basis
+	var stall_angle_deg: float = 15.0
+	var sharpness: float = 12.0
+	var cd_max: float = 2.1
+	var ac_position: float = 0.25 # Standard 25% MAC
+	# NEU: Wie gut fliegt der Flügel rückwärts? (0.0 bis 1.0)
+	# 1.0 = Bikonvex (Symmetrisch), 0.3 = NACA (Schlechte Hinterkante)
+	var backward_lift_scale: float = 1.0
 
-		for mach in lut.mach_points:
-			var velocity = mach * speed_of_sound
-			var reynolds = _calculate_reynolds(atm.density, velocity, WING_CHORD, atm.temperature)
+	# Preview Settings
+	var preview_mach: float = 0.1
+	var preview_re: float = 1.0e6
 
-			for alpha_deg in lut.alpha_points:
-				var alpha_rad = deg_to_rad(alpha_deg)
+	# Blending
+	var blend_start_deg: float = 20.0
+	var blend_width_deg: float = 20.0
 
-				# Rufe die Master-Funktion auf (jetzt Teil dieser Klasse)
-				var aero_coeffs = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
-
-				lut.cl_data.append(aero_coeffs.cl)
-				lut.cd_data.append(aero_coeffs.cd)
-
-	# Speichere die fertige Ressource
-	var err = ResourceSaver.save(lut, save_path)
-	if err == OK:
-		print("Successfully saved LUT to: ", save_path)
-	else:
-		push_error("Failed to save LUT file!")
 # --- Öffentliche API ---
 
-# Die Hauptfunktion, die alles ausführt.
-static func generate_and_save_lut(airfoil_profile: AirfoilProfile, save_path: String):
-	print("Starting (alpha, Mach, Re) LUT generation for: ", airfoil_profile.name)
+static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorConfig) -> Dictionary:
+	var geo = analyze_geometry(profile)
+	var alpha_0 = _calculate_alpha_0(profile)
+	var curves = {"cl": [], "cd": [], "cm": [], "sigma": []}
+	var grid = _get_alpha_grid()
+
+	for alpha_deg in grid:
+		var alpha_rad = deg_to_rad(alpha_deg)
+		var coeffs = _calculate_point_strategy(alpha_rad, alpha_0, geo, config.preview_mach, config.preview_re, config)
+		curves.cl.append(Vector2(alpha_deg, coeffs.cl))
+		curves.cd.append(Vector2(alpha_deg, coeffs.cd))
+		curves.cm.append(Vector2(alpha_deg, coeffs.cm))
+		curves.sigma.append(Vector2(alpha_deg, coeffs.sigma))
+	return curves
+
+static func generate_lut(profile: AirfoilProfile, config: GeneratorConfig) -> AirfoilLut:
+	if not profile: return null
+	print("LutGenerator: Starting generation for '%s'..." % profile.name)
+
 	var lut = AirfoilLut.new()
-
-	# Definiere das Grid für die LUT
 	lut.alpha_points = _get_alpha_grid()
-	lut.mach_points = mach_points
-	# Repräsentative Reynolds-Zahlen (von kleinen bis zu grossen Flugzeugen)
-	lut.reynolds_points = reynolds_points
+	lut.mach_points = MACH_POINTS.duplicate()
+	lut.reynolds_points = REYNOLDS_POINTS.duplicate()
 
-	#lut.cl_data = []
-	#lut.cd_data = []
+	var geo = analyze_geometry(profile)
+	var alpha_0 = _calculate_alpha_0(profile)
 
-	var geometry = _get_max_thickness_and_camber(airfoil_profile)
-	var alpha_0 = _calculate_alpha_0(airfoil_profile)
-
-	# Die neue große Dreifach-Schleife: Re -> Mach -> Alpha
-	for reynolds in lut.reynolds_points:
-		print("  Calculating for Reynolds: %.1d" % reynolds)
+	for re in lut.reynolds_points:
 		for mach in lut.mach_points:
 			for alpha_deg in lut.alpha_points:
 				var alpha_rad = deg_to_rad(alpha_deg)
+				var coeffs = _calculate_point_strategy(alpha_rad, alpha_0, geo, mach, re, config)
+				lut.cl_data.append(coeffs.cl)
+				lut.cd_data.append(coeffs.cd)
+				lut.cm_data.append(coeffs.cm)
+				lut.stall_data.append(coeffs.sigma)
+	return lut
 
-				# Rufe die Master-Funktion mit den direkten Werten auf
-				var aero_coeffs = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
+static func save_lut(lut: AirfoilLut, path: String) -> void:
+	ResourceSaver.save(lut, path)
 
-				lut.cl_data.append(aero_coeffs.cl)
-				lut.cd_data.append(aero_coeffs.cd)
+# --- Kern-Logik (Strategy & Fixes) ---
 
-	var err = ResourceSaver.save(lut, save_path)
-	if err == OK:
-		print("Successfully saved (alpha, Mach, Re) LUT to: ", save_path)
+static func _calculate_point_strategy(alpha_rad: float, alpha_0: float, geo: Dictionary, mach: float, re: float, config: GeneratorConfig) -> Dictionary:
+	match config.method:
+		CalculationMethod.METHOD_1:
+			return _compute_physics_m1(alpha_rad, alpha_0, geo, mach, re, config)
+		CalculationMethod.METHOD_1A:
+			return _compute_physics_m1a(alpha_rad, alpha_0, geo, mach, re, config)
+		CalculationMethod.METHOD_2:
+			return _compute_physics_m2(alpha_rad, alpha_0, geo, mach, re, config)
+		CalculationMethod.COMBINED:
+			# Beide berechnen
+			var r1 = _compute_physics_m1(alpha_rad, alpha_0, geo, mach, re, config)
+			var r2 = _compute_physics_m2(alpha_rad, alpha_0, geo, mach, re, config)
+
+			# Mischen basierend auf smoothstep
+			return _blend_results_smooth(r1, r2, alpha_rad, config)
+		_:
+			return {"cl": 0.0, "cd": 0.0}
+
+# NEU: Sanftes Blending ohne Stufen
+static func _blend_results_smooth(r1: Dictionary, r2: Dictionary, alpha_rad: float, config: GeneratorConfig) -> Dictionary:
+	var angle_deg = abs(rad_to_deg(alpha_rad))
+	# Wir normalisieren den Winkel auf 0-180 für die Misch-Logik (Symmetrie)
+	if angle_deg > 180.0: angle_deg = 360.0 - angle_deg
+
+	var start = config.blend_start_deg  # z.B. 20 Grad
+	var end = start + config.blend_width_deg # z.B. 40 Grad
+
+	# Berechne Faktor t: 0.0 = Nur M1, 1.0 = Nur M2
+	var t = smoothstep(start, end, angle_deg)
+
+	# Lineare Interpolation (Lerp) zwischen den Ergebnissen
+	var cl = lerp(r1.cl, r2.cl, t)
+	var cd = lerp(r1.cd, r2.cd, t)
+
+	return {"cl": cl, "cd": cd}
+
+static func _compute_physics_m1a(alpha_rad: float, alpha_0: float, geo: Dictionary, mach: float, re: float, config: GeneratorConfig) -> Dictionary:
+	var thickness = geo.thickness
+
+	var cl_slope_factor = 1.0
+	# Grenzen für den Übergangsbereich
+	var m_sub_limit = 0.9  # Bis hier gilt Prandtl-Glauert
+	var m_sup_limit = 1.2  # Ab hier gilt Ackeret (Überschall)
+
+	if mach <= m_sub_limit:
+		# Subsonic: Steigt an bis zur Schallmauer
+		cl_slope_factor = 1.0 / sqrt(1.0 - pow(mach, 2))
+	elif mach >= m_sup_limit:
+		# Supersonic: Sinkt wieder (Ackeret Theorie: 4 / sqrt(M^2 - 1))
+		# Wir cappen es, damit es nicht zu extrem abfällt
+		cl_slope_factor = 4.0 / sqrt(pow(mach, 2) - 1.0)
 	else:
-		push_error("Failed to save LUT file!")
-# Die Hauptfunktion, die alles ausführt.
-static func generate_and_save_lut_combine_m1_m2(airfoil_profile: AirfoilProfile, save_path: String):
-	print("Starting LUT generation for: ", airfoil_profile.name)
-	var lut = AirfoilLut.new()
+		# Transsonic Bridge (Interpolation)
+		# Wir berechnen die Werte an den Rändern und verbinden sie linear.
 
-	# Definiere das Grid für die LUT
-	lut.alpha_points = _get_alpha_grid()
-	lut.mach_points = mach_points
-	lut.reynolds_points = reynolds_points
+		# Wert bei Mach 0.9
+		var val_sub = 1.0 / sqrt(1.0 - pow(m_sub_limit, 2)) # ca. 2.29
 
-	# Initialisiere die Daten-Arrays
-	#lut.cl_data = []
-	#lut.cd_data = []
+		# Wert bei Mach 1.2
+		var val_sup = 4.0 / sqrt(pow(m_sup_limit, 2) - 1.0) # ca. 6.0 (Theorie)
 
-	# Holen der geometrischen Daten des Profils (einmalig)
-	var geometry = _get_max_thickness_and_camber(airfoil_profile)
-	var alpha_0 = _calculate_alpha_0(airfoil_profile)
+		# Ackeret liefert bei 1.2 oft noch zu hohe Werte für reale 3D-Flügel.
+		# Wir begrenzen den Startwert für Überschall etwas konservativer,
+		# z.B. auf den Wert des Unterschalls oder leicht höher.
+		val_sup = min(val_sup, 3.0)
 
-	# Die große Dreifach-Schleife
-	for reynolds in lut.reynolds_points:
-		print("  Calculating for Reynolds: %.1d" % reynolds)
-		for mach in lut.mach_points:
-			#var velocity = mach * speed_of_sound
-			#var reynolds = _calculate_reynolds(atm.density, velocity, WING_CHORD, atm.temperature)
-			var cl_data_m1: Array[Vector2] = []
-			var cl_data_m2: Array[Vector2] = []
-			var cd_data_m1: Array[Vector2] = []
-			var cd_data_m2: Array[Vector2] = []
-			for alpha_deg in lut.alpha_points:
-				var alpha_rad = deg_to_rad(alpha_deg)
+		# Interpolations-Faktor t (0.0 bei 0.9, 1.0 bei 1.2)
+		var t = (mach - m_sub_limit) / (m_sup_limit - m_sub_limit)
 
-				# Rufe die Master-Funktion auf (jetzt Teil dieser Klasse)
-				var aero_coeffs_m1: Dictionary = _compute_final_aero_curves_m1(alpha_rad, alpha_0, geometry, mach, reynolds)
-				var aero_coeffs_m2: Dictionary = _compute_final_aero_curves_m2(alpha_rad, alpha_0, geometry, mach, reynolds)
-				cl_data_m1.append(Vector2(alpha_deg, aero_coeffs_m1.cl))
-				cl_data_m2.append(Vector2(alpha_deg, aero_coeffs_m2.cl))
-				cd_data_m1.append(Vector2(alpha_deg, aero_coeffs_m1.cd))
-				cd_data_m2.append(Vector2(alpha_deg, aero_coeffs_m2.cd))
+		# Linearer Übergang (Lerp)
+		cl_slope_factor = lerp(val_sub, val_sup, t)
 
-			var final_lift_coeffs: Array[float] = _combine_curves(cl_data_m1, cl_data_m2, true)
-			var final_drag_coeffs: Array[float] = _combine_curves(cd_data_m1, cd_data_m2)
-			lut.cl_data.append_array(final_lift_coeffs)
-			lut.cd_data.append_array(final_drag_coeffs)
+	# Sicherheits-Limit für alle Fälle (damit Physik-Engine nicht explodiert)
+	cl_slope_factor = min(cl_slope_factor, 4.0)
 
-	# Speichere die fertige Ressource
-	var err = ResourceSaver.save(lut, save_path)
-	if err == OK:
-		print("Successfully saved LUT to: ", save_path)
+	var cl_slope = (2.0 * PI) * cl_slope_factor
+	var cl_linear_fwd = cl_slope * (alpha_rad - alpha_0)
+
+	var re_factor = 1.0 - 0.3 / (1.0 + re / 5.0e5)
+	var stall_offset = 50.0 * thickness
+	var stall_pos = deg_to_rad(config.stall_angle_deg + stall_offset) * re_factor
+	var stall_neg = deg_to_rad(-config.stall_angle_deg - stall_offset) * re_factor
+
+	# Sigmoid für Vorwärts-Stall
+	var sigma_fwd = _sigmoid_blend(alpha_rad, stall_neg, stall_pos, config.sharpness)
+
+	# --- B) Rückwärtsflug (180 Grad) ---
+	# Wir mappen den Winkel so, dass 180 Grad wie 0 Grad behandelt wird
+	var alpha_rad_back = 0.0
+	if alpha_rad > 0:
+		alpha_rad_back = alpha_rad - PI # 180 -> 0
 	else:
-		push_error("Failed to save LUT file!")
+		alpha_rad_back = alpha_rad + PI # -180 -> 0
 
-static func _combine_curves(p_curve_01: Array, p_curve_02: Array, p_is_lift_curve: bool = false) -> Array:
-	var new_y: float = 0.0
-	var new_curve: Array[float] = []
-	var factor_c_01: float = 1.0
-	var factor_c_02: float = 1.0
-	for i in p_curve_01.size():
-		if p_is_lift_curve:
-			if i < 90:
-				factor_c_01 = 20.0
-				factor_c_02 = 1.0
-			elif i < 180:
-				factor_c_01 = 1.0
-				factor_c_02 = 8.0
-			elif i < 270:
-				factor_c_01 = 1.0
-				factor_c_02 = 8.0
-			else:
-				factor_c_01 = 20.0
-				factor_c_02 = 1.0
-		new_y = p_curve_01[i].y*factor_c_01 + p_curve_02[i].y*factor_c_02
-		new_y /= (factor_c_01+factor_c_02)
-		new_curve.append(new_y)
-	return new_curve
+	# Berechnung für Rückwärts (oft schlechterer Slope und früherer Stall)
+	# Wir nehmen hier vereinfacht dieselben Stall-Winkel an, aber skalierten Lift
+	var cl_linear_back = cl_slope * (alpha_rad_back - alpha_0) # Beachte Vorzeichen alpha_0
+	var sigma_back = _sigmoid_blend(alpha_rad_back, stall_neg * 0.8, stall_pos * 0.8, config.sharpness) # Stallt oft früher rückwärts
 
-# --- Aerodynamische Berechnungs-Engine (aus plot_test.gd hierher verschoben) ---
+	# Skalierung für Rückwärtsflug-Effizienz
+	var lift_back = (sigma_back * cl_linear_back) * config.backward_lift_scale
 
-static func _calculate_cl_primary(angle_rad, current_alpha_0, geometry, mach_number, reynolds_number) -> float:
-	var thickness = geometry.thickness
-	var cl_slope = (2.0 * PI) / sqrt(1.0 - pow(min(mach_number, 0.95), 2))
-	var cl_linear = cl_slope * (angle_rad - current_alpha_0)
-	var cd_max = 2.1
-	var cl_post_stall = cd_max * sin(angle_rad - current_alpha_0) * cos(angle_rad)
+	# --- C) Deep Stall (90 Grad / Flat Plate) ---
+	# Das klassische Viterna Modell für den Bereich, wo gar nichts mehr fliegt
+	var cl_plate = config.cd_max * sin(alpha_rad) * cos(alpha_rad)
 
-	var re_factor = 1.0 - 0.3 / (1.0 + reynolds_number / 5.0e5)
-	var alpha_stall_pos = deg_to_rad(11.0 + 50.0 * thickness) * re_factor
-	var alpha_stall_neg = deg_to_rad(-7.0 - 50.0 * thickness) * re_factor
-	var sharpness_pos = 15.0
-	var sharpness_neg = 8.0
+	# Zusammensetzen
+	var cl_fwd_part = (sigma_fwd * cl_linear_fwd)
 
-	var sigma_pos = 1.0 / (1.0 + exp(sharpness_pos * (angle_rad - alpha_stall_pos)))
-	var sigma_neg = 1.0 / (1.0 + exp(-sharpness_neg * (angle_rad - alpha_stall_neg)))
+	# Der Trick: Wir blenden zwischen (Fwd oder Back) und (Plate)
+	# Wenn Flow Attached -> Nutze Fwd/Back Berechnung
+	# Wenn Flow Detached (90°) -> Nutze Plate Berechnung
+
+	# Wir nutzen sigma als Gewichtung für den "Attached Flow" Anteil
+	# Aber da wir jetzt zwei Sigmas haben (vorne/hinten), müssen wir wählen.
+	var current_sigma = sigma_fwd if cos(alpha_rad) > 0 else sigma_back
+
+	# Harter Schnitt für Logik, weicher Übergang durch Formeln
+	var lift_aero = 0.0
+	if cos(alpha_rad) >= 0:
+		lift_aero = cl_fwd_part
+	else:
+		lift_aero = lift_back
+
+	# Finales Blending:
+	# Nimm aerodynamischen Lift so lange wir nicht im Stall sind (current_sigma hoch)
+	# Nimm Plate Lift wenn wir im Stall sind (current_sigma niedrig)
+	var final_cl = current_sigma * lift_aero + (1.0 - current_sigma) * cl_plate
+
+
+	# --- Drag Berechnung ---
+	# --- 2. Drag Berechnung (Wave Drag Fix) ---
+	var cd0_subsonic = 0.005 + (0.01 * thickness)
+	var cd_induced = pow(final_cl, 2) / (PI * 30.0)
+	var cd_plate = config.cd_max * pow(sin(alpha_rad), 2)
+
+	# Wave Drag (Wellenwiderstand)
+	var cd_wave = 0.0
+	var m_crit = 0.8      # Start des Anstiegs
+	var m_peak = 1.05     # Wo ist der Widerstand am höchsten?
+	var cd_wave_peak = 4.0 * pow(thickness, 2) # Faustformel für Peak-Höhe basierend auf Dicke
+
+	if mach > m_crit:
+		if mach < m_peak:
+			# Transsonic Rise (Anstieg zur Schallmauer)
+			# Sinus-Kurve für weichen Anstieg von 0 auf Peak
+			var ratio = (mach - m_crit) / (m_peak - m_crit)
+			cd_wave = cd_wave_peak * sin(ratio * PI / 2.0)
+		else:
+			# Supersonic Decay (Abfall bei Überschall)
+			# Formel: Peak * (1 / sqrt(M^2 - 1)) - aber sanft angepasst
+			# Wir nutzen einfach den Kehrwert der Machzahl, das ist stabil für Raketen
+			cd_wave = cd_wave_peak * (m_peak / mach)
+
+	# Zusammenbau
+	var final_cd = current_sigma * (cd0_subsonic + cd_induced + cd_wave) + (1.0 - current_sigma) * cd_plate
+
+	## Mach Wave Drag (optional addieren)
+	#if mach > 0.8:
+		#final_cd += 0.08 * pow(mach - 0.8, 2)
+
+
+	var cn = final_cl * cos(alpha_rad) + final_cd * sin(alpha_rad)
+# 1. Basis Cm0
+	# Wirken lassen wir es nur, wenn Strömung anliegt (current_sigma)
+	var cm0 = -2.0 * geo.camber # oder config.fixed_cm0
+	var moment_camber = cm0 * current_sigma
+
+	# 2. Bestimmung des Druckpunkts (Center of Pressure - x_cop)
+	var cop_attached = 0.5 - (0.25 * cos(alpha_rad))
+
+	# Der Druckpunkt im Stall ist immer die Mitte (Flache Platte)
+	var cop_stall = 0.5
+
+	# 3. Finaler Druckpunkt durch Blending
+	# Wenn sigma=1 (Flug) -> Nimm cop_attached
+	# Wenn sigma=0 (Stall) -> Nimm cop_stall (Mitte)
+	var current_cop = lerp(cop_stall, cop_attached, current_sigma)
+
+	# 4. Der Hebelarm
+	# Abstand vom physikalischen Drehpunkt (AC, meist 0.25) zum aktuellen Druckpunkt
+	var lever_arm = config.ac_position - current_cop
+
+	# 5. Finales Moment
+	# Moment = Wölbungsmoment + (Kraft * Hebelarm)
+	var final_cm = moment_camber + (cn * lever_arm)
+
+	return {"cl": final_cl, "cd": final_cd, "cm": final_cm, "sigma": current_sigma}
+
+# Hilfsfunktion für den Sigmoid-Übergang (macht den Code lesbarer)
+static func _sigmoid_blend(val: float, min_boundary: float, max_boundary: float, sharpness: float) -> float:
+	# Gibt 1.0 zurück, wenn val INNERHALB der boundaries ist
+	# Gibt 0.0 zurück, wenn val AUSSERHALB ist
+	var s1 = 1.0 / (1.0 + exp(sharpness * (val - max_boundary)))
+	var s2 = 1.0 / (1.0 + exp(-sharpness * (val - min_boundary)))
+	return min(s1, s2)
+
+# --- Methode 1: Korrigiert (Symmetrie Fix!) ---
+static func _compute_physics_m1(alpha_rad: float, alpha_0: float, geo: Dictionary, mach: float, re: float, config: GeneratorConfig) -> Dictionary:
+	var thickness = geo.thickness
+
+	# Prandtl-Glauert Korrektur für Lift Slope
+	var cl_slope = (2.0 * PI) / sqrt(1.0 - pow(min(mach, 0.95), 2))
+	var cl_linear = cl_slope * (alpha_rad - alpha_0)
+
+	# Viterna-Style Post-Stall (Symmetrisch um 0 wenn alpha_0=0)
+	var cl_post_stall = config.cd_max * sin(alpha_rad - alpha_0) * cos(alpha_rad)
+
+	# Stall Blending Parameter
+	var re_factor = 1.0 - 0.3 / (1.0 + re / 5.0e5)
+
+	# BUGFIX: Negative Stall Angle basierend auf Config nutzen!
+	var stall_offset = 50.0 * thickness
+	var stall_rad_pos = deg_to_rad(config.stall_angle_deg + stall_offset) * re_factor
+	var stall_rad_neg = deg_to_rad(-config.stall_angle_deg - stall_offset) * re_factor # War vorher hardcoded -7.0!
+
+	# Sigmoid Funktionen
+	var sigma_pos = 1.0 / (1.0 + exp(config.sharpness * (alpha_rad - stall_rad_pos)))
+	var sigma_neg = 1.0 / (1.0 + exp(-config.sharpness * (alpha_rad - stall_rad_neg))) # Symmetrische Sharpness nutzen
 	var sigma = min(sigma_pos, sigma_neg)
 
-	return sigma * cl_linear + (1.0 - sigma) * cl_post_stall
+	var cl = sigma * cl_linear + (1.0 - sigma) * cl_post_stall
 
-static func _compute_final_aero_curves_m1(alpha_rad: float, alpha_0: float, geometry: Dictionary, mach_number: float, reynolds_number: float) -> Dictionary:
-	var thickness = geometry.thickness
-	var cl_primary = _calculate_cl_primary(alpha_rad, alpha_0, geometry, mach_number, reynolds_number)
-	var mirrored_alpha = alpha_rad - PI if alpha_rad > 0 else alpha_rad + PI
-	var cl_mirrored = _calculate_cl_primary(mirrored_alpha, -alpha_0, geometry, mach_number, reynolds_number)
-	var blend_sharpness_90 = 8.0
-	var sigma_90 = 1.0 / (1.0 + exp(blend_sharpness_90 * (abs(alpha_rad) - deg_to_rad(90.0))))
-	var final_cl = sigma_90 * cl_primary + (1.0 - sigma_90) * cl_mirrored
+	# Drag Berechnung
+	var cf = 0.074 / pow(re, 0.2)
+	var cd_min = 2.0 * cf * (1.0 + 2.0 * thickness) + (0.1 * pow(mach, 6)) # Kleiner Mach-Drag im Min
+	var cd_induced = pow(cl, 2) / (PI * 30.0)
+	var cd_flow_sep = config.cd_max * pow(sin(alpha_rad), 2)
 
-	var cf = 0.074 / pow(reynolds_number, 0.2)
-	var cd_min = 2.0 * cf * (1.0 + 2.0 * thickness)
-	var oswald_eff = 0.95
-	var ar_eff = 50.0
-	var cd_i = pow(final_cl, 2) / (PI * ar_eff * oswald_eff)
-	var cd_pre_stall = cd_min + cd_i
+	var cd = cd_min + (sigma * cd_induced) + ((1.0 - sigma) * cd_flow_sep)
 
-	var cd_max_drag_base = 2.1
-	var cd_max_drag_re = cd_max_drag_base * (1.0 + 5.0 / sqrt(reynolds_number))
-	var cd_post_stall = cd_max_drag_re * pow(sin(alpha_rad), 2)
+	return {"cl": cl, "cd": cd}
 
-	var re_factor = 1.0 - 0.3 / (1.0 + reynolds_number / 5.0e5)
-	var alpha_stall_pos_cd = deg_to_rad(11.0 + 50.0 * thickness) * re_factor
-	var alpha_stall_neg_cd = deg_to_rad(-7.0 - 50.0 * thickness) * re_factor
-	var sharpness_pos_cd = 15.0
-	var sharpness_neg_cd = 8.0
-	var sigma_pos_cd = 1.0 / (1.0 + exp(sharpness_pos_cd * (alpha_rad - alpha_stall_pos_cd)))
-	var sigma_neg_cd = 1.0 / (1.0 + exp(-sharpness_neg_cd * (alpha_rad - alpha_stall_neg_cd)))
-	var sigma_cd = min(sigma_pos_cd, sigma_neg_cd)
+# --- Methode 2: Alternative ---
+static func _compute_physics_m2(alpha_rad: float, alpha_0: float, geo: Dictionary, mach: float, re: float, config: GeneratorConfig) -> Dictionary:
+	var thickness = geo.thickness
 
-	var m_crit = 0.75; var m_peak = 1.05; var peak_drag = 0.08
-	var cd_wave = 0.0
-	if mach_number > m_crit:
-		if mach_number <= m_peak:
-			var x = (mach_number - m_crit) / (m_peak - m_crit)
-			cd_wave = peak_drag * sin(x * PI / 2.0)
-		else:
-			var decay_factor = sqrt(pow(m_peak, 2) - 1.0) / sqrt(pow(mach_number, 2) - 1.0)
-			cd_wave = peak_drag * decay_factor
+	# Simuliere Reynolds-Einfluss
+	var re_exponent = clamp(log(re) / log(1e6), 0.7, 1.3)
+	var stall_base = deg_to_rad(config.stall_angle_deg) * re_exponent
 
-	var final_cd = sigma_cd * cd_pre_stall + (1.0 - sigma_cd) * cd_post_stall + cd_wave
-
-	return {"cl": final_cl, "cd": final_cd}
-
-static func _compute_final_aero_curves_m2(alpha_rad: float, alpha_0: float, geometry: Dictionary, mach_number: float, reynolds_number: float) -> Dictionary:
-	var thickness = geometry.thickness
-
-	# 1. REYNOLDS-EINFLUSS (logarithmisch)
-	var re_exponent = clamp(log(reynolds_number) / log(1e6), 0.7, 1.3)
-	var alpha_stall_base = deg_to_rad(10.0 + 45.0 * thickness)
-	var alpha_stall_pos_re = alpha_stall_base * re_exponent
-
-	# 2. CD-MAX BERECHNUNG (dickere Profile > höherer CD)
-	var cd_max = 1.8 + 0.6 * thickness
-
-	# 3. CL-BERECHNUNG
-	var cl_slope = (2.0 * PI) / sqrt(1.0 - pow(min(mach_number, 0.95), 2))
+	var cl_slope = 2.0 * PI
 	var cl_linear = cl_slope * (alpha_rad - alpha_0)
-	var cl_post_stall = (cd_max / 2) * sin(2 * alpha_rad)  # Viterna-Methode
 
-	var sharpness = 12.0
-	var sigma = 1.0 / (1.0 + exp(sharpness * (abs(alpha_rad) - alpha_stall_pos_re)))
-	var final_cl = sigma * cl_linear + (1.0 - sigma) * cl_post_stall
+	# M2 nutzt eine etwas andere Stall-Formel (reiner Sinus für Deep Stall)
+	var cl_deep_stall = (config.cd_max * 0.8) * sin(2.0 * alpha_rad)
 
-	# 4. CD-BERECHNUNG (KORRIGIERT)
-	# a) Reibungswiderstand (Prandtl-Schlichting)
-	var cf = 0.455 / pow(log(reynolds_number)/log(10), 2.58)
-	var cd_friction = 2.0 * cf * (1.0 + 2.2 * thickness + 100 * pow(thickness, 4))
+	var sigma = 1.0 / (1.0 + exp(config.sharpness * (abs(alpha_rad) - stall_base)))
+	var cl = sigma * cl_linear + (1.0 - sigma) * cl_deep_stall
 
-	# b) Induzierter Widerstand
-	var oswald_eff = 0.85 + 0.15 * (1 - exp(-reynolds_number/1e6)) - 0.1 * thickness
-	var ar_eff = 50.0  # Effektive Streckung
-	var cd_induced = pow(final_cl, 2) / (PI * ar_eff * oswald_eff)
-	var cd_pre_stall = cd_friction + cd_induced
+	# Drag M2 (Mehr Wave Drag Fokus)
+	var cf = 0.455 / pow(log(re)/log(10.0), 2.58)
+	var cd_friction = 2.0 * cf * (1.0 + 2.0 * thickness)
 
-	# c) Post-Stall Widerstand
-	var cd_post_stall = cd_max * pow(sin(alpha_rad), 2) * (1.0 + 0.5 * (1 - re_exponent))
-
-	# d) Mach-Effekte (KORRIGIERT)
-	var m_crit = 0.7 + 0.1 * thickness
 	var cd_wave = 0.0
-	if mach_number > m_crit:
-		if mach_number < 1.0:
-			cd_wave = 0.002 * exp(10 * (mach_number - m_crit)) * thickness * 100
-		elif mach_number < 1.05:  # Glättung bei Mach 1.0
-			cd_wave = 0.08 * (mach_number - m_crit) / 0.35
+	var m_crit = 0.7 + (0.1 * thickness)
+	if mach > m_crit:
+		if mach < 1.05:
+			cd_wave = 0.1 * pow((mach - m_crit), 2) * 20.0
 		else:
-			var beta = max(sqrt(mach_number * mach_number - 1.0), 0.01)
-			cd_wave = 4 * thickness * thickness / beta
+			cd_wave = 0.1 / sqrt(pow(mach, 2) - 1.0)
 
-	# e) Finales CD mit Blending
-	var sigma_cd = 1.0 / (1.0 + exp(sharpness * (abs(alpha_rad) - alpha_stall_pos_re)))
-	var final_cd = sigma_cd * cd_pre_stall + (1.0 - sigma_cd) * cd_post_stall + cd_wave
+	var cd_stall_part = config.cd_max * pow(sin(alpha_rad), 2)
+	var cd = cd_friction + cd_wave + (1.0 - sigma) * cd_stall_part + (sigma * (pow(cl, 2) * 0.05))
 
-	return {"cl": final_cl, "cd": final_cd}
+	return {"cl": cl, "cd": cd}
 
-# --- Physikalische Hilfsfunktionen ---
+# --- Helfer ---
 
-static func _get_isa_atmosphere(altitude_m: float) -> Dictionary:
-	# Vereinfachtes ISA-Modell für die Troposphäre (bis 11km)
-	altitude_m = clamp(altitude_m, 0.0, 11000.0)
-	var temp_k = SEA_LEVEL_TEMP_K - LAPSE_RATE * altitude_m
-	var pressure_pa = 101325.0 * pow(1.0 - LAPSE_RATE * altitude_m / SEA_LEVEL_TEMP_K, 5.255)
-	var density = pressure_pa / (GAS_CONSTANT_AIR * temp_k)
-	return {"temperature": temp_k, "density": density}
+static func analyze_geometry(profile: AirfoilProfile) -> Dictionary:
+	var max_thick = 0.0
+	var pos_max_thick_x = 0.3
+	var max_camber = 0.0 # NEU
 
-static func _get_speed_of_sound(temperature_kelvin: float) -> float:
-	return sqrt(ADIABATIC_INDEX * GAS_CONSTANT_AIR * temperature_kelvin)
+	if profile.upper_surface.size() > 0:
+		var count = min(profile.upper_surface.size(), profile.lower_surface.size())
+		for i in range(count):
+			var upper_y = profile.upper_surface[i].y
+			var lower_y = profile.lower_surface[i].y
 
-static func _calculate_reynolds(density, velocity, chord, temperature_kelvin):
-	# Sutherland's Law zur Berechnung der dynamischen Viskosität
-	var mu = MU_REF * ( (T_REF + SUTHERLAND_CONST) / (temperature_kelvin + SUTHERLAND_CONST) ) * pow(temperature_kelvin / T_REF, 1.5)
-	return (density * velocity * chord) / mu
+			# Dicke
+			var t = upper_y - lower_y
+			if t > max_thick:
+				max_thick = t
+				pos_max_thick_x = profile.upper_surface[i].x
 
-# --- Geometrie-Hilfsfunktionen (aus plot_test.gd hierher verschoben) ---
-# Diese benötigen das AirfoilProfile-Objekt als Input
+			# Camber (Mittellinie zwischen oben und unten)
+			var mean_line_y = (upper_y + lower_y) / 2.0
+			# Wir suchen den Punkt, der am weitesten von der Sehne (y=0) weg ist
+			if abs(mean_line_y) > abs(max_camber):
+				max_camber = mean_line_y
 
-static func _get_max_thickness_and_camber(profile: AirfoilProfile) -> Dictionary:
-	var max_thickness = 0.0
-	var max_camber = 0.0
-	var count = min(profile.upper_surface.size(), profile.lower_surface.size())
-	if count == 0: return {"thickness": 0.0, "camber": 0.0}
-	for i in range(count):
-		var thickness = profile.upper_surface[i].y - profile.lower_surface[i].y
-		if thickness > max_thickness: max_thickness = thickness
-		var camber_y = (profile.upper_surface[i].y + profile.lower_surface[i].y) / 2.0
-		if abs(camber_y) > abs(max_camber): max_camber = camber_y
-	return {"thickness": max_thickness, "camber": max_camber}
+	return {
+		"thickness": max_thick,
+		"pos_max_thick_x": pos_max_thick_x,
+		"camber": max_camber # NEU
+	}
+
+# Neue Hilfsfunktion
+static func estimate_cm0(geo_data: Dictionary) -> float:
+	# Faustformel: cm0 ist ca. -2 * max_camber
+	# Bei Bikonvex ist camber ~0 -> cm0 = 0
+	return -2.0 * geo_data.camber
+
+static func estimate_backward_scale(geo: Dictionary) -> float:
+	var x_pos = geo.pos_max_thick_x
+
+	# Berechnung des Abstands zur Mitte (0.5)
+	var dist_from_center = abs(x_pos - 0.5)
+	var scale = 1.0 - (dist_from_center * 3.2) # Faktor 3.2 sorgt für starken Abfall
+
+	return clamp(scale, 0.25, 1.0) # Nicht unter 0.25 gehen
+
+static func estimate_stall_angle(geo: Dictionary) -> float:
+	var base_stall = 9.0 # Konservativer Basiswert
+	var thickness_factor = 50.0 # Wie stark Dicke hilft
+
+	var estimated = base_stall + (geo.thickness * thickness_factor)
+	return clamp(estimated, 8.0, 20.0) # Sinnvolle Limits
+
 
 static func _calculate_alpha_0(profile: AirfoilProfile) -> float:
 	var camber_line = []
@@ -344,8 +417,9 @@ static func _calculate_alpha_0(profile: AirfoilProfile) -> float:
 		alpha_0 *= (PI / float(N - 1)) * (-1.0 / PI)
 	return alpha_0
 
+
+
 static func _get_alpha_grid() -> Array[float]:
-	var points: Array[float] = []
-	for i in range(-180, 181, 2):
-		points.append(float(i))
-	return points
+	var p: Array[float] = []
+	for i in range(-180, 181, 1): p.append(float(i))
+	return p

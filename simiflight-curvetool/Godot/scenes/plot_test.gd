@@ -76,7 +76,7 @@ func _draw_graph_aerodynamic_curves(curves: Dictionary) -> void:
 		self.lift_curve_from_JavaFoil.add_point_vector(javaFoilLift.NACA0012_WINDTUNNEL[i])
 	for i in range(javaFoilLift.lift_curve_with_calcfoil.size()):
 		self.lift_curve_from_JavaFoil2.add_point_vector(javaFoilLift.lift_curve_with_calcfoil[i])
-	#self.plot.add_series(self.lift_curve_from_JavaFoil)
+	self.plot.add_series(self.lift_curve_from_JavaFoil)
 	#self.plot.add_series(self.lift_curve_from_JavaFoil2)
 	#self.plot.add_series(self.lift_curve_from_JavaFoil)
 	await self.get_tree().create_timer(0.1).timeout
@@ -647,9 +647,9 @@ func _calculate_luts(combine_methos: bool = false) -> void:
 
 	var save_path = "res://data/luts/naca_632012_lut.tres"
 	if combine_methos:
-		LutGenerator.generate_and_save_lut_combine_m1_m2(airfoil_to_process, save_path)
+		LutGeneratorOLD.generate_and_save_lut_combine_m1_m2(airfoil_to_process, save_path)
 	else:
-		LutGenerator.generate_and_save_lut(airfoil_to_process, save_path)
+		LutGeneratorOLD.generate_and_save_lut(airfoil_to_process, save_path)
 
 
 func _on_calc_clcd_button_pressed() -> void:

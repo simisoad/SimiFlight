@@ -1,16 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://x2f41jlstfi1"]
+[gd_scene load_steps=3 format=3 uid="uid://x8npjygfm4fd"]
 
-[ext_resource type="Script" uid="uid://dioivwyau0vs1" path="res://lut_visu.gd" id="1_st0r0"]
-[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="2_4jniy"]
+[ext_resource type="Script" uid="uid://11ym0j6u1mfa" path="res://scenes/LutVisualizer.gd" id="1_vnhl4"]
+[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="2_uyaca"]
 
-[node name="LUT_Visu" type="Control"]
+[node name="LutVisualizer" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_st0r0")
+script = ExtResource("1_vnhl4")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -21,6 +21,13 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="FileSelectorLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FileSelector" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="MachNumberLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
@@ -39,11 +46,11 @@ text = "Reynolds Number:"
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Plot" type="Control" parent="HBoxContainer"]
+[node name="PlotVisu" type="Control" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource("2_4jniy")
+script = ExtResource("2_uyaca")
 x_min = -180.0
 x_max = 180.0
 y_min = -3.0

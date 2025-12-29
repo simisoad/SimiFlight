@@ -1,0 +1,177 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtapqfpemfk0"]
+
+[ext_resource type="Script" uid="uid://cl4wq53i4153p" path="res://scenes/LutGeneratorView.gd" id="1_oqsnf"]
+[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="2_ppnu1"]
+
+[node name="LutGeneratorView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oqsnf")
+
+[node name="MainSplit" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Plots" type="VSplitContainer" parent="MainSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlotPreview" type="Control" parent="MainSplit/Plots"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_ppnu1")
+x_min = -180.0
+x_max = 180.0
+x_tick_count = 12
+y_min = -3.0
+y_max = 3.0
+background_color = Color(0.172833, 0.172833, 0.172833, 1)
+horizontal_title = "Alpha"
+vertical_title = "CL / CD"
+axis_thickness = 4.0
+metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+metadata/_edit_lock_ = true
+
+[node name="PlotGeometry" type="Control" parent="MainSplit/Plots"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+script = ExtResource("2_ppnu1")
+x_max = 1.0
+x_decimal_places = 4
+y_min = -0.1
+y_max = 0.1
+y_decimal_places = 4
+background_color = Color(0.172549, 0.172549, 0.172549, 1)
+show_tick_labels = false
+metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+
+[node name="Settings" type="VBoxContainer" parent="MainSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="StateLabel" type="Label" parent="MainSplit/Settings"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "State: "
+
+[node name="LoadFiles" type="PanelContainer" parent="MainSplit/Settings"]
+layout_mode = 2
+
+[node name="LoadFile" type="HBoxContainer" parent="MainSplit/Settings/LoadFiles"]
+layout_mode = 2
+
+[node name="ProfileSelector" type="OptionButton" parent="MainSplit/Settings/LoadFiles/LoadFile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Output" type="PanelContainer" parent="MainSplit/Settings"]
+layout_mode = 2
+
+[node name="OutputNames" type="HBoxContainer" parent="MainSplit/Settings/Output"]
+layout_mode = 2
+
+[node name="OutputName" type="LineEdit" parent="MainSplit/Settings/Output/OutputNames"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Output-Name"
+
+[node name="Methods" type="PanelContainer" parent="MainSplit/Settings"]
+layout_mode = 2
+
+[node name="Method" type="HBoxContainer" parent="MainSplit/Settings/Methods"]
+layout_mode = 2
+
+[node name="MethodSelector" type="OptionButton" parent="MainSplit/Settings/Methods/Method"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Parameters" type="PanelContainer" parent="MainSplit/Settings"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/Settings/Parameters"]
+layout_mode = 2
+
+[node name="StallAngle" type="HBoxContainer" parent="MainSplit/Settings/Parameters/VBoxContainer"]
+layout_mode = 2
+
+[node name="StallAngleLabel" type="Label" parent="MainSplit/Settings/Parameters/VBoxContainer/StallAngle"]
+layout_mode = 2
+text = "Stall Angle:"
+
+[node name="StallAngle" type="LineEdit" parent="MainSplit/Settings/Parameters/VBoxContainer/StallAngle"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackwardScale" type="HBoxContainer" parent="MainSplit/Settings/Parameters/VBoxContainer"]
+layout_mode = 2
+
+[node name="BackwardScaleLabel" type="Label" parent="MainSplit/Settings/Parameters/VBoxContainer/BackwardScale"]
+layout_mode = 2
+text = "Backward Scale:"
+
+[node name="BackwardScaleInput" type="LineEdit" parent="MainSplit/Settings/Parameters/VBoxContainer/BackwardScale"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Reynolds" type="HBoxContainer" parent="MainSplit/Settings/Parameters/VBoxContainer"]
+layout_mode = 2
+
+[node name="ReynoldsLabel" type="Label" parent="MainSplit/Settings/Parameters/VBoxContainer/Reynolds"]
+layout_mode = 2
+text = "Reynolds:"
+
+[node name="ReynoldsPreview" type="LineEdit" parent="MainSplit/Settings/Parameters/VBoxContainer/Reynolds"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Sharpness" type="HBoxContainer" parent="MainSplit/Settings/Parameters/VBoxContainer"]
+layout_mode = 2
+
+[node name="SharpnessLabel" type="Label" parent="MainSplit/Settings/Parameters/VBoxContainer/Sharpness"]
+layout_mode = 2
+text = "Sharpness:"
+
+[node name="Sharpness" type="LineEdit" parent="MainSplit/Settings/Parameters/VBoxContainer/Sharpness"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PreviewMach" type="HBoxContainer" parent="MainSplit/Settings/Parameters/VBoxContainer"]
+layout_mode = 2
+
+[node name="PreviewMachLabel" type="Label" parent="MainSplit/Settings/Parameters/VBoxContainer/PreviewMach"]
+layout_mode = 2
+text = "Preview Mach:"
+
+[node name="MachPreview" type="LineEdit" parent="MainSplit/Settings/Parameters/VBoxContainer/PreviewMach"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CalcCurve" type="Button" parent="MainSplit/Settings"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Calculate Curves"
+
+[node name="GenerateFullLUT" type="Button" parent="MainSplit/Settings"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Generate Full LUT"

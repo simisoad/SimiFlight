@@ -1,17 +1,44 @@
 Godot
 ├───assets
 ├───data
-│   └───airfoils
+│   ├───LiftCurves
+│   │   ├───Naca632012LiftCurve.gd
+│   │   ├───Naca632012LiftCurve.gd.uid
+│   │   └───naca_632012_liftCurve.txt
+│   ├───airfoils
+│   │   ├───Bikonvexprofil8%.txt
+│   │   ├───KeilProfil
+│   │   ├───KeilProfil.txt
+│   │   ├───NACA 1107-73.txt
+│   │   ├───NACA0006_Supersonic.txt
+│   │   ├───NACA0014.txt
+│   │   ├───NACA64-2012.txt
+│   │   ├───Naca0015.txt
+│   │   ├───TsAGIB
+│   │   ├───TsAGIB.txt
 │   │   ├───naca_632012.tres
-│   │   └───naca_632012.txt
+│   │   ├───naca_632012.txt
+│   │   └───naca_632012_leerz.txt
+│   └───luts
+│   │   ├───NACA0006_Supersonic.tres
+│   │   ├───naca_632012_lut.tres
+│   │   └───naca_632012_lut.tres.txt
 ├───scenes
 │   ├───main.tscn
 │   ├───main.tscn6435697529.tmp
 │   ├───plot.gd
 │   ├───plot.gd.uid
 │   ├───plot_test.gd
-│   └───plot_test.gd.uid
+│   ├───plot_test.gd.uid
+│   ├───plot_test_old.gd
+│   └───plot_test_old.gd.uid
 ├───scripts
+│   ├───AirfoilLut.gd
+│   ├───AirfoilLut.gd.uid
+│   ├───LUTGenerator.gd
+│   ├───LUTGenerator.gd.uid
+│   ├───OldScripts.gd
+│   ├───OldScripts.gd.uid
 │   ├───airfoil_profile.gd
 │   ├───airfoil_profile.gd.uid
 │   ├───curve_simulator.gd
@@ -22,10 +49,14 @@ Godot
 │   └───plot_manager.gd.uid
 ├───ui
 │   └───elements
+│   │   └───BlackBackgroundPanel.tres
 ├───LICENSE
 ├───README.md
 ├───folder_structure.txt
 ├───icon.svg
+├───lut_visu.gd
+├───lut_visu.gd.uid
+├───lut_visu.tscn
 ├───main.gd
 ├───main.gd.uid
 └───project.godot
