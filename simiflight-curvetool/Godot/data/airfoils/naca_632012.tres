@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AirfoilProfile" load_steps=2 format=3 uid="uid://dt2528f8fpj4x"]
 
-[ext_resource type="Script" uid="uid://c5rsqy31s2ara" path="res://scripts/airfoil_profile.gd" id="1_bddts"]
+[ext_resource type="Script" uid="uid://c5rsqy31s2ara" path="res://scripts/AirfoilProfil.gd" id="1_bddts"]
 
 [resource]
 script = ExtResource("1_bddts")

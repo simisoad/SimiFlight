@@ -1,9 +1,9 @@
 @tool
 class_name Graph2D extends Graph
-## A node for creating two-dimensional quantitative graphs. 
+## A node for creating two-dimensional quantitative graphs.
 ## Used with a [Series2D] inheriting node to plot data on a 2D graph.
 
-## Automatically adjusts axis min and max values to accommodate data. 
+## Automatically adjusts axis min and max values to accommodate data.
 @export var auto_scaling : bool = true:
 	set(value):
 		auto_scaling = value
@@ -22,7 +22,7 @@ class_name Graph2D extends Graph
 		x_max = Rounder.round_num_to_decimal_place(value, x_decimal_places)
 		if x_max < x_min: x_min = x_max
 		queue_redraw()
-## Number of major gridlines. May change to ensure accurate position of gridlines. 
+## Number of major gridlines. May change to ensure accurate position of gridlines.
 ## More [member x_decimal_places] results in less variation.
 @export var x_tick_count: int = 10:
 	set(value):
@@ -63,7 +63,7 @@ class_name Graph2D extends Graph
 		y_max = Rounder.round_num_to_decimal_place(value, y_decimal_places)
 		if y_max < y_min: y_min = y_max
 		queue_redraw()
-## Number of major gridlines. May change to ensure accurate position of gridlines. 
+## Number of major gridlines. May change to ensure accurate position of gridlines.
 ## More [member y_decimal_places] results in less variation.
 @export var y_tick_count: int = 10:
 	set(value):
@@ -127,7 +127,7 @@ func _draw() -> void:
 func _update_graph_limits() -> void:
 	var min_limits = Vector2(x_min, y_min)
 	var max_limits = Vector2(x_max, y_max)
-	
+
 	if auto_scaling:
 		var data_min = Rounder.floor_vector_to_decimal_places(
 			series_container.min_value, Vector2(x_decimal_places, y_decimal_places)

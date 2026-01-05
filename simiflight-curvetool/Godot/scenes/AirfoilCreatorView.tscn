@@ -1,0 +1,116 @@
+[gd_scene load_steps=3 format=3 uid="uid://co5lhdilj1n8y"]
+
+[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="1_023ui"]
+[ext_resource type="Script" uid="uid://blm8e45wnxo0r" path="res://scripts/AirfoilCreator/AirfoilCreatorView.gd" id="1_jxo0w"]
+
+[node name="AirfoilCreatorView" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jxo0w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="AirfoilGenLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Airfoil Generator"
+
+[node name="CamberSpinBox" type="SpinBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -9.5
+max_value = 9.5
+step = 0.1
+value = 0.5
+prefix = "Camber:"
+suffix = "%"
+
+[node name="PositionSpinBox" type="SpinBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -9.0
+max_value = 9.0
+step = 0.1
+prefix = "Position:"
+suffix = "/10"
+
+[node name="ThicknessSpinbox" type="SpinBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -40.0
+max_value = 40.0
+step = 0.1
+value = 1.0
+prefix = "Thickness:"
+suffix = "%"
+
+[node name="SpinNoseRadius" type="SpinBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 2.0
+step = 0.01
+page = 0.1
+value = 0.9
+prefix = "Nose Sharpnes(LE):"
+suffix = "(r)"
+
+[node name="SpinTEThick" type="SpinBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 5.0
+step = 0.01
+page = 0.1
+value = 0.9
+prefix = "TE Thickness:"
+suffix = "%"
+
+[node name="CheckOvalShape" type="CheckBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "OvalShape"
+
+[node name="PreviewBtn" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Generate Preview"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="FileNameLineEdit" type="LineEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Filename"
+
+[node name="SaveBtn" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save to file."
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlotGeometry" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_023ui")
+auto_scaling = false
+x_max = 1.0
+x_tick_count = 1
+x_gridlines_minor = 8
+y_min = -0.5
+y_max = 0.5
+y_tick_count = 1
+y_gridlines_minor = 8
+background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
+title = "Airfoil Preview"
+axis_color = Color(0.78352344, 0.7835234, 0.7835234, 1)
+metadata/_custom_type_script = "uid://2wcgnx78i6bw"

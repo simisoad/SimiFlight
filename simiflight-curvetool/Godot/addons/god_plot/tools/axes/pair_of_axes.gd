@@ -21,7 +21,7 @@ var color : Color:
 		color = value
 		x_axis.color = color
 		y_axis.color = color
-		
+
 var thickness : float:
 	set(value):
 		thickness = value
@@ -48,13 +48,13 @@ func _ready() -> void:
 	bottom_left_corner.add_drawing_object(y_gridlines)
 
 func get_min_limits() -> Vector2: return Vector2(x_axis.min_value, y_axis.min_value)
-	
+
 func set_min_limits(min_limits : Vector2):
 	x_axis.min_value = min_limits.x
 	y_axis.min_value = min_limits.y
-	
+
 func get_max_limits() -> Vector2: return Vector2(x_axis.max_value, y_axis.max_value)
-	
+
 func set_max_limits(max_limits : Vector2):
 	x_axis.max_value = max_limits.x
 	y_axis.max_value = max_limits.y
@@ -65,7 +65,7 @@ func get_range() -> Vector2:
 func _draw() -> void:
 	update()
 	bottom_left_corner.queue_redraw()
-	
+
 func update():
 	_update_margins()
 	_set_bottom_left_corner()
@@ -75,14 +75,14 @@ func _update_margins():
 	_update_bottom_margin()
 	_update_left_margin()
 	_update_right_margin()
-	
+
 
 func _update_bottom_margin():
 	var bottom_margin = x_axis.get_tick_length()
 	bottom_margin += font_size if visible_tick_labels else 0.0
 	bottom_margin += thickness
 	bottom_margin += offset.y
-	
+
 	margin.bottom = bottom_margin
 
 func _update_left_margin(y_title_width : float = 0.0):
@@ -93,7 +93,7 @@ func _update_left_margin(y_title_width : float = 0.0):
 	left_margin += font_size / 1.5 * (DigitCounter.get_max_num_digits(y_axis.min_value, y_axis.max_value) + decimal_places.y)
 	left_margin += y_title_margin
 	left_margin += offset.x
-	
+
 	margin.left = left_margin
 
 func _update_right_margin():
@@ -106,10 +106,10 @@ func _set_bottom_left_corner():
 func _set_axes_offsets_and_lengths():
 	x_axis.offset = Vector2.UP * y_axis.get_zero_position_along_axis_clipped()
 	y_axis.offset = Vector2.RIGHT * x_axis.get_zero_position_along_axis_clipped()
-	
+
 	var x_axis_length = size.x - (margin.left + margin.right)
 	x_axis.length = max(0, x_axis_length)
-	
+
 	var y_axis_length = size.y - margin.bottom
 	y_axis.length = max(0, y_axis_length)
 
@@ -122,7 +122,7 @@ func get_pixel_position_from_minimum(vector_from_axes_minimum : Vector2) -> Vect
 		-y_axis.get_pixel_distance_from_minimum(vector_from_axes_minimum.y),
 		)
 
-func set_font_and_size(font : FontFile, f_size : float):
+func set_font_and_size(font : Font, f_size : float):
 	font_size = f_size
 	x_axis.set_font_and_size(font, font_size)
 	y_axis.set_font_and_size(font, font_size)

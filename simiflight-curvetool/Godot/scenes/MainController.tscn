@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://j4mlp7cre765"]
+[gd_scene load_steps=6 format=3 uid="uid://j4mlp7cre765"]
 
-[ext_resource type="Script" uid="uid://bmmhyo7n4d5qu" path="res://scenes/MainController.gd" id="1_mcild"]
+[ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_8exsg"]
+[ext_resource type="Script" uid="uid://bmmhyo7n4d5qu" path="res://scripts/MainController.gd" id="1_mcild"]
 [ext_resource type="PackedScene" uid="uid://dtapqfpemfk0" path="res://scenes/LutGeneratorView.tscn" id="2_bxdna"]
 [ext_resource type="PackedScene" uid="uid://x8npjygfm4fd" path="res://scenes/LutVisualizer.tscn" id="3_j44cv"]
+[ext_resource type="PackedScene" uid="uid://co5lhdilj1n8y" path="res://scenes/AirfoilCreatorView.tscn" id="4_aefve"]
 
 [node name="MainController" type="Control"]
 layout_mode = 3
@@ -11,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_8exsg")
 script = ExtResource("1_mcild")
 
 [node name="Background" type="Panel" parent="."]
@@ -20,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_8exsg")
 
 [node name="MarginContainer" type="MarginContainer" parent="Background"]
 layout_mode = 1
@@ -28,6 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_8exsg")
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
@@ -36,11 +41,13 @@ theme_override_constants/margin_bottom = 5
 [node name="TabContainer" type="TabContainer" parent="Background/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_8exsg")
 current_tab = 0
 drag_to_rearrange_enabled = true
 
 [node name="LutGenerator" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 layout_mode = 2
+theme = ExtResource("1_8exsg")
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
@@ -54,6 +61,7 @@ layout_mode = 2
 [node name="LutVisualizer" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+theme = ExtResource("1_8exsg")
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
@@ -63,3 +71,19 @@ metadata/_tab_index = 1
 [node name="LutVisualizer" parent="Background/MarginContainer/TabContainer/LutVisualizer" instance=ExtResource("3_j44cv")]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_8exsg")
+
+[node name="AirfoilCreatorView" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_8exsg")
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+metadata/_tab_index = 2
+
+[node name="AirfoilCreatorView" parent="Background/MarginContainer/TabContainer/AirfoilCreatorView" instance=ExtResource("4_aefve")]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_8exsg")

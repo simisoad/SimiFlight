@@ -28,8 +28,3 @@ enabled=PackedStringArray("res://addons/folder_structure_export/plugin.cfg", "re
 
 exclusions/excluded_dirs=["addons", ".godot", ".git", "build"]
 exclusions/output_path="folder_structure.txt"
-
-[rendering]
-
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"

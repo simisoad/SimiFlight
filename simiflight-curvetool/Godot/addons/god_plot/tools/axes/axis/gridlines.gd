@@ -42,6 +42,8 @@ func _set_major_gridline_positions():
 	for tick_position in origin_axis.get_tick_positions_along_axis():
 		major_gridline_positions.append(tick_position * origin_axis.direction)
 
+# In Datei: gridlines.gd
+
 func draw_minor_gridlines(canvas : CanvasItem):
 	if !minor_count:
 		return
@@ -49,23 +51,31 @@ func draw_minor_gridlines(canvas : CanvasItem):
 	if is_zero_approx(minor_interval):
 		return
 	var first_minor_position = get_first_minor_position()
-	
+
 	var minor_gridline_position = first_minor_position
-	var graph_edge = origin_axis.length * origin_axis.direction
-	while minor_gridline_position < graph_edge:
+
+	# FIX: Skalar-Vergleich statt Vektor-Vergleich
+	# Wir prüfen, ob die Distanz auf der Achse kleiner/gleich der Achsenlänge ist
+	while minor_gridline_position.dot(origin_axis.direction) <= origin_axis.length + 0.001:
 		canvas.draw_line(
 			minor_gridline_position,
-			minor_gridline_position - parallel_axis.length * origin_axis.out_direction, 
+			minor_gridline_position - parallel_axis.length * origin_axis.out_direction,
 			color, minor_thickness
 		)
 		minor_gridline_position += minor_interval * origin_axis.direction
 
-func _update_minor_interval():
-	minor_interval = origin_axis.get_tick_interval() / float(minor_count + 1)	
-
 func get_first_minor_position() -> Vector2:
 	var first_minor_position = major_gridline_positions[0]
 	var smallest_remaining_gap = minor_interval * origin_axis.direction
-	while first_minor_position > smallest_remaining_gap or first_minor_position.is_equal_approx(smallest_remaining_gap):
-		first_minor_position -= minor_interval * origin_axis.direction
+
+	# FIX: Endlosschleife behoben durch Nutzung des Skalarprodukts (dot)
+	# Wir vergleichen die projizierte Distanz statt roher Vektoren
+	var current_dist = first_minor_position.dot(origin_axis.direction)
+
+	while current_dist > minor_interval or is_equal_approx(current_dist, minor_interval):
+		first_minor_position -= smallest_remaining_gap
+		current_dist = first_minor_position.dot(origin_axis.direction)
+
 	return first_minor_position
+func _update_minor_interval():
+	minor_interval = origin_axis.get_tick_interval() / float(minor_count + 1)

@@ -1,0 +1,157 @@
+[gd_resource type="Theme" load_steps=22 format=3 uid="uid://dblsxlww46j3l"]
+
+[ext_resource type="StyleBox" uid="uid://6m6n7cp316nd" path="res://ui/elements/BlackBackgroundPanel.tres" id="1_at6rb"]
+[ext_resource type="StyleBox" uid="uid://k4jyw6xx27r3" path="res://ui/Theme/Buttons/Btn_disabled.tres" id="1_hlyxo"]
+[ext_resource type="Texture2D" uid="uid://blkpxu32h6vxj" path="res://ui/Icons/LUTGen.png" id="2_03xje"]
+[ext_resource type="StyleBox" uid="uid://u4urnfchxgx1" path="res://ui/Theme/Buttons/Btn_focus.tres" id="2_v0aaa"]
+[ext_resource type="StyleBox" uid="uid://dq2e2onau1bb8" path="res://ui/Theme/Buttons/Btn_hover.tres" id="3_530ad"]
+[ext_resource type="StyleBox" uid="uid://dqihl2ujrgdp4" path="res://ui/Theme/Buttons/Btn_normal.tres" id="4_hqor4"]
+[ext_resource type="StyleBox" uid="uid://cdyhc3ya6lhhh" path="res://ui/Theme/Buttons/Btn_pressed.tres" id="5_uju3u"]
+
+[sub_resource type="DPITexture" id="DPITexture_054as"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"8\"><path fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" d=\"m12 2-4 3.5L4 2\"/></svg>
+"
+
+[sub_resource type="DPITexture" id="DPITexture_8wwim"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"8\"><path fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" d=\"m4 6 4-3.5L12 6\"/></svg>
+"
+
+[sub_resource type="ImageTexture" id="ImageTexture_27ega"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gx2pu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sr54c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vh56p"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yuvvs"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_usihc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g2pxs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fjlia"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uqh7c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uju3u"]
+bg_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
+
+[sub_resource type="FontFile" id="FontFile_ntxfi"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/25/0/ascent = 0.0
+cache/0/25/0/descent = 0.0
+cache/0/25/0/underline_position = 0.0
+cache/0/25/0/underline_thickness = 0.0
+cache/0/25/0/scale = 1.0
+cache/0/18/0/ascent = 0.0
+cache/0/18/0/descent = 0.0
+cache/0/18/0/underline_position = 0.0
+cache/0/18/0/underline_thickness = 0.0
+cache/0/18/0/scale = 1.0
+cache/0/19/0/ascent = 0.0
+cache/0/19/0/descent = 0.0
+cache/0/19/0/underline_position = 0.0
+cache/0/19/0/underline_thickness = 0.0
+cache/0/19/0/scale = 1.0
+cache/0/20/0/ascent = 0.0
+cache/0/20/0/descent = 0.0
+cache/0/20/0/underline_position = 0.0
+cache/0/20/0/underline_thickness = 0.0
+cache/0/20/0/scale = 1.0
+
+[sub_resource type="SystemFont" id="SystemFont_ntxfi"]
+fallbacks = Array[Font]([SubResource("FontFile_ntxfi")])
+font_names = PackedStringArray("Sans-Serif")
+hinting = 2
+oversampling = 2.0
+
+[resource]
+default_font = SubResource("SystemFont_ntxfi")
+default_font_size = 18
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 4
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/styles/disabled = ExtResource("1_hlyxo")
+Button/styles/focus = ExtResource("2_v0aaa")
+Button/styles/hover = ExtResource("3_530ad")
+Button/styles/hover_pressed = ExtResource("3_530ad")
+Button/styles/normal = ExtResource("4_hqor4")
+Button/styles/pressed = ExtResource("5_uju3u")
+CheckBox/constants/align_to_largest_stylebox = 2
+CheckBox/constants/h_separation = 9
+Panel/styles/panel = ExtResource("1_at6rb")
+SpinBox/colors/down_disabled_icon_modulate = Color(0.875, 0.875, 0.875, 0.5)
+SpinBox/colors/down_hover_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+SpinBox/colors/down_icon_modulate = Color(0.875, 0.875, 0.875, 1)
+SpinBox/colors/down_pressed_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+SpinBox/colors/up_disabled_icon_modulate = Color(0.875, 0.875, 0.875, 0.5)
+SpinBox/colors/up_hover_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+SpinBox/colors/up_icon_modulate = Color(0.875, 0.875, 0.875, 1)
+SpinBox/colors/up_pressed_icon_modulate = Color(0.95, 0.95, 0.95, 1)
+SpinBox/constants/buttons_vertical_separation = 0
+SpinBox/constants/buttons_width = 16
+SpinBox/constants/field_and_buttons_separation = 2
+SpinBox/constants/set_min_buttons_width_from_icons = 1
+SpinBox/font_sizes/FontSize = 8
+SpinBox/icons/down = SubResource("DPITexture_054as")
+SpinBox/icons/down_disabled = SubResource("DPITexture_054as")
+SpinBox/icons/down_hover = SubResource("DPITexture_054as")
+SpinBox/icons/down_pressed = SubResource("DPITexture_054as")
+SpinBox/icons/up = SubResource("DPITexture_8wwim")
+SpinBox/icons/up_disabled = SubResource("DPITexture_8wwim")
+SpinBox/icons/up_hover = SubResource("DPITexture_8wwim")
+SpinBox/icons/up_pressed = SubResource("DPITexture_8wwim")
+SpinBox/icons/updown = SubResource("ImageTexture_27ega")
+SpinBox/styles/down_background = SubResource("StyleBoxEmpty_gx2pu")
+SpinBox/styles/down_background_disabled = SubResource("StyleBoxEmpty_sr54c")
+SpinBox/styles/down_background_hovered = SubResource("StyleBoxFlat_vh56p")
+SpinBox/styles/down_background_pressed = SubResource("StyleBoxFlat_yuvvs")
+SpinBox/styles/field_and_buttons_separator = SubResource("StyleBoxEmpty_usihc")
+SpinBox/styles/up_background = SubResource("StyleBoxEmpty_g2pxs")
+SpinBox/styles/up_background_disabled = SubResource("StyleBoxEmpty_fjlia")
+SpinBox/styles/up_background_hovered = SubResource("StyleBoxFlat_vh56p")
+SpinBox/styles/up_background_pressed = SubResource("StyleBoxFlat_yuvvs")
+SpinBox/styles/up_down_buttons_separator = SubResource("StyleBoxEmpty_uqh7c")
+TabContainer/font_sizes/font_size = 20
+TabContainer/icons/LutGen = ExtResource("2_03xje")
+TooltipLabel/colors/font_color = Color(1, 1, 1, 1)
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_uju3u")
