@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://x8npjygfm4fd"]
 
-[ext_resource type="Script" uid="uid://11ym0j6u1mfa" path="res://scripts/LutVisualizer.gd" id="1_vnhl4"]
+[ext_resource type="Script" uid="uid://11ym0j6u1mfa" path="res://scripts/LUTAndForceVisualizer/LutVisualizer.gd" id="1_vnhl4"]
 [ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="2_dtayv"]
-[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="2_uyaca"]
 [ext_resource type="PackedScene" uid="uid://cyhr6lmtiyngb" path="res://scenes/ForceVisualizer.tscn" id="3_3v3rj"]
+[ext_resource type="Script" uid="uid://bd36psmww5euc" path="res://scripts/SimpleChart/SimpleChart.gd" id="3_dtayv"]
 
 [node name="LutVisualizer" type="Control"]
 layout_mode = 3
@@ -12,7 +12,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_dtayv")
 script = ExtResource("1_vnhl4")
+metadata/_custom_type_script = "uid://11ym0j6u1mfa"
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
 layout_mode = 1
@@ -21,13 +23,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_dtayv")
+touch_dragger_enabled = true
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_dtayv")
+touch_dragger_enabled = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(268, 0)
 layout_mode = 2
+theme = ExtResource("2_dtayv")
 
 [node name="FileSelectorLabel" type="Label" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -64,7 +72,6 @@ layout_mode = 2
 theme = ExtResource("2_dtayv")
 button_pressed = true
 text = "Live Curves"
-alignment = 1
 
 [node name="ShowCalculatedLutCurves" type="CheckBox" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -78,27 +85,13 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("2_uyaca")
-x_min = -1.0
-x_max = 1.0
-x_tick_count = 12
-x_decimal_places = 0
-x_gridlines_major_thickness = 2.0
-x_gridlines_minor = 2
-y_min = -3.0
-y_max = 3.0
-y_tick_count = 5
-y_decimal_places = 0
-y_gridlines_major_thickness = 2.0
-y_gridlines_minor = 8
+theme = ExtResource("2_dtayv")
+script = ExtResource("3_dtayv")
 background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
-axis_color = Color(0.78352344, 0.7835234, 0.7835234, 1)
-label_size = 1.25
-metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+highlight_range_color = null
+auto_zoom_limit = true
+show_range_highlight = true
+metadata/_custom_type_script = "uid://bd36psmww5euc"
 
 [node name="ForceVisualizer" parent="VSplitContainer" instance=ExtResource("3_3v3rj")]
 layout_mode = 2
-size_flags_vertical = 3
-
-[connection signal="item_selected" from="VSplitContainer/HBoxContainer/VBoxContainer/MachSelector" to="." method="_on_selection_changed"]
-[connection signal="item_selected" from="VSplitContainer/HBoxContainer/VBoxContainer/ReynoldsSelector" to="." method="_on_selection_changed"]

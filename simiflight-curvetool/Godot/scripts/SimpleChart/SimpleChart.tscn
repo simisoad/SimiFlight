@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxlalatnnmyhs"]
+
+[ext_resource type="Script" uid="uid://bd36psmww5euc" path="res://scripts/SimpleChart/SimpleChart.gd" id="1_v3c00"]
+
+[node name="SimpleChart" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_v3c00")
+set_domain_from_inspector = true
+show_range_highlight = true
+highlight_min_x = -50.0
+highlight_max_x = 50.0
+metadata/_custom_type_script = "uid://bd36psmww5euc"

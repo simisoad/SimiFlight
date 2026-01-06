@@ -2,7 +2,7 @@ class_name AirfoilCreatorView extends HSplitContainer
 
 signal airfoil_saved(filename: String)
 
-# UI References
+# --- UI References ---
 @onready var spin_m: SpinBox = %CamberSpinBox
 @onready var spin_p: SpinBox = %PositionSpinBox
 @onready var spin_t: SpinBox = %ThicknessSpinbox
@@ -12,17 +12,16 @@ signal airfoil_saved(filename: String)
 @onready var spin_te: SpinBox = %SpinTEThick    # Range 0.0 to 5.0 (%), Step 0.1
 
 # The Type Selector
-@onready var check_oval: CheckBox = %CheckOvalShape # NEW UI ELEMENT
+@onready var check_oval: CheckBox = %CheckOvalShape
 
 @onready var input_name: LineEdit = %FileNameLineEdit
-@onready var plot: Graph2D = %PlotGeometry
 @onready var lbl_status: Label = %StatusLabel
 
+# --- Plot Reference ---
+@onready var plot: SimpleChart = %PlotGeometry
+
+# --- State ---
 var current_points: Dictionary = {}
-var line_upper: LineSeries
-var line_lower: LineSeries
-# New: A specific line to close the gap visually
-var line_closure: LineSeries
 
 func _ready():
 	_init_plot()
@@ -45,18 +44,13 @@ func _ready():
 	_generate()
 
 func _init_plot():
-	line_upper = LineSeries.new(Color.GREEN, 2.0)
-	line_lower = LineSeries.new(Color.YELLOW, 2.0)
-	line_closure = LineSeries.new(Color.WHITE, 2.0) # To draw the vertical line at the back
+	# Set visual domain to framing the airfoil comfortably
+	# X: -0.1 to 1.1 (Chord is 0.0 to 1.0)
+	# Y: -0.3 to 0.3 (Thickness usually maxes at +/- 0.15)
+	plot.set_domain(-0.1, 1.1, -0.3, 0.3)
 
-	plot.add_series(line_upper)
-	plot.add_series(line_lower)
-	plot.add_series(line_closure)
-
-	plot.x_min = -0.1
-	plot.x_max = 1.1
-	plot.y_min = -0.3
-	plot.y_max = 0.3
+	# Optional: You could disable the grid if you want a cleaner look
+	# plot.show_grid = false
 
 func _generate():
 	var m = spin_m.value / 100.0
@@ -68,9 +62,10 @@ func _generate():
 
 	var type = NacaGenerator.ShapeType.ELLIPTICAL if check_oval.button_pressed else NacaGenerator.ShapeType.NACA_POLYNOMIAL
 
+	# This returns { "upper": [Vector2], "lower": [Vector2] }
 	current_points = NacaGenerator.generate_universal(m, p, t, le, te, type, 60)
 
-	# Auto-Naming logic (Simplified)
+	# Auto-Naming logic
 	var base_name = "NACA" if type == 0 else "OVAL"
 	if le != 1.0 or te != 0.0:
 		base_name = "MOD"
@@ -79,35 +74,37 @@ func _generate():
 	_draw_plot()
 
 func _draw_plot():
-	line_upper.clear_data()
-	line_lower.clear_data()
-	line_closure.clear_data()
+	plot.clear_series()
 
-	# 1. Draw Upper
-	for pt in current_points.upper:
-		line_upper.add_point(pt.x, pt.y)
+	if current_points.is_empty(): return
 
-	# 2. Draw Lower
-	for pt in current_points.lower:
-		line_lower.add_point(pt.x, pt.y)
+	# 1. Prepare Data
+	# NacaGenerator returns Array[Vector2], so we can pass them directly.
+	var upper_pts: Array = current_points.upper
+	var lower_pts: Array = current_points.lower
 
-	# 3. VISUALLY CLOSE THE TRAILING EDGE
-	# Get the last point of upper and lower
-	if current_points.upper.size() > 0:
-		var last_up = current_points.upper.back()
-		var last_low = current_points.lower.back()
+	# 2. Closure Line (Visual line at the Trailing Edge)
+	var closure_pts: Array[Vector2] = []
+	if not upper_pts.is_empty() and not lower_pts.is_empty():
+		closure_pts.append(upper_pts.back())
+		closure_pts.append(lower_pts.back())
 
-		# Draw a vertical line connecting them
-		line_closure.add_point(last_up.x, last_up.y)
-		line_closure.add_point(last_low.x, last_low.y)
+	# 3. Add Series to SimpleChart
+	plot.add_series("Upper", upper_pts, Color.GREEN, 2.0)
+	plot.add_series("Lower", lower_pts, Color.YELLOW, 2.0)
 
-	plot.queue_redraw()
-
+	# Only draw closure if there is a gap (TE thickness > 0)
+	if spin_te.value > 0.0:
+		plot.add_series("Closure", closure_pts, Color.WHITE, 2.0)
 
 func _on_save_pressed():
 	if current_points.is_empty(): return
 
 	var fname = input_name.text.strip_edges()
+	if fname.is_empty():
+		# Fallback to placeholder if user didn't type anything
+		fname = input_name.placeholder_text.strip_edges()
+
 	if fname.is_empty():
 		lbl_status.text = "Error: Name is empty."
 		return
@@ -124,7 +121,7 @@ func _on_save_pressed():
 
 	# Write SELIG format
 	# Line 1: Name
-	file.store_line(input_name.text)
+	file.store_line(fname.get_basename())
 
 	# Line 2+: X  Y
 	# Selig format usually runs Upper Surface (1.0 -> 0.0) then Lower (0.0 -> 1.0)

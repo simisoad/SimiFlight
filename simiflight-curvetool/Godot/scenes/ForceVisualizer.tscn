@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cyhr6lmtiyngb"]
+[gd_scene load_steps=4 format=3 uid="uid://cyhr6lmtiyngb"]
 
-[ext_resource type="Script" uid="uid://c2rbp8pdqyral" path="res://scripts/ForceVisualizer.gd" id="1_xxvdj"]
-[ext_resource type="Script" uid="uid://dft5p6a1fylqy" path="res://scripts/WindTunnelView.gd" id="2_fkr2s"]
+[ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_s6ns7"]
+[ext_resource type="Script" uid="uid://c2rbp8pdqyral" path="res://scripts/LUTAndForceVisualizer/ForceVisualizer.gd" id="1_xxvdj"]
+[ext_resource type="Script" uid="uid://dft5p6a1fylqy" path="res://scripts/LUTAndForceVisualizer/WindTunnelView.gd" id="2_fkr2s"]
 
 [node name="ForceVisualizer" type="HSplitContainer"]
 anchors_preset = 15
@@ -9,18 +10,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_s6ns7")
+touch_dragger_enabled = true
 script = ExtResource("1_xxvdj")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(268, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_s6ns7")
 
 [node name="SimulationParameters" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Simulation Parameters"
 
 [node name="AlphaSlider" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 min_value = -180.0
 max_value = 180.0
 
@@ -28,8 +38,10 @@ max_value = 180.0
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
+theme = ExtResource("1_s6ns7")
 min_value = -180.0
 max_value = 180.0
+value = 5.0
 prefix = "Alpha:"
 select_all_on_focus = true
 
@@ -37,8 +49,10 @@ select_all_on_focus = true
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
+theme = ExtResource("1_s6ns7")
 max_value = 10.0
 step = 0.05
+value = 0.1
 prefix = "Mach:"
 select_all_on_focus = true
 
@@ -46,6 +60,7 @@ select_all_on_focus = true
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
+theme = ExtResource("1_s6ns7")
 max_value = 100000000.0
 step = 1000.0
 prefix = "Re:"
@@ -55,6 +70,7 @@ select_all_on_focus = true
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
+theme = ExtResource("1_s6ns7")
 max_value = 5000.0
 prefix = "Airspeed:"
 suffix = "m/s"
@@ -64,6 +80,7 @@ select_all_on_focus = true
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
+theme = ExtResource("1_s6ns7")
 min_value = 0.01
 step = 0.01
 page = 1.0
@@ -76,6 +93,7 @@ select_all_on_focus = true
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
+theme = ExtResource("1_s6ns7")
 max_value = 10.0
 step = 0.001
 value = 1.225
@@ -83,45 +101,63 @@ prefix = "AirDens:"
 suffix = "kg/m3"
 select_all_on_focus = true
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer"]
+[node name="VSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 
 [node name="LiveResults" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Live Results"
 
 [node name="LblCl" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Cl:"
 
 [node name="LblCd" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Cd:"
 
 [node name="LblCm" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Cd:"
 
 [node name="LblLift" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Force:"
 
 [node name="LblDrag" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "Force:"
 
 [node name="AutoScaleVectorsCheckBox" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_s6ns7")
 text = "AutoScaleVectors"
 
-[node name="WindTunnelView" type="Control" parent="."]
+[node name="WindTunnelVBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 11.08
+
+[node name="WindTunnelView" type="Control" parent="WindTunnelVBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 6.0
+theme = ExtResource("1_s6ns7")
 script = ExtResource("2_fkr2s")
+wind_color = Color(1, 1, 1, 0.1)
+metadata/_custom_type_script = "uid://dft5p6a1fylqy"

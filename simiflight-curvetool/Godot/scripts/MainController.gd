@@ -12,14 +12,15 @@ func _ready():
 	if creator_view:
 		creator_view.airfoil_saved.connect(_on_airfoil_created)
 func _on_new_lut_generated(path: String):
-	# 1. Switch to Visualizer Tab
-	tabs.current_tab = 1
-
-	# 2. Update file list in Visualizer
-	visualizer_view._refresh_file_list()
-
-	# 3. Select the newly created file (optional, logic would need to be added to Visualizer)
-	print("New LUT generated, switching to visualizer.")
+	pass
+	## 1. Switch to Visualizer Tab
+	#tabs.current_tab = 1
+#
+	## 2. Update file list in Visualizer
+	#visualizer_view._refresh_file_list()
+#
+	## 3. Select the newly created file (optional, logic would need to be added to Visualizer)
+	#print("New LUT generated, switching to visualizer.")
 func _on_airfoil_created(path: String):
 	print("New airfoil created at: ", path)
 

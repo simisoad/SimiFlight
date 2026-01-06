@@ -1,12 +1,12 @@
 extends VBoxContainer
 
-@onready var spike_ref_radius: SpinBox = %spike_ref_radius
-@onready var spike_max_capacity: SpinBox = %spike_max_capacity
-@onready var spike_camber_penalty: SpinBox = %spike_camber_penalty
-@onready var spike_boost_mag: SpinBox = %spike_boost_mag
-@onready var spike_crash_mag: SpinBox = %spike_crash_mag
-@onready var recovery_thick_min: SpinBox = %recovery_thick_min
-@onready var recovery_thick_max: SpinBox = %recovery_thick_max
+@onready var spike_ref_radius: SpinBoxExtended = %spike_ref_radius
+@onready var spike_max_capacity: SpinBoxExtended = %spike_max_capacity
+@onready var spike_camber_penalty: SpinBoxExtended = %spike_camber_penalty
+@onready var spike_boost_mag: SpinBoxExtended = %spike_boost_mag
+@onready var spike_crash_mag: SpinBoxExtended = %spike_crash_mag
+@onready var recovery_thick_min: SpinBoxExtended = %recovery_thick_min
+@onready var recovery_thick_max: SpinBoxExtended = %recovery_thick_max
 
 func _ready() -> void:
 	_setup_spinbox(spike_ref_radius, 0.0001, 0.05, 0.0001, AeroPhysicsModel.spike_ref_radius,
@@ -38,10 +38,11 @@ func _ready() -> void:
 	recovery_thick_min.value_changed.connect(func(v): AeroPhysicsModel.recovery_thick_min = v)
 	recovery_thick_max.value_changed.connect(func(v): AeroPhysicsModel.recovery_thick_max = v)
 
-func _setup_spinbox(node: SpinBox, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
+func _setup_spinbox(node: SpinBoxExtended, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
 	node.min_value = min_v
 	node.max_value = max_v
 	node.step = step_v
 	node.value = default_v
+	node.default_val = node.value
 	node.tooltip_text = tip
 	node.prefix = node.name + ":"

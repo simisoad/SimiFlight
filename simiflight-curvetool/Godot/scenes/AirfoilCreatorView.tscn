@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://co5lhdilj1n8y"]
+[gd_scene load_steps=4 format=3 uid="uid://co5lhdilj1n8y"]
 
-[ext_resource type="Script" uid="uid://2wcgnx78i6bw" path="res://addons/god_plot/tools/graphs/graph_2d.gd" id="1_023ui"]
+[ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_cn54y"]
 [ext_resource type="Script" uid="uid://blm8e45wnxo0r" path="res://scripts/AirfoilCreator/AirfoilCreatorView.gd" id="1_jxo0w"]
+[ext_resource type="Script" uid="uid://bd36psmww5euc" path="res://scripts/SimpleChart/SimpleChart.gd" id="2_jxo0w"]
 
 [node name="AirfoilCreatorView" type="HSplitContainer"]
 anchors_preset = 15
@@ -9,12 +10,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_cn54y")
+touch_dragger_enabled = true
 script = ExtResource("1_jxo0w")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
+theme = ExtResource("1_cn54y")
 
 [node name="AirfoilGenLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
@@ -101,16 +107,14 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_023ui")
-auto_scaling = false
-x_max = 1.0
-x_tick_count = 1
-x_gridlines_minor = 8
-y_min = -0.5
-y_max = 0.5
-y_tick_count = 1
-y_gridlines_minor = 8
+theme = ExtResource("1_cn54y")
+script = ExtResource("2_jxo0w")
 background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
-title = "Airfoil Preview"
-axis_color = Color(0.78352344, 0.7835234, 0.7835234, 1)
-metadata/_custom_type_script = "uid://2wcgnx78i6bw"
+set_domain_from_inspector = null
+auto_zoom_limit = true
+max_zoom_factor = 10.0
+max_zoom_out = 4.0
+add_reset_button = null
+reset_button_name = null
+reset_button_tooltip = null
+metadata/_custom_type_script = "uid://bd36psmww5euc"

@@ -1,9 +1,9 @@
 extends VBoxContainer
 
-@onready var mach_limit_sub: SpinBox = %mach_limit_sub
-@onready var mach_limit_sup: SpinBox = %mach_limit_sup
-@onready var mach_stall_onset: SpinBox = %mach_stall_onset
-@onready var mach_stall_reduction: SpinBox = %mach_stall_reduction
+@onready var mach_limit_sub: SpinBoxExtended = %mach_limit_sub
+@onready var mach_limit_sup: SpinBoxExtended = %mach_limit_sup
+@onready var mach_stall_onset: SpinBoxExtended = %mach_stall_onset
+@onready var mach_stall_reduction: SpinBoxExtended = %mach_stall_reduction
 
 func _ready() -> void:
 	# 1. Subsonic Limit
@@ -28,10 +28,11 @@ func _ready() -> void:
 	mach_stall_reduction.value_changed.connect(func(v): AeroPhysicsModel.mach_stall_reduction = v)
 
 # Helper to configure the node in one line
-func _setup_spinbox(node: SpinBox, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
+func _setup_spinbox(node: SpinBoxExtended, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
 	node.min_value = min_v
 	node.max_value = max_v
 	node.step = step_v
-	node.value = default_v # Set value LAST (after range is set)
+	node.value = default_v
+	node.default_val = node.value
 	node.tooltip_text = tip
 	node.prefix = node.name + ":"

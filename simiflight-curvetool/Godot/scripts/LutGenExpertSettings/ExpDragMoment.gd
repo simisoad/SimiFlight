@@ -1,11 +1,11 @@
 extends VBoxContainer
 
-@onready var drag_re_floor: SpinBox = %drag_re_floor
-@onready var drag_wave_peak_mach: SpinBox = %drag_wave_peak_mach
-@onready var drag_wave_factor: SpinBox = %drag_wave_factor
-@onready var drag_mcrit_thick_factor: SpinBox = %drag_mcrit_thick_factor
-@onready var drag_base_factor: SpinBox = %drag_base_factor
-@onready var ac_offset_supersonic: SpinBox = %ac_offset_supersonic
+@onready var drag_re_floor: SpinBoxExtended = %drag_re_floor
+@onready var drag_wave_peak_mach: SpinBoxExtended = %drag_wave_peak_mach
+@onready var drag_wave_factor: SpinBoxExtended = %drag_wave_factor
+@onready var drag_mcrit_thick_factor: SpinBoxExtended = %drag_mcrit_thick_factor
+@onready var drag_base_factor: SpinBoxExtended = %drag_base_factor
+@onready var ac_offset_supersonic: SpinBoxExtended = %ac_offset_supersonic
 
 func _ready() -> void:
 	_setup_spinbox(drag_re_floor, 1000.0, 1000000.0, 1000.0, AeroPhysicsModel.drag_re_floor,
@@ -33,10 +33,11 @@ func _ready() -> void:
 	drag_base_factor.value_changed.connect(func(v): AeroPhysicsModel.drag_base_factor = v)
 	ac_offset_supersonic.value_changed.connect(func(v): AeroPhysicsModel.ac_offset_supersonic = v)
 
-func _setup_spinbox(node: SpinBox, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
+func _setup_spinbox(node: SpinBoxExtended, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
 	node.min_value = min_v
 	node.max_value = max_v
 	node.step = step_v
 	node.value = default_v
+	node.default_val = node.value
 	node.tooltip_text = tip
 	node.prefix = node.name + ":"
