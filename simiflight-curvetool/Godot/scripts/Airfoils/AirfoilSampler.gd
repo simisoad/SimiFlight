@@ -19,19 +19,19 @@ static func sample(lut: AirfoilLut, alpha_rad: float, mach: float, re: float) ->
 
 	# 3. Calculate weights (Where are we between index i and i+1?)
 	# Value between 0.0 and 1.0
-	var w_a = _get_weight(lut.alpha_points, i_a, alpha_deg)
-	var w_m = _get_weight(lut.mach_points, i_m, mach)
-	var w_r = _get_weight(lut.reynolds_points, i_r, re)
+	var w_a: float = _get_weight(lut.alpha_points, i_a, alpha_deg)
+	var w_m: float = _get_weight(lut.mach_points, i_m, mach)
+	var w_r: float = _get_weight(lut.reynolds_points, i_r, re)
 
 	# 4. Trilinear interpolation for all coefficients
-	var cl = _trilinear_interp(lut.cl_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
-	var cd = _trilinear_interp(lut.cd_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
-	var cm = _trilinear_interp(lut.cm_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
+	var cl: float = _trilinear_interp(lut.cl_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
+	var cd: float = _trilinear_interp(lut.cd_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
+	var cm: float = _trilinear_interp(lut.cm_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
 
 	# Optional: Interpolate stall degree (Sigma)
-	# var sigma = _trilinear_interp(lut.stall_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
+	var sigma = _trilinear_interp(lut.stall_data, lut, i_r, i_m, i_a, w_r, w_m, w_a)
 
-	return {"cl": cl, "cd": cd, "cm": cm}
+	return {"cl": cl, "cd": cd, "cm": cm, "stall": sigma}
 
 # --- Helper Functions ---
 

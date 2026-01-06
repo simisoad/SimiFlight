@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=52 format=3 uid="uid://dblsxlww46j3l"]
+[gd_resource type="Theme" load_steps=54 format=3 uid="uid://dblsxlww46j3l"]
 
 [ext_resource type="StyleBox" uid="uid://6m6n7cp316nd" path="res://ui/elements/BlackBackgroundPanel.tres" id="1_at6rb"]
 [ext_resource type="StyleBox" uid="uid://k4jyw6xx27r3" path="res://ui/Theme/Buttons/Btn_disabled.tres" id="1_hlyxo"]
@@ -13,6 +13,8 @@
 [ext_resource type="SystemFont" uid="uid://cbw767dxx77yo" path="res://ui/Theme/Font/NormalFont.tres" id="10_t2bds"]
 [ext_resource type="Texture2D" uid="uid://cbj42ccr2otc2" path="res://ui/Theme/SplitContainer/v_grabber.tres" id="11_4v2df"]
 [ext_resource type="SystemFont" uid="uid://5cb82dvedh2m" path="res://ui/Theme/Font/TitleFont.tres" id="12_qjvro"]
+[ext_resource type="StyleBox" uid="uid://tffhn48e1rn7" path="res://ui/Theme/Buttons/Btn_WindowFrame.tres" id="14_p3sha"]
+[ext_resource type="StyleBox" uid="uid://drm3rom1hcdq1" path="res://ui/Theme/Buttons/Btn_WindowFrame_Hover.tres" id="15_xg02u"]
 
 [sub_resource type="DPITexture" id="DPITexture_p3sha"]
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><circle cx=\"8\" cy=\"8\" r=\"5.5\" fill=\"#1a1a1a\" stroke=\"#fff\" stroke-opacity=\".75\" stroke-width=\"3\"/></svg>
@@ -395,3 +397,26 @@ VSplitContainer/icons/touch_dragger = ExtResource("11_4v2df")
 VSplitContainer/icons/v_grabber = ExtResource("11_4v2df")
 VSplitContainer/icons/v_touch_dragger = ExtResource("11_4v2df")
 VSplitContainer/styles/split_bar_background = ExtResource("6_t2bds")
+WindowFrameButtons/base_type = &"Button"
+WindowFrameButtons/colors/font_color = Color(0.62152386, 0.62152386, 0.6215238, 1)
+WindowFrameButtons/colors/font_disabled_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/font_focus_color = Color(0.9647059, 0.9647059, 0.9647059, 1)
+WindowFrameButtons/colors/font_hover_color = Color(1, 1, 1, 1)
+WindowFrameButtons/colors/font_hover_pressed_color = Color(0.9647059, 0.9647059, 0.9647059, 1)
+WindowFrameButtons/colors/font_outline_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/font_pressed_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/icon_disabled_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/icon_focus_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/icon_hover_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/icon_normal_color = Color(0, 0, 0, 1)
+WindowFrameButtons/colors/icon_pressed_color = Color(0, 0, 0, 1)
+WindowFrameButtons/constants/align_to_largest_stylebox = 0
+WindowFrameButtons/constants/h_separation = 0
+WindowFrameButtons/constants/icon_max_width = 0
+WindowFrameButtons/constants/outline_size = 0
+WindowFrameButtons/styles/disabled = ExtResource("14_p3sha")
+WindowFrameButtons/styles/focus = ExtResource("14_p3sha")
+WindowFrameButtons/styles/hover = ExtResource("15_xg02u")
+WindowFrameButtons/styles/normal = ExtResource("14_p3sha")
+WindowFrameButtons/styles/pressed = ExtResource("15_xg02u")

@@ -88,7 +88,6 @@ size_flags_vertical = 3
 theme = ExtResource("2_dtayv")
 script = ExtResource("3_dtayv")
 background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
-highlight_range_color = null
 auto_zoom_limit = true
 show_range_highlight = true
 metadata/_custom_type_script = "uid://bd36psmww5euc"

@@ -28,22 +28,24 @@ var pts_static_stall: Array[Vector2] = []
 var pts_live_cl: Array[Vector2] = []
 var pts_live_cd: Array[Vector2] = []
 var pts_live_cm: Array[Vector2] = []
+var pts_live_stall: Array[Vector2] = []
 
 var pts_marker_cl: Array[Vector2] = []
 var pts_marker_cd: Array[Vector2] = []
 
 # --- Series Names ---
-const N_STAT_CL = "LUT Cl"
-const N_STAT_CD = "LUT Cd"
-const N_STAT_CM = "LUT Cm"
-const N_STAT_STALL = "LUT Stall"
+const N_STAT_CL: String = "LUT Cl"
+const N_STAT_CD: String = "LUT Cd"
+const N_STAT_CM: String = "LUT Cm"
+const N_STAT_STALL: String = "LUT Stall"
 
-const N_LIVE_CL = "Live Cl"
-const N_LIVE_CD = "Live Cd"
-const N_LIVE_CM = "Live Cm"
+const N_LIVE_CL: String = "Live Cl"
+const N_LIVE_CD: String = "Live Cd"
+const N_LIVE_CM: String = "Live Cm"
+const N_LIVE_STALL: String = "Live Stall"
 
-const N_MARK_CL = "Current Cl"
-const N_MARK_CD = "Current Cd"
+const N_MARK_CL: String = "Current Cl"
+const N_MARK_CD: String = "Current Cd"
 
 
 func _ready():
@@ -154,17 +156,19 @@ func _on_sim_params_changed(mach: float, re: float):
 	pts_live_cl.clear()
 	pts_live_cd.clear()
 	pts_live_cm.clear()
+	pts_live_stall.clear()
 
 	if not current_lut: return
 
 	# Sample from -180 to 180 (Step 2 degrees is fine for visualization)
-	for i in range(-180, 181, 2):
-		var alpha_rad = deg_to_rad(float(i))
+	for i in LutGenerator._get_alpha_grid(-180.0,180.0,0.1):
+		var alpha_rad = deg_to_rad(i)
 		var coeffs = AirfoilSampler.sample(current_lut, alpha_rad, mach, re)
 
-		pts_live_cl.append(Vector2(float(i), coeffs.cl))
-		pts_live_cd.append(Vector2(float(i), coeffs.cd))
-		pts_live_cm.append(Vector2(float(i), coeffs.cm))
+		pts_live_cl.append(Vector2(i, coeffs.cl))
+		pts_live_cd.append(Vector2(i, coeffs.cd))
+		pts_live_cm.append(Vector2(i, coeffs.cm))
+		pts_live_stall.append(Vector2(i, coeffs.stall))
 
 	_refresh_chart_visuals()
 
@@ -173,7 +177,7 @@ func _on_sim_state_changed(alpha: float, cl: float, cd: float, _cm: float):
 	pts_marker_cl.clear()
 	pts_marker_cd.clear()
 
-	var offset = 1.0 # 1 degree width for the marker line
+	var offset = 0.5 # 1 degree width for the marker line
 
 	pts_marker_cl.append(Vector2(alpha - offset, cl))
 	pts_marker_cl.append(Vector2(alpha + offset, cl))
@@ -203,10 +207,11 @@ func _refresh_chart_visuals():
 	plot.add_series(N_LIVE_CL, pts_live_cl, Color.CYAN, 2.0)
 	plot.add_series(N_LIVE_CD, pts_live_cd, Color.ORANGE, 2.0)
 	plot.add_series(N_LIVE_CM, pts_live_cm, Color.GREEN_YELLOW, 2.0)
+	plot.add_series(N_LIVE_STALL, pts_live_stall, Color.VIOLET, 2.0)
 
 	# 3. Add Markers (Thick White/Yellow lines)
-	plot.add_series(N_MARK_CL, pts_marker_cl, Color.WHITE, 4.0)
-	plot.add_series(N_MARK_CD, pts_marker_cd, Color.YELLOW, 4.0)
+	plot.add_series(N_MARK_CL, pts_marker_cl, Color.WHITE, 2.0)
+	plot.add_series(N_MARK_CD, pts_marker_cd, Color.YELLOW, 2.0)
 
 	# 4. Apply Visibility Logic
 	var show_static = show_calculated_lut_curves.button_pressed

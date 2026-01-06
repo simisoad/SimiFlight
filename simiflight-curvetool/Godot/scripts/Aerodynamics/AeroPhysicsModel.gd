@@ -296,27 +296,6 @@ static func _calc_sigma(ctx: _CalcContext) -> void:
 		ctx.config.sharpness
 	)
 
-#static func _calc_base_lift(ctx: _CalcContext) -> void:
-	#var cl_linear = ctx.effective_slope * (ctx.effective_alpha - ctx.used_alpha0)
-#
-	## Plate Lift Logic
-#
-	## Transition blending (approx 70 to 110 degrees)
-	#var transition_blend = smoothstep(plate_trans_start_deg, plate_trans_end_deg, ctx.angle_deg_abs)
-#
-	## Back variation (approx 110 to 170 degrees)
-	#var back_variation = smoothstep(plate_rear_var_start_deg, plate_rear_var_end_deg, ctx.angle_deg_abs)
-	#var final_bwd_scale = lerp(plate_bwd_scale_base, plate_bwd_scale_max, back_variation)
-#
-	#var plate_scale = lerp(plate_fwd_scale, final_bwd_scale, transition_blend)
-#
-	#var plate_phase_shift = ctx.geo.camber * 0.5
-	#var thickness_damping = clamp(1.0 - (ctx.thickness * plate_thickness_damping_threshold), 0.8, 1.0)
-#
-	#var cl_plate = ctx.config.cd_max * sin(2.0 * (ctx.alpha_rad - plate_phase_shift)) * plate_scale * thickness_damping
-#
-	#ctx.blended_cl = (ctx.sigma * cl_linear) + ((1.0 - ctx.sigma) * cl_plate)
-#
 static func _calc_base_lift(ctx: _CalcContext) -> void:
 	var cl_linear = ctx.effective_slope * (ctx.effective_alpha - ctx.used_alpha0)
 
