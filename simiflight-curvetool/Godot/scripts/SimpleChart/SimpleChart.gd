@@ -7,7 +7,9 @@ extends Control
 @export var background_color: Color = Color(0.12, 0.12, 0.14, 1.0)
 @export var grid_color: Color = Color(1, 1, 1, 0.15)
 @export var axis_text_color: Color = Color(0.8, 0.8, 0.8, 1.0)
-@export var zero_line_color: Color = Color(1, 1, 1, 0.5)
+@export var zero_line_color_x: Color = Color(0.301, 0.0, 0.0, 0.5)
+@export var zero_line_color_y: Color = Color(0.0, 0.166, 0.0, 0.5)
+@export var plot_area_color: Color = Color(0.145, 0.145, 0.168, 1.0)
 
 # NEW: Highlight Color
 @export var highlight_range_color: Color = Color(1, 1, 1, 0.05)
@@ -18,6 +20,8 @@ extends Control
 @export var margin_top: float = 40.0
 @export var margin_right: float = 20.0
 @export var font_size: int = 14
+@export var line_width: float = 1.0
+@export var zero_line_width: float = 2.0
 # --- Data State ---
 @export_category("Domain")
 @export var set_domain_from_inspector: bool = false
@@ -150,8 +154,10 @@ func _draw() -> void:
 		var screen_x = _map_x(curr_x) + margin_left
 		if screen_x >= margin_left - 1.0 and screen_x <= size.x - margin_right + 1.0:
 			var color = grid_color
-			if is_equal_approx(curr_x, 0.0): color = zero_line_color
-			draw_line(Vector2(screen_x, margin_top), Vector2(screen_x, size.y - margin_bottom), color, 1.0)
+			var width = line_width
+			if is_equal_approx(curr_x, 0.0): color = zero_line_color_x
+			if is_equal_approx(curr_x, 0.0): width = zero_line_width
+			draw_line(Vector2(screen_x, margin_top), Vector2(screen_x, size.y - margin_bottom), color, width)
 
 			var text = String.num(curr_x, 1)
 			if abs(curr_x) < 0.001: text = "0"
@@ -167,8 +173,10 @@ func _draw() -> void:
 		var screen_y = _map_y(curr_y) + margin_top
 		if screen_y >= margin_top - 1.0 and screen_y <= size.y - margin_bottom + 1.0:
 			var color = grid_color
-			if is_equal_approx(curr_y, 0.0): color = zero_line_color
-			draw_line(Vector2(margin_left, screen_y), Vector2(size.x - margin_right, screen_y), color, 1.0)
+			var width = line_width
+			if is_equal_approx(curr_y, 0.0): color = zero_line_color_y
+			if is_equal_approx(curr_y, 0.0): width = zero_line_width
+			draw_line(Vector2(margin_left, screen_y), Vector2(size.x - margin_right, screen_y), color, width)
 
 			var text = String.num(curr_y, 1)
 			var text_size = _default_font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
@@ -185,7 +193,7 @@ func _draw() -> void:
 		draw_string(_default_font, Vector2(legend_x + 15, 20), name_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, axis_text_color)
 		var text_len: int = int(name_text.length() * (font_size * 0.7) + 30)
 		legend_x += text_len
-
+	draw_rect(plot_rect, plot_area_color, false, 2.0)
 	_plot_area.queue_redraw()
 
 # ------------------------------------------------------------------------------

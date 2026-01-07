@@ -26,6 +26,22 @@ theme = ExtResource("1_cn54y")
 layout_mode = 2
 text = "Airfoil Generator"
 
+[node name="OptionShapeMode" type="OptionButton" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NumPointsSpinBox" type="SpinBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 20.0
+max_value = 1000.0
+value = 200.0
+prefix = "Number of Points:"
+
+[node name="OptionCamberMode" type="OptionButton" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="CamberSpinBox" type="SpinBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -75,10 +91,20 @@ value = 0.9
 prefix = "TE Thickness:"
 suffix = "%"
 
-[node name="CheckOvalShape" type="CheckBox" parent="VBoxContainer"]
+[node name="SpinShapeExp" type="SpinBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "OvalShape"
+tooltip_text = "2.0 is a circle/ellipse. 1.0 is a diamond. 10.0 is a square/board."
+min_value = 0.1
+max_value = 20.0
+step = 0.1
+value = 0.1
+prefix = "Shape Exponent:"
+
+[node name="CheckMirrorY" type="CheckBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Invert (Mirror Y)"
 
 [node name="PreviewBtn" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -91,7 +117,7 @@ layout_mode = 2
 [node name="FileNameLineEdit" type="LineEdit" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Filename"
+placeholder_text = "Filename"
 
 [node name="SaveBtn" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true

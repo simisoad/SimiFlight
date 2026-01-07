@@ -32,7 +32,8 @@ var pts_live_stall: Array[Vector2] = []
 
 var pts_marker_cl: Array[Vector2] = []
 var pts_marker_cd: Array[Vector2] = []
-
+var pts_marker_cm: Array[Vector2] = []
+var pts_marker_stall: Array[Vector2] = []
 # --- Series Names ---
 const N_STAT_CL: String = "LUT Cl"
 const N_STAT_CD: String = "LUT Cd"
@@ -46,8 +47,8 @@ const N_LIVE_STALL: String = "Live Stall"
 
 const N_MARK_CL: String = "Current Cl"
 const N_MARK_CD: String = "Current Cd"
-
-
+const N_MARK_CM: String = "Current Cm"
+const N_MARK_STALL: String = "Current Stall"
 func _ready():
 	_setup_plot()
 	_refresh_file_list()
@@ -172,18 +173,26 @@ func _on_sim_params_changed(mach: float, re: float):
 
 	_refresh_chart_visuals()
 
-func _on_sim_state_changed(alpha: float, cl: float, cd: float, _cm: float):
+func _on_sim_state_changed(alpha: float, cl: float, cd: float, cm: float, stall: float):
 	# Updates the Marker positions
 	pts_marker_cl.clear()
 	pts_marker_cd.clear()
+	pts_marker_cm.clear()
+	pts_marker_stall.clear()
 
 	var offset = 0.5 # 1 degree width for the marker line
 
 	pts_marker_cl.append(Vector2(alpha - offset, cl))
 	pts_marker_cl.append(Vector2(alpha + offset, cl))
 
+	pts_marker_cm.append(Vector2(alpha - offset, cm))
+	pts_marker_cm.append(Vector2(alpha + offset, cm))
+
 	pts_marker_cd.append(Vector2(alpha - offset, cd))
 	pts_marker_cd.append(Vector2(alpha + offset, cd))
+
+	pts_marker_stall.append(Vector2(alpha - offset, stall))
+	pts_marker_stall.append(Vector2(alpha + offset, stall))
 
 	_refresh_chart_visuals()
 
@@ -210,9 +219,10 @@ func _refresh_chart_visuals():
 	plot.add_series(N_LIVE_STALL, pts_live_stall, Color.VIOLET, 2.0)
 
 	# 3. Add Markers (Thick White/Yellow lines)
-	plot.add_series(N_MARK_CL, pts_marker_cl, Color.WHITE, 2.0)
-	plot.add_series(N_MARK_CD, pts_marker_cd, Color.YELLOW, 2.0)
-
+	plot.add_series(N_MARK_CL, pts_marker_cl, Color.AQUA, 2.0)
+	plot.add_series(N_MARK_CD, pts_marker_cd, Color.ORANGE_RED, 2.0)
+	plot.add_series(N_MARK_CM, pts_marker_cm, Color.YELLOW, 2.0)
+	plot.add_series(N_MARK_STALL, pts_marker_stall, Color.BLUE_VIOLET, 2.0)
 	# 4. Apply Visibility Logic
 	var show_static = show_calculated_lut_curves.button_pressed
 	var show_live = show_live_curves.button_pressed

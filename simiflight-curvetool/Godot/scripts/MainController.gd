@@ -4,6 +4,7 @@ extends Control
 @onready var visualizer_view = %LutVisualizer
 @onready var creator_view = %AirfoilCreatorView # Removed type hint for safety if node missing
 @onready var tabs = %TabContainer
+@onready var snap_preview: Window = %SnapPreview
 
 # UI References
 @onready var resize_handles_container = %ResizeHandles # The parent of all handle nodes
@@ -20,9 +21,16 @@ var _drag_start_mouse_global: Vector2i
 var _dragging_title = false
 var _drag_offset_from_top_left = Vector2()
 var _is_toggling_maximize = false
+# 0=Left, 1=Right, 2=Top (Max)
+# 3=TopLeft, 4=TopRight, 5=BotLeft, 6=BotRight
+var _current_snap_state = null
+var _preview_rect: Rect2i = Rect2i()
+
+# Sensitivity
+const SNAP_THRESHOLD = 20
 
 func _ready():
-	# ... Your existing View connections ...
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true, 0)
 	generator_view.lut_generated.connect(_on_new_lut_generated)
 	if creator_view:
 		creator_view.airfoil_saved.connect(_on_airfoil_created)
@@ -115,6 +123,11 @@ func _on_title_bar_gui_input(event):
 				if _dragging_title:
 					_finalize_drag_snap()
 				_dragging_title = false
+				snap_preview.hide()
+				_current_snap_state = null
+
+	if event is InputEventMouseMotion and _dragging_title:
+		_handle_drag_move()
 
 func _smart_toggle_maximize():
 	var current_mode = DisplayServer.window_get_mode()
@@ -140,14 +153,97 @@ func _smart_toggle_maximize():
 		_is_toggling_maximize = false
 
 func _handle_drag_move():
-	# If we drag while Maximized, we must "Restore" first
+	# 1. Standard Move Logic
 	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
 		_restore_and_attach_to_mouse()
 
-	# Manual Move (Alternative to start_drag, gives us more control for Snap)
-	# We move the window so the cursor stays at the same relative spot
 	var global_mouse = DisplayServer.mouse_get_position()
 	get_window().position = global_mouse - Vector2i(_drag_offset_from_top_left)
+
+	# 2. CALCULATE SNAP PREVIEW
+	_update_snap_preview(global_mouse)
+
+func _update_snap_preview(mouse_pos: Vector2i):
+	var screen_id = DisplayServer.get_screen_from_rect(Rect2(mouse_pos, Vector2(1, 1)))
+	var screen_rect = DisplayServer.screen_get_usable_rect(screen_id)
+
+	var new_state = null
+	var target_rect = Rect2i()
+
+	# Thresholds
+	# Corners need a larger hit area to feel comfortable
+	var corner_size = 50
+	var edge_threshold = 20
+
+	var is_top = mouse_pos.y < screen_rect.position.y + corner_size
+	var is_bot = mouse_pos.y > screen_rect.end.y - corner_size
+	var is_left_corner = mouse_pos.x < screen_rect.position.x + corner_size
+	var is_right_corner = mouse_pos.x > screen_rect.end.x - corner_size
+
+	# Standard dimensions
+	var half_w = screen_rect.size.x / 2
+	var half_h = screen_rect.size.y
+	var full_h = screen_rect.size.y
+
+	# --- 1. CHECK CORNERS FIRST (Priority) ---
+
+	# Top-Left (State 3)
+	if is_top and is_left_corner:
+		new_state = 3
+		target_rect = Rect2i(screen_rect.position.x, screen_rect.position.y, half_w, half_h / 2)
+
+	# Top-Right (State 4)
+	elif is_top and is_right_corner:
+		new_state = 4
+		target_rect = Rect2i(screen_rect.position.x + half_w, screen_rect.position.y, half_w, half_h / 2)
+
+	# Bottom-Left (State 5)
+	elif is_bot and is_left_corner:
+		new_state = 5
+		target_rect = Rect2i(screen_rect.position.x, screen_rect.position.y + (half_h), half_w, half_h) # Logic fix: half_h is actually full height / 2? Windows splits 50/50 vertically usually
+		# Actually Windows usually does 4 quadrants. Let's do 50% height.
+		target_rect = Rect2i(screen_rect.position.x, screen_rect.position.y + (screen_rect.size.y / 2), half_w, screen_rect.size.y / 2)
+
+	# Bottom-Right (State 6)
+	elif is_bot and is_right_corner:
+		new_state = 6
+		target_rect = Rect2i(screen_rect.position.x + half_w, screen_rect.position.y + (screen_rect.size.y / 2), half_w, screen_rect.size.y / 2)
+
+	# --- 2. CHECK EDGES (If not a corner) ---
+
+	if new_state == null:
+		# Top Edge (Maximize)
+		if mouse_pos.y < screen_rect.position.y + edge_threshold:
+			new_state = 2
+			target_rect = screen_rect
+
+		# Left Edge (Half)
+		elif mouse_pos.x < screen_rect.position.x + edge_threshold:
+			new_state = 0
+			target_rect = Rect2i(screen_rect.position.x, screen_rect.position.y, half_w, full_h)
+
+		# Right Edge (Half)
+		elif mouse_pos.x > screen_rect.end.x - edge_threshold:
+			new_state = 1
+			target_rect = Rect2i(screen_rect.position.x + half_w, screen_rect.position.y, half_w, full_h)
+
+	# --- APPLY ---
+	if new_state != null:
+		if _current_snap_state != new_state:
+			_current_snap_state = new_state
+			# Margin for the "Windows 11 Look"
+			var margin = 10
+			var visual_rect = target_rect.grow(-margin)
+
+			snap_preview.position = visual_rect.position
+			snap_preview.size = visual_rect.size
+			snap_preview.show()
+	else:
+		if _current_snap_state != null:
+			snap_preview.hide()
+			_current_snap_state = null
+
+	_preview_rect = target_rect
 
 func _restore_and_attach_to_mouse():
 	# 1. Calculate relative X position (percentage) before restoring
@@ -162,30 +258,18 @@ func _restore_and_attach_to_mouse():
 	_drag_offset_from_top_left = Vector2(new_width * mouse_x_ratio, _drag_offset_from_top_left.y)
 
 func _finalize_drag_snap():
-	var mouse_pos = DisplayServer.mouse_get_position()
+	if _current_snap_state != null:
 
-	# Get the rectangle of the screen the mouse is currently on
-	# (Important for multi-monitor setups)
-	var screen_id = DisplayServer.get_screen_from_rect(Rect2(mouse_pos, Vector2(1, 1)))
-	var screen_rect = DisplayServer.screen_get_usable_rect(screen_id)
+		# Maximize (Top)
+		if _current_snap_state == 2:
+			_on_maximize_pressed()
 
-	# Define a sensitivity threshold (how close to the edge to trigger snap)
-	var snap_threshold = 20
-
-	# 1. SNAP TOP (Maximize)
-	if mouse_pos.y < screen_rect.position.y + snap_threshold:
-		_on_maximize_pressed()
-		return
-
-	# 2. SNAP LEFT (Half Screen)
-	if mouse_pos.x < screen_rect.position.x + snap_threshold:
-		_snap_window_half(screen_rect, "left")
-		return
-
-	# 3. SNAP RIGHT (Half Screen)
-	if mouse_pos.x > screen_rect.end.x - snap_threshold:
-		_snap_window_half(screen_rect, "right")
-		return
+		# All other states (Left, Right, Corners) -> Set Rect
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			get_window().position = _preview_rect.position
+			get_window().size = _preview_rect.size
+			_update_window_state()
 
 func _snap_window_half(screen_rect: Rect2i, side: String):
 	# Ensure we are in Windowed mode so we can move/resize freely

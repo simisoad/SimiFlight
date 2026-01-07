@@ -1,7 +1,7 @@
 class_name SpinBoxExtended extends SpinBox
 
 @export var default_val: float
-var button: Button = Button.new()
+var button: SquareButton = SquareButton.new()
 
 func _ready() -> void:
 	await self.get_tree().process_frame
@@ -17,6 +17,8 @@ func _setup_default_button() -> void:
 	parent.move_child(hbox_container, tree_pos_index)
 	self.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox_container.add_child(button)
+	button._squarify_btn()
+	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.text = "D"
 	button.pressed.connect(func(): self.value = default_val)
 	button.tooltip_text = "Reset value to default"

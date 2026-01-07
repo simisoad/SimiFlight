@@ -2,7 +2,7 @@ class_name ForceVisualizer extends HSplitContainer
 # UI References (please link in Inspector or via Unique Name)
 
 signal params_changed(mach: float, re: float) # When environment changes (recalculate curve)
-signal state_changed(alpha: float, cl: float, cd: float, cm: float) # When angle changes (move markers)
+signal state_changed(alpha: float, cl: float, cd: float, cm: float, stall: float) # When angle changes (move markers)
 
 @onready var wind_tunnel_view: WindTunnelView = %WindTunnelView # The right area
 @onready var input_alpha: SpinBox = %AlphaSpinBox
@@ -110,7 +110,7 @@ func _update_sim() -> void:
 	wind_tunnel_view.update_state(alpha_deg, lift_force, drag_force, moment, coeffs.cl, coeffs.cd, coeffs.cm, speed)
 	# 6. SEND SIGNALS
 	params_changed.emit(mach, re)
-	state_changed.emit(alpha_deg, coeffs.cl, coeffs.cd, coeffs.cm)
+	state_changed.emit(alpha_deg, coeffs.cl, coeffs.cd, coeffs.cm, coeffs.stall)
 
 func _on_speed_changed(new_speed: float) -> void:
 	if is_updating_params: return

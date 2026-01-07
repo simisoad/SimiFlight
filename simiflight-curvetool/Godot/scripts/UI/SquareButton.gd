@@ -11,6 +11,7 @@ func _notification(what):
 	# This detects if the window size/mode changes (e.g. via Win+UpArrow or Restore)
 	if what == NOTIFICATION_WM_SIZE_CHANGED:
 		_squarify_btn()
+
 func _squarify_btn() -> void:
 	var size_x: float = self.size.x
 	var size_y: float = self.size.y

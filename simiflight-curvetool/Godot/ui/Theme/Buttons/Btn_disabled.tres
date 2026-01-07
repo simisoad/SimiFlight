@@ -5,4 +5,4 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.23031491, 0.23031494, 0.23031494, 1)
+bg_color = Color(0.12156863, 0.12156863, 0.14117648, 1)

@@ -20,6 +20,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("4_8wwim")
 script = ExtResource("1_oqsnf")
 
 [node name="MainSplit" type="HSplitContainer" parent="."]
@@ -31,8 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("4_8wwim")
-split_offset = -5
-touch_dragger_enabled = true
+dragger_visibility = 1
 
 [node name="Plots" type="VSplitContainer" parent="MainSplit"]
 custom_minimum_size = Vector2(1000, 0)
@@ -40,11 +40,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme = ExtResource("4_8wwim")
-touch_dragger_enabled = true
+dragger_visibility = 1
 
 [node name="PreviewMargin" type="MarginContainer" parent="MainSplit/Plots"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
 
 [node name="PanelContainer" type="PanelContainer" parent="MainSplit/Plots/PreviewMargin"]
 custom_minimum_size = Vector2(0, 300)
@@ -54,6 +55,7 @@ theme = ExtResource("4_8wwim")
 
 [node name="VBoxContainerPreview" type="VBoxContainer" parent="MainSplit/Plots/PreviewMargin/PanelContainer"]
 layout_mode = 2
+theme = ExtResource("4_8wwim")
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -63,6 +65,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 script = ExtResource("3_sr54c")
+margin_right = 60.0
 auto_zoom_limit = true
 max_zoom_out = 4.0
 show_range_highlight = true
@@ -72,6 +75,7 @@ metadata/_custom_type_script = "uid://bd36psmww5euc"
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.65
+theme = ExtResource("4_8wwim")
 
 [node name="PlotGeometry" type="Control" parent="MainSplit/Plots/AirfoilGeometryMargin"]
 unique_name_in_owner = true
@@ -82,7 +86,8 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 theme = ExtResource("4_8wwim")
 script = ExtResource("3_sr54c")
-background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
+background_color = Color(0.12156863, 0.12156863, 0.14117648, 1)
+margin_right = 60.0
 auto_zoom_limit = true
 max_zoom_factor = 10.0
 max_zoom_out = 4.0
@@ -91,36 +96,37 @@ highlight_min_x = 0.0
 highlight_max_x = 1.0
 metadata/_custom_type_script = "uid://bd36psmww5euc"
 
-[node name="Settings" type="VBoxContainer" parent="MainSplit"]
-custom_minimum_size = Vector2(323, 0)
+[node name="PanelContainer" type="PanelContainer" parent="MainSplit"]
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+
+[node name="Settings" type="VBoxContainer" parent="MainSplit/PanelContainer"]
+custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
 theme = ExtResource("4_8wwim")
 
-[node name="MainSettingsMargin" type="MarginContainer" parent="MainSplit/Settings"]
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/Settings/MainSettingsMargin"]
-layout_mode = 2
-
-[node name="LoadFiles" type="PanelContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer"]
+[node name="MainSettingsMargin" type="MarginContainer" parent="MainSplit/PanelContainer/Settings"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="LoadFile" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/LoadFiles"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin"]
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+
+[node name="LoadFiles" type="PanelContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+
+[node name="LoadFile" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/LoadFiles"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/LoadFiles/LoadFile"]
+[node name="Label" type="Label" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/LoadFiles/LoadFile"]
 layout_mode = 2
 text = "Airfoil"
 
-[node name="ProfileSelector" type="OptionButton" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/LoadFiles/LoadFile"]
+[node name="ProfileSelector" type="OptionButton" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/LoadFiles/LoadFile"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -129,19 +135,19 @@ focus_mode = 0
 theme = ExtResource("4_8wwim")
 flat = true
 
-[node name="Output" type="PanelContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer"]
+[node name="Output" type="PanelContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="OutputNames" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Output"]
+[node name="OutputNames" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Output"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="Label" type="Label" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Output/OutputNames"]
+[node name="Label" type="Label" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Output/OutputNames"]
 layout_mode = 2
 text = "LUT Name"
 
-[node name="OutputName" type="LineEdit" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Output/OutputNames"]
+[node name="OutputName" type="LineEdit" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Output/OutputNames"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -150,34 +156,33 @@ theme = ExtResource("4_8wwim")
 placeholder_text = "Output-Name"
 flat = true
 
-[node name="Parameters" type="PanelContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer"]
+[node name="Parameters" type="PanelContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="Label" type="Label" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer"]
+[node name="Label" type="Label" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 1
 theme = ExtResource("4_8wwim")
-theme_type_variation = &"HeaderSmall"
 text = "Parameters"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
 columns = 2
 
-[node name="StallFwd" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
+[node name="StallFwd" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 
-[node name="StallAngleFwd" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallFwd"]
+[node name="StallAngleFwd" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallFwd"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -190,13 +195,11 @@ value = 6.0
 prefix = "Stall [FWD] :"
 suffix = "°"
 
-[node name="VSeparator" type="VSeparator" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallFwd"]
+[node name="StallBwd" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
+theme = ExtResource("4_8wwim")
 
-[node name="StallBwd" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
-layout_mode = 2
-
-[node name="StallAngleBwd" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallBwd"]
+[node name="StallAngleBwd" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallBwd"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -209,13 +212,13 @@ value = 6.0
 prefix = "Stall [BWD] :"
 suffix = "°"
 
-[node name="PreviewMach" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
+[node name="PreviewMach" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 
-[node name="MachPreview" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewMach"]
+[node name="MachPreview" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewMach"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -227,16 +230,13 @@ step = 0.05
 value = 0.05
 prefix = "Mach:"
 
-[node name="VSeparator" type="VSeparator" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewMach"]
-layout_mode = 2
-
-[node name="Reynolds" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
+[node name="Reynolds" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 
-[node name="ReynoldsPreview" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/Reynolds"]
+[node name="ReynoldsPreview" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/Reynolds"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -248,13 +248,13 @@ step = 10000.0
 value = 10000.0
 prefix = "Re:"
 
-[node name="Sharpness" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
+[node name="Sharpness" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 
-[node name="Sharpness" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/Sharpness"]
+[node name="Sharpness" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/Sharpness"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -263,15 +263,15 @@ The default value is most likely the best fit."
 theme = ExtResource("4_8wwim")
 prefix = "Sharpness:"
 
-[node name="VSeparator" type="VSeparator" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/Sharpness"]
+[node name="PreviewAlpha" type="HBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
+theme = ExtResource("4_8wwim")
 
-[node name="PreviewAlpha" type="HBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
-layout_mode = 2
-
-[node name="AlphaStart" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewAlpha"]
+[node name="AlphaStart" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewAlpha"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_8wwim")
 min_value = -1000.0
 max_value = 1000.0
 value = -180.0
@@ -280,9 +280,11 @@ suffix = "°"
 script = ExtResource("6_gx2pu")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
-[node name="AlphaEnd" type="SpinBox" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewAlpha"]
+[node name="AlphaEnd" type="SpinBox" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewAlpha"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_8wwim")
 min_value = -1000.0
 max_value = 1000.0
 value = 180.0
@@ -291,15 +293,133 @@ suffix = "°"
 script = ExtResource("6_gx2pu")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
-[node name="Buttons" type="PanelContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer"]
+[node name="Buttons" type="PanelContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons"]
 layout_mode = 2
 theme = ExtResource("4_8wwim")
 
-[node name="ToggleExpertSettings" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer"]
+[node name="StatusColorRect" type="ColorRect" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
+color = Color(0.060530387, 0.060530342, 0.060530342, 1)
+
+[node name="StateLabelInfo" type="Label" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/StatusColorRect"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_8wwim")
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "State: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
+columns = 2
+
+[node name="CalcCurve" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Calculates a new preview."
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+text = "Preview"
+
+[node name="GenerateFullLUT" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Generates the LUT for selected Airfoil. Waring: This could freez the UI for some seconds."
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+text = "Generate LUT"
+
+[node name="ShowCl" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Toggle Lift-Curve in preview"
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+theme_override_colors/font_color = Color(0.17272583, 0.3629984, 0.7137648, 1)
+theme_override_colors/font_focus_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Cl"
+
+[node name="ShowCd" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Toggle Drag-Curve in preview"
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+theme_override_colors/font_color = Color(0.49718744, 0.1868529, 0.19135019, 1)
+theme_override_colors/font_focus_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Cd
+"
+
+[node name="ShowCm" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Toggle Moment-Curve in preview"
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+theme_override_colors/font_color = Color(0, 0.3079468, 1.92523e-07, 1)
+theme_override_colors/font_focus_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 1, 0, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Cm"
+
+[node name="ShowStall" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Toggles Stall-Curve in preview"
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+theme_override_colors/font_color = Color(0.3488202, 0.0008107625, 0.50572443, 1)
+theme_override_colors/font_focus_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_pressed_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_hover_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.5803922, 0, 0.827451, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Stall"
+
+[node name="ToggleExpertSettings" type="Button" parent="MainSplit/PanelContainer/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Toggles Expert Settings.
@@ -315,148 +435,549 @@ toggle_mode = true
 text = "Toggle Expert Settings"
 script = ExtResource("4_27ega")
 
-[node name="StatusColorRect" type="ColorRect" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer"]
-custom_minimum_size = Vector2(0, 25)
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0.060530387, 0.060530342, 0.060530342, 1)
-
-[node name="StateLabelInfo" type="Label" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/StatusColorRect"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-theme = ExtResource("4_8wwim")
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-text = "State: "
-vertical_alignment = 1
-
-[node name="GridContainer" type="GridContainer" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-columns = 2
-
-[node name="CalcCurve" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Calculates a new preview."
-focus_mode = 0
-theme = ExtResource("4_8wwim")
-text = "Preview"
-
-[node name="GenerateFullLUT" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Generates the LUT for selected Airfoil. Waring: This could freez the UI for some seconds."
-focus_mode = 0
-theme = ExtResource("4_8wwim")
-text = "Generate LUT"
-
-[node name="ShowCl" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Toggle Lift-Curve in preview"
-focus_mode = 0
-theme = ExtResource("4_8wwim")
-theme_override_colors/font_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_focus_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_hover_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-toggle_mode = true
-button_pressed = true
-text = "Toggle Cl"
-
-[node name="ShowCd" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Toggle Drag-Curve in preview"
-focus_mode = 0
-theme = ExtResource("4_8wwim")
-theme_override_colors/font_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_focus_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_hover_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-toggle_mode = true
-button_pressed = true
-text = "Toggle Cd
-"
-
-[node name="ShowCm" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Toggle Moment-Curve in preview"
-focus_mode = 0
-theme = ExtResource("4_8wwim")
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 1, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 1, 0, 1)
-toggle_mode = true
-button_pressed = true
-text = "Toggle Cm"
-
-[node name="ShowStall" type="Button" parent="MainSplit/Settings/MainSettingsMargin/VBoxContainer/Buttons/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Toggles Stall-Curve in preview"
-focus_mode = 0
-theme = ExtResource("4_8wwim")
-theme_override_colors/font_color = Color(0.5803922, 0, 0.827451, 1)
-theme_override_colors/font_focus_color = Color(0.5803922, 0, 0.827451, 1)
-theme_override_colors/font_pressed_color = Color(0.5803922, 0, 0.827451, 1)
-theme_override_colors/font_hover_color = Color(0.5803922, 0, 0.827451, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.5803922, 0, 0.827451, 1)
-toggle_mode = true
-button_pressed = true
-text = "Toggle Stall"
-
-[node name="ExpertSettingsScrollContainer" type="ScrollContainer" parent="MainSplit/Settings"]
+[node name="ExpertSettingsScrollContainer" type="ScrollContainer" parent="MainSplit/PanelContainer/Settings"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 follow_focus = true
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 2
+theme = ExtResource("4_8wwim")
 
-[node name="ExpSettingsPanelContainer" type="PanelContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer"]
+[node name="ExpSettingsPanelContainer" type="ScrollContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
+follow_focus = true
+horizontal_scroll_mode = 0
 
-[node name="ExpertSettings" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer"]
+[node name="ExpertSettings" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer"]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_8wwim")
+theme_override_constants/separation = 0
 
-[node name="ShowNACA0012Ref" type="Button" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+[node name="PlateLiftFoldableContainer" type="FoldableContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+theme = ExtResource("4_8wwim")
+title = "Plate Lift (Post-Stall Blending)"
+
+[node name="PlateLift" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer"]
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+theme_override_constants/separation = 0
+script = ExtResource("3_hf5rd")
+
+[node name="plate_scale_sharp" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "plate_scale_sharp:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_scale_blunt" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "plate_scale_blunt:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_blunt_threshold" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "plate_blunt_threshold:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_thickness_damping_threshold" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "plate_thickness_damping_threshold:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_trans_width_deg" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+max_value = 80.0
+page = 5.0
+prefix = "plate_trans_width_deg:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_deep_stall_start_deg" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 90.0
+max_value = 140.0
+page = 5.0
+value = 90.0
+prefix = "plate_deep_stall_start_deg:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_deep_stall_peak_deg" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 140.0
+max_value = 175.0
+page = 5.0
+value = 140.0
+prefix = "plate_deep_stall_peak_deg:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="DragAndMomentFoldableContainer" type="FoldableContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Drag & Moment"
+
+[node name="DragAndMoment" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+script = ExtResource("4_b6lfr")
+
+[node name="drag_re_floor" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+prefix = "drag_re_floor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_wave_peak_mach" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_wave_factor" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+prefix = "drag_wave_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_mcrit_thick_factor" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+step = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_base_factor" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+prefix = "drag_base_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="ac_offset_supersonic" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+prefix = "ac_offset_supersonic:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="BuffetNoiseFoldableContainer" type="FoldableContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Buffet / Noise"
+
+[node name="BuffetNoise" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+script = ExtResource("5_vwwhc")
+
+[node name="buffet_base_shake" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_sharp_bonus" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_window_width" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_freq_alpha" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_freq_mach" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+max_value = 80.0
+page = 5.0
+prefix = "drag_base_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="CompressibilityMachEffectsFoldableContainer" type="FoldableContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Compressibility (Mach Effects)"
+
+[node name="CompressibilityMachEffects" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+script = ExtResource("6_tyanh")
+
+[node name="mach_limit_sub" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_limit_sup" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_onset" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_reduction" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="StallGeometryFoldableContainer" type="FoldableContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Stall Geometry"
+
+[node name="StallGeometry" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+script = ExtResource("7_a7s43")
+
+[node name="stall_re_ref" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_le_quality_factor" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_max_cap_deg" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_min_deg" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_te_roundness_threshold" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_sensitivity" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_min" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_max" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="SuctionSpikeAndCrashFoldableContainer" type="FoldableContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Suction Spike & Crash"
+
+[node name="SuctionSpikeAndCrash" type="VBoxContainer" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+script = ExtResource("8_054as")
+
+[node name="spike_ref_radius" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+prefix = "drag_re_floor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_max_capacity" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_camber_penalty" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_boost_mag" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_crash_mag" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="recovery_thick_min" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="recovery_thick_max" type="SpinBox" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8wwim")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("6_gx2pu")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="ShowNACA0012Ref" type="Button" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Displays the NACA-0012 reference curve, which was experimentally created in a wind tunnel.
@@ -472,518 +993,8 @@ theme_override_colors/font_hover_pressed_color = Color(0.49803922, 1, 0.83137256
 toggle_mode = true
 text = "Toggle NACA0012 Ref"
 
-[node name="PlateLiftFoldableContainer" type="FoldableContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-focus_mode = 0
-title = "Plate Lift (Post-Stall Blending)"
-
-[node name="PlateLift" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer"]
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-script = ExtResource("3_hf5rd")
-
-[node name="plate_scale_sharp" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "plate_scale_sharp:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="plate_scale_blunt" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "plate_scale_blunt:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="plate_blunt_threshold" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "plate_blunt_threshold:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="plate_thickness_damping_threshold" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "plate_thickness_damping_threshold:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="plate_trans_width_deg" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-max_value = 80.0
-page = 5.0
-prefix = "plate_trans_width_deg:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="plate_deep_stall_start_deg" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 90.0
-max_value = 140.0
-page = 5.0
-value = 90.0
-prefix = "plate_deep_stall_start_deg:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="plate_deep_stall_peak_deg" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 140.0
-max_value = 175.0
-page = 5.0
-value = 140.0
-prefix = "plate_deep_stall_peak_deg:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="DragAndMomentFoldableContainer" type="FoldableContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-focus_mode = 0
-folded = true
-title = "Drag & Moment"
-
-[node name="DragAndMoment" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-script = ExtResource("4_b6lfr")
-
-[node name="drag_re_floor" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-prefix = "drag_re_floor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="drag_wave_peak_mach" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="drag_wave_factor" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-prefix = "drag_wave_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="drag_mcrit_thick_factor" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-step = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="drag_base_factor" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-prefix = "drag_base_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="ac_offset_supersonic" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-prefix = "ac_offset_supersonic:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="BuffetNoiseFoldableContainer" type="FoldableContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-focus_mode = 0
-folded = true
-title = "Buffet / Noise"
-
-[node name="BuffetNoise" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-script = ExtResource("5_vwwhc")
-
-[node name="buffet_base_shake" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_re_floor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="buffet_sharp_bonus" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="buffet_window_width" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="buffet_freq_alpha" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="buffet_freq_mach" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-max_value = 80.0
-page = 5.0
-prefix = "drag_base_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="CompressibilityMachEffectsFoldableContainer" type="FoldableContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-focus_mode = 0
-folded = true
-title = "Compressibility (Mach Effects)"
-
-[node name="CompressibilityMachEffects" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-script = ExtResource("6_tyanh")
-
-[node name="mach_limit_sub" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_re_floor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_limit_sup" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_stall_onset" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_stall_reduction" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="StallGeometryFoldableContainer" type="FoldableContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-focus_mode = 0
-folded = true
-title = "Stall Geometry"
-
-[node name="StallGeometry" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-script = ExtResource("7_a7s43")
-
-[node name="stall_re_ref" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_re_floor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_le_quality_factor" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_max_cap_deg" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_min_deg" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_te_roundness_threshold" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_camber_shift_sensitivity" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_camber_shift_min" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_camber_shift_max" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="SuctionSpikeAndCrashFoldableContainer" type="FoldableContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-focus_mode = 0
-folded = true
-title = "Suction Spike & Crash"
-
-[node name="SuctionSpikeAndCrash" type="VBoxContainer" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-script = ExtResource("8_054as")
-
-[node name="spike_ref_radius" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-prefix = "drag_re_floor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="spike_max_capacity" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="spike_camber_penalty" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="spike_boost_mag" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="spike_crash_mag" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="recovery_thick_min" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="recovery_thick_max" type="SpinBox" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("4_8wwim")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("6_gx2pu")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="Panel" type="Panel" parent="MainSplit/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+[node name="Panel" type="Panel" parent="MainSplit/PanelContainer/Settings/ExpertSettingsScrollContainer/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3

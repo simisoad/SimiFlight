@@ -140,7 +140,7 @@ static func _smooth_array(data: Array[float], passes: int = 1) -> Array[float]:
 			result[i] = 0.25 * temp[i-1] + 0.5 * temp[i] + 0.25 * temp[i+1]
 	return result
 
-static func _get_alpha_grid(start_deg: float = -180.0, end_deg: float = 180.0, density: float = 0.1) -> Array[float]:
+static func _get_alpha_grid(start_deg: float = -180.0, end_deg: float = 180.0, density: float = 0.5) -> Array[float]:
 	var p: Array[float] = []
 	var step_deg: float = density
 	var start := start_deg
