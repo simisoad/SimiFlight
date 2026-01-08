@@ -1,7 +1,7 @@
 extends Control
 
 @onready var generator_view = %LutGeneratorView
-@onready var visualizer_view = %LutVisualizer
+@onready var visualizer_view: LutVisualizer = %LutVisualizer
 @onready var creator_view = %AirfoilCreatorView # Removed type hint for safety if node missing
 @onready var tabs = %TabContainer
 
@@ -12,15 +12,11 @@ func _ready():
 	if creator_view:
 		creator_view.airfoil_saved.connect(_on_airfoil_created)
 
-func _on_new_lut_generated(path: String):
-	pass
-	## 1. Switch to Visualizer Tab
-	#tabs.current_tab = 1
+func _on_new_lut_generated(file_name: String):
+	## Update file list in Visualizer and slect created LUT.
+	visualizer_view.refresh_file_list(hash(file_name))
 #
-	## 2. Update file list in Visualizer
-	#visualizer_view._refresh_file_list()
-#
-	## 3. Select the newly created file (optional, logic would need to be added to Visualizer)
+
 	#print("New LUT generated, switching to visualizer.")
 func _on_airfoil_created(path: String):
 	print("New airfoil created at: ", path)

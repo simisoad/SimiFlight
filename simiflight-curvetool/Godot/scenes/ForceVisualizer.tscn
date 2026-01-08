@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyhr6lmtiyngb"]
+[gd_scene load_steps=6 format=3 uid="uid://cyhr6lmtiyngb"]
 
 [ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_s6ns7"]
 [ext_resource type="Script" uid="uid://c2rbp8pdqyral" path="res://scripts/LUTAndForceVisualizer/ForceVisualizer.gd" id="1_xxvdj"]
 [ext_resource type="Script" uid="uid://dft5p6a1fylqy" path="res://scripts/LUTAndForceVisualizer/WindTunnelView.gd" id="2_fkr2s"]
+[ext_resource type="Script" uid="uid://74m75dnsy7av" path="res://scripts/UI/SquareButton.gd" id="4_p44gh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s6ns7"]
 bg_color = Color(0.16470589, 0.16470589, 0.18431373, 1)
@@ -54,6 +55,22 @@ theme = ExtResource("1_s6ns7")
 script = ExtResource("2_fkr2s")
 wind_color = Color(1, 1, 1, 0.1)
 metadata/_custom_type_script = "uid://dft5p6a1fylqy"
+
+[node name="ResetView" type="Button" parent="ForceVisualizer/WindTunnelVBoxContainer/WindTunnelView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 31)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -31.0
+offset_bottom = 31.0
+grow_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"SquareButton"
+text = "R"
+script = ExtResource("4_p44gh")
+metadata/_custom_type_script = "uid://74m75dnsy7av"
 
 [node name="PanelContainer2" type="PanelContainer" parent="ForceVisualizer"]
 custom_minimum_size = Vector2(400, 0)

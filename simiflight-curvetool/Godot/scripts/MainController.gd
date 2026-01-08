@@ -27,6 +27,10 @@ var _preview_rect: Rect2i = Rect2i()
 const SNAP_THRESHOLD = 20
 
 func _ready():
+
+	if DisplayServer.get_screen_count() > 1:
+		pass
+
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS,true, 0)
 
 	# Window Buttons

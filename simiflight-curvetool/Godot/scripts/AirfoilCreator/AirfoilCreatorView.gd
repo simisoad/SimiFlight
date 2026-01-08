@@ -79,7 +79,7 @@ func _init_plot():
 func _generate():
 	var selected_family = opt_shape.get_selected_id()
 
-	# 0. Update UI Editable States
+	# 1. Update UI Editable States
 	var config = AirfoilGenerators.get_ui_config(selected_family)
 
 	spin_m.editable = config.get("m", true)
@@ -91,7 +91,7 @@ func _generate():
 
 	# Enable/Disable the Camber Dropdown
 	opt_camber.disabled = not config.get("camber_mode", true)
-	# 1. Gather Parameters
+	# 2. Gather Parameters
 	var params = {
 		"num_points": int(spin_pt.value),
 		"m": spin_m.value / 100.0,
@@ -105,28 +105,12 @@ func _generate():
 		"mirror_y": check_mirror.button_pressed
 	}
 
-	# 2. Generate
+	# 3. Generate
 	current_points = AirfoilGenerators.generate(selected_family, params)
 
-	# 3. Auto-Name
-	var type_str = "UNK"
-	match selected_family:
-		AirfoilGenerators.Family.NACA_4_DIGIT: type_str = "NACA"
-		AirfoilGenerators.Family.JOUKOWSKI: type_str = "JOUK"
-		AirfoilGenerators.Family.SUPER_SHAPE: type_str = "SHP"
-		AirfoilGenerators.Family.FLAT_PLATE: type_str = "PLAT"
-
-	var mod_str = "INV_" if params.mirror_y else ""
-
-	if params.mirror_y: mod_str += "INV_"
-	if params.camber_type == AirfoilGenerators.CamberType.REFLEX: mod_str += "REF_"
-	var camber_pos_string_size: float = 1.0
-	if int(spin_t.value) < 10:
-		camber_pos_string_size = 10.0
-	var camber_string: String = str(int(spin_m.value))
-	var camber_pos_string: String = str(int(spin_p.value*camber_pos_string_size))
-	var thickness_string: String = str(int(spin_t.value))
-	input_name.placeholder_text = "%s%s-%s%s%s" % [mod_str, type_str, camber_string,camber_pos_string, thickness_string]
+	# 4. Auto-Name
+	var auto_name = _get_auto_name(selected_family, params)
+	input_name.placeholder_text = auto_name
 
 	_draw_plot()
 
@@ -138,18 +122,93 @@ func _draw_plot():
 	var lower_pts: Array = current_points.lower
 
 	# Calculate closure line
-	var closure_pts: Array[Vector2] = []
-	if not upper_pts.is_empty():
-		closure_pts.append(upper_pts.back())
-		closure_pts.append(lower_pts.back())
+	#var closure_pts: Array[Vector2] = []
+	#if not upper_pts.is_empty():
+		#closure_pts.append(upper_pts.back())
+		#closure_pts.append(lower_pts.back())
 
 	plot.add_series("Upper", upper_pts, Color.GREEN, 2.0)
 	plot.add_series("Lower", lower_pts, Color.YELLOW, 2.0)
 
 	# Draw closure if TE is thick
-	if spin_te.value > 0.0 or abs(upper_pts.back().y - lower_pts.back().y) > 0.001:
-		plot.add_series("Closure", closure_pts, Color.WHITE, 2.0)
+	#if spin_te.value > 0.0 or abs(upper_pts.back().y - lower_pts.back().y) > 0.001:
+		#plot.add_series("Closure", closure_pts, Color.AQUA, 15.0)
 
+func _get_auto_name(family: int, params: Dictionary) -> String:
+	var name_parts = []
+
+	# --- 1. Base Values (Percentages) ---
+	var m_int = int(params.m * 100.0)      # Camber %
+	var p_int = int(params.p * 10.0)       # Position / 10
+	var t_int = int(params.t * 100.0)      # Thickness %
+
+	# --- 2. Family Specific Naming ---
+	match family:
+		AirfoilGenerators.Family.NACA_4_DIGIT:
+			# Format: NACA XXXX
+			# If Camber is 0, Position is irrelevant, conventionally '0'
+			if m_int == 0: p_int = 0
+
+			# %02d ensures thickness 9% becomes '09' -> "0009"
+			var code = "NACA_%d%d%02d" % [m_int, p_int, t_int]
+			name_parts.append(code)
+
+			# Append Nose Modifier if significant
+			# epsilon comparison because floats are rarely exactly 1.0
+			if not is_equal_approx(params.le_mult, 1.0):
+				# e.g. "_LE0.5" or "_LE2.0"
+				name_parts.append("LE" + str(params.le_mult).pad_decimals(1))
+
+		AirfoilGenerators.Family.JOUKOWSKI:
+			# JavaFoil Style: Jouk f=2% t=12% -> File safe: JOUK_t12_f2
+			name_parts.append("JOUK")
+			name_parts.append("t%d" % t_int)
+			name_parts.append("f%d" % m_int)
+
+		AirfoilGenerators.Family.SUPER_SHAPE:
+			# Detect specific shapes for readability
+			var e = params.shape_exp
+			var shape_name = "e" + str(e).pad_decimals(1) # Default: e2.5
+
+			if is_equal_approx(e, 2.0): shape_name = "OVAL"
+			elif is_equal_approx(e, 1.0): shape_name = "DIAMOND"
+			elif is_equal_approx(e, 10.0): shape_name = "BOX"
+			elif e > 15.0: shape_name = "RECT"
+
+			name_parts.append("SHP_" + shape_name)
+			name_parts.append("t%d" % t_int)
+			# Only show camber if it exists
+			if m_int > 0:
+				name_parts.append("m%d" % m_int)
+
+		AirfoilGenerators.Family.FLAT_PLATE:
+			name_parts.append("PLATE")
+			name_parts.append("t%d" % t_int)
+			name_parts.append("m%d" % m_int)
+
+	# --- 3. Global Modifiers ---
+
+	# Camber Type (Reflex/Sine) - Skip for Joukowski/NACA Standard
+	# We only tag if it's NOT standard (and if the generator supports it)
+	if family != AirfoilGenerators.Family.JOUKOWSKI:
+		if params.camber_type == AirfoilGenerators.CamberType.REFLEX:
+			name_parts.append("REFLEX") # or REF
+		elif params.camber_type == AirfoilGenerators.CamberType.SMOOTH_SINE:
+			name_parts.append("SINE")
+
+	# Trailing Edge Thickness (if significant)
+	if params.te_thick > 0.001:
+		# e.g. TE1
+		name_parts.append("TE" + str(int(params.te_thick * 100)))
+
+	# Mirror (Inverted)
+	if params.mirror_y:
+		# Prepend to front is usually better for sorting "INV_NACA..."
+		name_parts.push_front("INV")
+
+	# --- 4. Assemble ---
+	# Join with underscores for file safety (JavaFoil uses spaces, but Godot prefers _)
+	return "_".join(name_parts)
 func _on_save_pressed():
 	# (Keep your existing save logic here, it was fine)
 	if current_points.is_empty(): return
@@ -166,12 +225,14 @@ func _on_save_pressed():
 	file.store_line(fname.get_basename())
 
 	# Write Upper (Tail to Nose)
+	file.store_line("upper")
 	var up = current_points.upper.duplicate()
 	up.reverse()
 	for pt in up: file.store_line("%.6f   %.6f" % [pt.x, pt.y])
 
 	# Write Lower (Nose to Tail)
-	for i in range(1, current_points.lower.size()):
+	file.store_line("lower")
+	for i in range(0, current_points.lower.size()):
 		var pt = current_points.lower[i]
 		file.store_line("%.6f   %.6f" % [pt.x, pt.y])
 

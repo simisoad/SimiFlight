@@ -1,6 +1,6 @@
-extends Control
+class_name LutGeneratorView extends Control
 
-signal lut_generated(path: String)
+signal lut_generated(filename: String)
 
 # --- Constants ---
 const AIRFOIL_DIR = "res://data/airfoils/"
@@ -63,10 +63,10 @@ func _ready():
 
 	refresh_profile_list()
 	_init_default_values()
-	_set_show_curve_btns_color(show_cl, CL_COLOR)
-	_set_show_curve_btns_color(show_cd, CD_COLOR)
-	_set_show_curve_btns_color(show_cm, CM_COLOR)
-	_set_show_curve_btns_color(show_stall, STALL_COLOR)
+	set_show_curve_btns_color(show_cl, CL_COLOR)
+	set_show_curve_btns_color(show_cd, CD_COLOR)
+	set_show_curve_btns_color(show_cm, CM_COLOR)
+	set_show_curve_btns_color(show_stall, STALL_COLOR)
 	# Connect Signals
 	opt_profile.item_selected.connect(_on_profile_selected)
 	btn_calc.pressed.connect(_on_calculate_preview_pressed)
@@ -97,7 +97,7 @@ func _ready():
 	if opt_profile.item_count > 0:
 		_on_profile_selected(0)
 
-func _set_show_curve_btns_color(button: Button, color: Color) -> void:
+static func set_show_curve_btns_color(button: Button, color: Color) -> void:
 	button.add_theme_color_override(&"font_color", color)
 	button.add_theme_color_override(&"font_hover_color", color)
 	button.add_theme_color_override(&"font_pressed_color", color)
@@ -258,7 +258,7 @@ func _on_generate_full_lut_pressed():
 	LutGenerator.save_lut(lut, save_path)
 
 	lbl_state.text = "LUT saved to: " + fname
-	lut_generated.emit(save_path)
+	lut_generated.emit(fname)
 
 # Visualization of the Profile (Geometry) - UPDATED TO SIMPLECHART
 func _draw_geometry():

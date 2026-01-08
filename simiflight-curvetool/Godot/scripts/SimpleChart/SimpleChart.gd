@@ -203,11 +203,6 @@ func _draw() -> void:
 func _on_plot_area_draw() -> void:
 	var plot_size = _plot_area.size
 
-
-	for m: Dictionary in _markers:
-		#({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill})
-		_draw_marker(m.pos, m.radius, m.color, m.fill, m.width)
-
 	for s in _series:
 		if not s.visible or s.points.is_empty(): continue
 
@@ -227,9 +222,16 @@ func _on_plot_area_draw() -> void:
 
 		if polyline.size() > 1:
 			_plot_area.draw_polyline(polyline, s.color, s.width, true)
+	for m: Dictionary in _markers:
+		if not m.visible: continue
+		#({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill})
+		var px = _map_x_local(m.pos.x, plot_size.x)
+		var py = _map_y_local(m.pos.y, plot_size.y)
+		var draw_pos: Vector2 = Vector2(px, py)
+		_plot_area.draw_circle(draw_pos, m.radius,m.color, m.fill, m.width)
 
-func _draw_marker(pos: Vector2, radius: float, color: Color, fill: bool, width: float) -> void:
-	_plot_area.draw_circle(pos, radius, color, fill, width)
+
+
 # ------------------------------------------------------------------------------
 # MATH
 # ------------------------------------------------------------------------------
@@ -270,8 +272,12 @@ func _calc_step_size(range_min: float, range_max: float, desired_count: float) -
 # API
 # ------------------------------------------------------------------------------
 # (pos: Vector2, radius: float, color: Color, fill: bool)
-func add_marker(marker_name: String, pos: Vector2, radius: float, color: Color, width: float, fill: bool) -> void:
-	_markers.append({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill})
+func add_marker(marker_name: String, pos: Vector2, radius: float, color: Color, width: float, fill: bool, s_visible: bool = true) -> void:
+	_markers.append({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill, "visible": s_visible})
+	queue_redraw()
+
+func clear_markers() -> void:
+	_markers.clear()
 	queue_redraw()
 
 func add_series(series_name: String, points: Array, color: Color, width: float = 2.0, s_visible: bool = true) -> void:
@@ -299,6 +305,13 @@ func set_domain(p_min_x: float, p_max_x: float, p_min_y: float, p_max_y: float) 
 
 func set_series_visible(series_name: String, visibility: bool) -> void:
 	for s in _series:
+		if s.name == series_name:
+			s.visible = visibility
+			break
+	queue_redraw()
+
+func set_marker_visible(series_name: String, visibility: bool) -> void:
+	for s in _markers:
 		if s.name == series_name:
 			s.visible = visibility
 			break

@@ -47,6 +47,7 @@ script = ExtResource("3_dtayv")
 margin_bottom = 60.0
 margin_right = 60.0
 auto_zoom_limit = true
+max_zoom_out = 4.0
 show_range_highlight = true
 metadata/_custom_type_script = "uid://bd36psmww5euc"
 
@@ -69,54 +70,240 @@ theme = ExtResource("2_dtayv")
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="FileSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LUTSelectHBox" type="HBoxContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FileSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LUTSelectHBox"]
+custom_minimum_size = Vector2(150, 27)
 layout_mode = 2
 theme = ExtResource("2_dtayv")
 text = "LUT:"
 
-[node name="FileSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="FileSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LUTSelectHBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select LUT for visualization."
 focus_mode = 0
 theme = ExtResource("2_dtayv")
 
-[node name="MachNumberLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MachNumberSelectHBox" type="HBoxContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MachNumberLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/MachNumberSelectHBox"]
+custom_minimum_size = Vector2(150, 27)
 layout_mode = 2
 theme = ExtResource("2_dtayv")
 text = "Mach Number:"
 
-[node name="MachSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MachSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/MachNumberSelectHBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select calculated curves based on Mach number."
 focus_mode = 0
 theme = ExtResource("2_dtayv")
 
-[node name="ReynoldsSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ReSelectHBox" type="HBoxContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="ReynoldsSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ReSelectHBox"]
+custom_minimum_size = Vector2(150, 27)
+layout_mode = 2
+size_flags_vertical = 1
 theme = ExtResource("2_dtayv")
 text = "Reynolds Number:"
 
-[node name="ReynoldsSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ReynoldsSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ReSelectHBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 theme = ExtResource("2_dtayv")
 
-[node name="ShowLiveCurves" type="CheckBox" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-theme = ExtResource("2_dtayv")
-button_pressed = true
-text = "  Live Curves"
 
-[node name="ShowCalculatedLutCurves" type="CheckBox" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ShowCalculatedLutCurves" type="CheckBox" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Displays the static curves based on the parameters selected above [Mach Number, Reynolds Number]"
 focus_mode = 0
 theme = ExtResource("2_dtayv")
 button_pressed = true
-text = "  Calculated Curves"
+text = "   Static LUT"
+
+[node name="ShowLiveCurves" type="CheckBox" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Display the live curves based on the current parameters of the force visualization."
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+button_pressed = true
+text = "   Live LUT"
+
+[node name="ToggleStaticCurvesLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Static Curves:"
+
+[node name="StaticCurvesToggleGrid" type="GridContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_dtayv")
+columns = 2
+
+[node name="ShowCl" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StaticCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggle Lift-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0.17272583, 0.3629984, 0.7137648, 1)
+theme_override_colors/font_focus_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Static Cl"
+
+[node name="ShowCd" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StaticCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggle Drag-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0.49718744, 0.1868529, 0.19135019, 1)
+theme_override_colors/font_focus_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Static Cd
+"
+
+[node name="ShowCm" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StaticCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggle Moment-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0, 0.3079468, 1.92523e-07, 1)
+theme_override_colors/font_focus_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 1, 0, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Static Cm"
+
+[node name="ShowStall" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StaticCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggles Stall-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0.3488202, 0.0008107625, 0.50572443, 1)
+theme_override_colors/font_focus_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_pressed_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_hover_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.5803922, 0, 0.827451, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Static Stall"
+
+[node name="LiveCurvesToggleLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Static Curves:"
+
+[node name="LiveCurvesToggleGrid" type="GridContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_dtayv")
+columns = 2
+
+[node name="ShowClLive" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LiveCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggle Live Lift-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0.17272583, 0.3629984, 0.7137648, 1)
+theme_override_colors/font_focus_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Live Cl"
+
+[node name="ShowCdLive" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LiveCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggle Live Drag-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0.49718744, 0.1868529, 0.19135019, 1)
+theme_override_colors/font_focus_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Live Cd
+"
+
+[node name="ShowCmLive" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LiveCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggle Live Moment-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0, 0.3079468, 1.92523e-07, 1)
+theme_override_colors/font_focus_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 1, 0, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Live Cm"
+
+[node name="ShowStallLive" type="Button" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LiveCurvesToggleGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Toggles Live Stall-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+theme_override_colors/font_color = Color(0.3488202, 0.0008107625, 0.50572443, 1)
+theme_override_colors/font_focus_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_pressed_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_hover_color = Color(0.5803922, 0, 0.827451, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.5803922, 0, 0.827451, 1)
+toggle_mode = true
+button_pressed = true
+text = "Toggle Live Stall"
 
 [node name="ForceVisualizer" parent="HBoxContainer/VSplitContainer" instance=ExtResource("3_3v3rj")]
 unique_name_in_owner = true

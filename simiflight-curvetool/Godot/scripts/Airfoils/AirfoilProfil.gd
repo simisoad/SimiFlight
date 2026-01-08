@@ -12,8 +12,13 @@ func load_from_dat(path: String) -> bool:
 	if not FileAccess.file_exists(path) or file == null:
 		push_error("Could not open airfoil file: %s" % path)
 		return false
-
-	var lines = file.get_as_text().split("\n", false)
+	var internal_created: bool = false
+	var upper_found: bool = false
+	var lower_found: bool = false
+	if file.get_as_text().contains("upper"):
+		internal_created = true
+		print("internal created!")
+	var lines: PackedStringArray = file.get_as_text().split("\n", false)
 	file.close()
 
 	if lines.size() < 3: # Needs Name + at least 2 points
@@ -30,6 +35,12 @@ func load_from_dat(path: String) -> bool:
 	for line_str in lines.slice(1): # Skip the name line
 		var line = line_str.strip_edges()
 		if line.is_empty():
+			continue
+		if line.contains("upper"):
+			upper_found = true
+			continue
+		if line.contains("lower"):
+			lower_found = true
 			continue
 
 		# Robust split that handles multiple spaces/tabs
@@ -48,22 +59,28 @@ func load_from_dat(path: String) -> bool:
 		# 1. We are on the upper surface as long as x decreases.
 		# 2. The point with the smallest x is the Leading Edge (nose point).
 		# 3. Once x starts increasing again, we are on the lower surface.
-
-		if not min_x_found:
-			if x < last_x:
-				upper_surface.append(point)
+		if not internal_created:
+			if not min_x_found:
+				if x < last_x:
+					upper_surface.append(point)
+				else:
+					min_x_found = true
+					# The last point on 'upper_surface' was the Leading Edge.
+					# The current point is the first on the lower surface.
+					lower_surface.append(point)
 			else:
-				min_x_found = true
-				# The last point on 'upper_surface' was the Leading Edge.
-				# The current point is the first on the lower surface.
 				lower_surface.append(point)
-		else:
-			lower_surface.append(point)
 
-		last_x = x
+			last_x = x
+		else:
+			if upper_found and not lower_found:
+				upper_surface.append(point)
+			if lower_found and upper_found:
+				lower_surface.append(point)
 
 	# The points on the upper surface are ordered from x=1.0 to x=0.0.
 	# For many algorithms, it is useful to have them from 0.0 to 1.0.
+
 	upper_surface.reverse()
 	# lower_surface.reverse()
 	# The points on the lower surface are already ordered from x=0.0 to x=1.0.

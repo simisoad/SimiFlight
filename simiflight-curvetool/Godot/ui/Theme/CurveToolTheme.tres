@@ -132,7 +132,7 @@ content_margin_left = 2.0
 content_margin_right = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t2bds"]
-content_margin_left = 2.0
+content_margin_left = 8.0
 bg_color = Color(0.09109508, 0.091093205, 0.10427257, 1)
 border_color = Color(0.8001019, 0.8001019, 0.8001019, 0.045)
 
@@ -403,6 +403,7 @@ bg_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
 
 [resource]
 default_font = ExtResource("10_t2bds")
+default_font_size = 18
 BoxContainer/constants/separation = 0
 Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
@@ -479,7 +480,6 @@ Label/fonts/font = ExtResource("10_t2bds")
 Label/styles/focus = SubResource("StyleBoxEmpty_xg02u")
 Label/styles/normal = SubResource("StyleBoxEmpty_s4e61")
 LineEdit/constants/minimum_character_width = 4
-LineEdit/font_sizes/font_size = 18
 LineEdit/styles/normal = SubResource("StyleBoxFlat_t2bds")
 OptionButton/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 OptionButton/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
@@ -492,7 +492,6 @@ OptionButton/constants/arrow_margin = 4
 OptionButton/constants/h_separation = 4
 OptionButton/constants/modulate_arrow = 0
 OptionButton/constants/outline_size = 0
-OptionButton/font_sizes/font_size = 16
 OptionButton/icons/arrow = SubResource("DPITexture_e7ov2")
 OptionButton/styles/disabled = SubResource("StyleBoxFlat_3igap")
 OptionButton/styles/disabled_mirrored = SubResource("StyleBoxFlat_qslsp")
@@ -516,6 +515,7 @@ SpinBox/colors/up_pressed_icon_modulate = Color(0.95, 0.95, 0.95, 1)
 SpinBox/constants/buttons_vertical_separation = 0
 SpinBox/constants/buttons_width = 0
 SpinBox/constants/field_and_buttons_separation = 0
+SpinBox/constants/set_min_buttons_width_from_icons = 1
 SpinBox/icons/down = SubResource("DPITexture_054as")
 SpinBox/icons/down_disabled = SubResource("DPITexture_054as")
 SpinBox/icons/down_hover = SubResource("DPITexture_054as")
@@ -535,7 +535,6 @@ SpinBox/styles/up_background_disabled = SubResource("StyleBoxEmpty_fjlia")
 SpinBox/styles/up_background_hovered = SubResource("StyleBoxFlat_vh56p")
 SpinBox/styles/up_background_pressed = SubResource("StyleBoxFlat_yuvvs")
 SpinBox/styles/up_down_buttons_separator = SubResource("StyleBoxEmpty_uqh7c")
-SpinBoxLineEdit/font_sizes/font_size = 16
 SplitContainer/colors/touch_dragger_color = Color(1, 1, 1, 0.3)
 SplitContainer/colors/touch_dragger_hover_color = Color(1, 1, 1, 0.6)
 SplitContainer/colors/touch_dragger_pressed_color = Color(1, 1, 1, 1)

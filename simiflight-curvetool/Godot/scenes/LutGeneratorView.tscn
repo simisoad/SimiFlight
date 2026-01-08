@@ -104,6 +104,10 @@ max_y = 0.25
 auto_zoom_limit = true
 max_zoom_factor = 10.0
 max_zoom_out = 4.0
+min_range_x = 0.4800000000000001
+max_range_x = 4.800000000000001
+min_range_y = 0.2
+max_range_y = 2.0
 show_range_highlight = true
 highlight_min_x = 0.0
 highlight_max_x = 1.0
@@ -151,7 +155,7 @@ theme = ExtResource("4_8wwim")
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer/LoadFiles/LoadFile"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Airfoil:"
 
@@ -177,7 +181,7 @@ layout_mode = 2
 theme = ExtResource("4_8wwim")
 
 [node name="Label" type="Label" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer/Output/OutputNames"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "LUT Name:"
 
@@ -187,11 +191,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 theme = ExtResource("4_8wwim")
-theme_override_font_sizes/font_size = 16
 
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 30
 
 [node name="Parameters" type="PanelContainer" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer"]
 layout_mode = 2
@@ -225,6 +228,7 @@ theme = ExtResource("4_8wwim")
 
 [node name="StallAngleFwd" type="SpinBox" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallFwd"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Stall angle(forward: Leading Edge) estimated by airfoil analysis, can be adjusted."
@@ -238,10 +242,13 @@ suffix = "°"
 
 [node name="StallBwd" type="HBoxContainer" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource("4_8wwim")
 
 [node name="StallAngleBwd" type="SpinBox" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/StallBwd"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Stall angle(backwards: Trailing Edge) estimated by airfoil analysis, can be adjusted."
@@ -263,7 +270,7 @@ theme = ExtResource("4_8wwim")
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Mach number for preview."
+tooltip_text = "Mach number to preview in chart.."
 theme = ExtResource("4_8wwim")
 min_value = 0.05
 max_value = 10.0
@@ -281,7 +288,7 @@ theme = ExtResource("4_8wwim")
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Reynolds number for preview."
+tooltip_text = "Reynolds number to preview in chart.."
 theme = ExtResource("4_8wwim")
 min_value = 10000.0
 max_value = 100000000.0
@@ -308,14 +315,12 @@ prefix = "Sharpness:"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 10000.0
 theme = ExtResource("4_8wwim")
 
 [node name="AlphaStart" type="SpinBox" parent="HBoxContainer/MainSplit/PanelContainer/PanelContainer2/HBoxContainer/Settings/MainSettingsMargin/VBoxContainer/Parameters/VBoxContainer/GridContainer/PreviewAlpha"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 10000.0
 theme = ExtResource("4_8wwim")
 min_value = -1000.0
 max_value = 1000.0
@@ -330,7 +335,6 @@ metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 10000.0
 theme = ExtResource("4_8wwim")
 min_value = -1000.0
 max_value = 1000.0
@@ -380,7 +384,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Toggle Lift-Curve in preview"
+tooltip_text = "Toggle Lift-Curve in Chart"
 focus_mode = 0
 theme = ExtResource("4_8wwim")
 theme_override_colors/font_color = Color(0.17272583, 0.3629984, 0.7137648, 1)
@@ -397,7 +401,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Toggle Drag-Curve in preview"
+tooltip_text = "Toggle Drag-Curve in Chart"
 focus_mode = 0
 theme = ExtResource("4_8wwim")
 theme_override_colors/font_color = Color(0.49718744, 0.1868529, 0.19135019, 1)
@@ -415,7 +419,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Toggle Moment-Curve in preview"
+tooltip_text = "Toggle Moment-Curve in Chart"
 focus_mode = 0
 theme = ExtResource("4_8wwim")
 theme_override_colors/font_color = Color(0, 0.3079468, 1.92523e-07, 1)
@@ -432,7 +436,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Toggles Stall-Curve in preview"
+tooltip_text = "Toggles Stall-Curve in Chart"
 focus_mode = 0
 theme = ExtResource("4_8wwim")
 theme_override_colors/font_color = Color(0.3488202, 0.0008107625, 0.50572443, 1)

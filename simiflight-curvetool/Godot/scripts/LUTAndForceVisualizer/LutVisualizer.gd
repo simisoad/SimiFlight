@@ -1,4 +1,4 @@
-class_name LUTVisualizer extends Control
+class_name LutVisualizer extends Control
 
 @export_group("LiveMarkers")
 @export var markers_radius: float = 5.0
@@ -6,8 +6,19 @@ class_name LUTVisualizer extends Control
 @onready var file_selector: OptionButton = %FileSelector
 @onready var mach_selector: OptionButton = %MachSelector
 @onready var re_selector: OptionButton = %ReynoldsSelector
+
 @onready var show_live_curves: CheckBox = %ShowLiveCurves
 @onready var show_calculated_lut_curves: CheckBox = %ShowCalculatedLutCurves
+
+@onready var show_cl: Button = %ShowCl
+@onready var show_cd: Button = %ShowCd
+@onready var show_cm: Button = %ShowCm
+@onready var show_stall: Button = %ShowStall
+
+@onready var show_cl_live: Button = %ShowClLive
+@onready var show_cd_live: Button = %ShowCdLive
+@onready var show_cm_live: Button = %ShowCmLive
+@onready var show_stall_live: Button = %ShowStallLive
 
 # The Custom Chart
 @onready var plot: SimpleChart = %PlotVisu
@@ -32,10 +43,10 @@ var pts_live_cd: Array[Vector2] = []
 var pts_live_cm: Array[Vector2] = []
 var pts_live_stall: Array[Vector2] = []
 
-var pts_marker_cl: Vector2
-var pts_marker_cd: Array[Vector2] = []
-var pts_marker_cm: Array[Vector2] = []
-var pts_marker_stall: Array[Vector2] = []
+var pos_marker_cl: Vector2 = Vector2.ZERO
+var pos_marker_cd: Vector2 = Vector2.ZERO
+var pos_marker_cm: Vector2 = Vector2.ZERO
+var pos_marker_stall: Vector2 = Vector2.ZERO
 # --- Series Names ---
 const N_STAT_CL: String = "LUT Cl"
 const N_STAT_CD: String = "LUT Cd"
@@ -52,9 +63,21 @@ const N_MARK_CD: String = "Current Cd"
 const N_MARK_CM: String = "Current Cm"
 const N_MARK_STALL: String = "Current Stall"
 
+# Color Const
+const CL_COLOR_STATIC: Color = Color.CYAN
+const CD_COLOR_STATIC: Color = Color.RED
+const CM_COLOR_STATIC: Color = Color.GREEN
+const STALL_COLOR_STATIC: Color = Color.DARK_VIOLET
+
+const CL_COLOR_LIVE = Color.SKY_BLUE
+const CD_COLOR_LIVE = Color.DARK_RED
+const CM_COLOR_LIVE = Color.GREEN_YELLOW
+const STALL_COLOR_LIVE = Color.VIOLET
+
+
 func _ready():
 	_setup_plot()
-	_refresh_file_list()
+	refresh_file_list()
 
 	# Connect Internal UI
 	file_selector.item_selected.connect(_on_file_selected)
@@ -65,10 +88,45 @@ func _ready():
 	show_live_curves.toggled.connect(_refresh_chart_visuals.unbind(1)) # unbind ignores the bool arg, just refreshes
 	show_calculated_lut_curves.toggled.connect(_refresh_chart_visuals.unbind(1))
 
+	LutGeneratorView.set_show_curve_btns_color(show_cl, CL_COLOR_STATIC)
+	LutGeneratorView.set_show_curve_btns_color(show_cd, CD_COLOR_STATIC)
+	LutGeneratorView.set_show_curve_btns_color(show_cm, CM_COLOR_STATIC)
+	LutGeneratorView.set_show_curve_btns_color(show_stall, STALL_COLOR_STATIC)
+
+	LutGeneratorView.set_show_curve_btns_color(show_cl_live, CL_COLOR_LIVE)
+	LutGeneratorView.set_show_curve_btns_color(show_cd_live, CD_COLOR_LIVE)
+	LutGeneratorView.set_show_curve_btns_color(show_cm_live, CM_COLOR_LIVE)
+	LutGeneratorView.set_show_curve_btns_color(show_stall_live, STALL_COLOR_LIVE)
+
+	show_calculated_lut_curves.toggled.connect(func(v):
+			show_cl.disabled = !v
+			show_cd.disabled = !v
+			show_cm.disabled = !v
+			show_stall.disabled = !v
+			)
+	show_live_curves.toggled.connect(func(v):
+			show_cl_live.disabled = !v
+			show_cd_live.disabled = !v
+			show_cm_live.disabled = !v
+			show_stall_live.disabled = !v
+			)
+
+	show_cl.toggled.connect(func(v): plot.set_series_visible(N_STAT_CL, v))
+	show_cd.toggled.connect(func(v): plot.set_series_visible(N_STAT_CD, v))
+	show_cm.toggled.connect(func(v): plot.set_series_visible(N_STAT_CM, v))
+	show_stall.toggled.connect(func(v): plot.set_series_visible(N_STAT_STALL, v))
+
+	show_cl_live.toggled.connect(func(v): plot.set_series_visible(N_LIVE_CL, v); plot.set_marker_visible(N_MARK_CL, v))
+	show_cd_live.toggled.connect(func(v): plot.set_series_visible(N_LIVE_CD, v); plot.set_marker_visible(N_MARK_CD, v))
+	show_cm_live.toggled.connect(func(v): plot.set_series_visible(N_LIVE_CM, v); plot.set_marker_visible(N_MARK_CM, v))
+	show_stall_live.toggled.connect(func(v): plot.set_series_visible(N_LIVE_STALL, v); plot.set_marker_visible(N_MARK_STALL, v))
+
 	# Connect External Simulation Signals
 	if force_vis:
 		force_vis.params_changed.connect(_on_sim_params_changed)
 		force_vis.state_changed.connect(_on_sim_state_changed)
+		_on_sim_params_changed(force_vis.input_mach.value, force_vis.input_re.value)
+
 
 func _setup_plot():
 	# Configure the SimpleChart view
@@ -76,7 +134,7 @@ func _setup_plot():
 	# Optional: Enable grid if your SimpleChart has that property exposed
 	# plot.show_grid = true
 
-func _refresh_file_list():
+func refresh_file_list(select_id_hash = null):
 	file_selector.clear()
 	var dir = DirAccess.open(LUT_DIR)
 	if dir:
@@ -84,11 +142,15 @@ func _refresh_file_list():
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir() and file_name.ends_with(".tres"):
-				file_selector.add_item(file_name)
+				file_selector.add_item(file_name, hash(file_name))
 			file_name = dir.get_next()
 
 		if file_selector.item_count > 0:
-			_on_file_selected(0)
+			if select_id_hash:
+				var idx: int = file_selector.get_item_index(select_id_hash)
+				_on_file_selected(idx)
+			else:
+				_on_file_selected(0)
 	else:
 		push_error("Failed to access LUT directory: " + LUT_DIR)
 
@@ -178,24 +240,10 @@ func _on_sim_params_changed(mach: float, re: float):
 
 func _on_sim_state_changed(alpha: float, cl: float, cd: float, cm: float, stall: float):
 	# Updates the Marker positions
-
-	pts_marker_cd.clear()
-	pts_marker_cm.clear()
-	pts_marker_stall.clear()
-
-	var offset = 0.5 # 1 degree width for the marker line
-
-	pts_marker_cl = Vector2(alpha, cl)
-
-
-	pts_marker_cm.append(Vector2(alpha - offset, cm))
-	pts_marker_cm.append(Vector2(alpha + offset, cm))
-
-	pts_marker_cd.append(Vector2(alpha - offset, cd))
-	pts_marker_cd.append(Vector2(alpha + offset, cd))
-
-	pts_marker_stall.append(Vector2(alpha - offset, stall))
-	pts_marker_stall.append(Vector2(alpha + offset, stall))
+	pos_marker_cl = Vector2(alpha, cl)
+	pos_marker_cm =  Vector2(alpha, cm)
+	pos_marker_cd =  Vector2(alpha, cd)
+	pos_marker_stall = Vector2(alpha, stall)
 
 	_refresh_chart_visuals()
 
@@ -208,24 +256,25 @@ func _refresh_chart_visuals():
 	# and sets their visibility.
 
 	plot.clear_series()
+	plot.clear_markers()
 
 	# 1. Add Static LUT Curves
-	plot.add_series(N_STAT_CL, pts_static_cl, Color.BLUE, 2.0)
-	plot.add_series(N_STAT_CD, pts_static_cd, Color.RED, 2.0)
-	plot.add_series(N_STAT_CM, pts_static_cm, Color.GREEN, 2.0)
-	plot.add_series(N_STAT_STALL, pts_static_stall, Color.DARK_VIOLET, 1.5)
+	plot.add_series(N_STAT_CL, pts_static_cl, CL_COLOR_STATIC, 2.0)
+	plot.add_series(N_STAT_CD, pts_static_cd, CD_COLOR_STATIC, 2.0)
+	plot.add_series(N_STAT_CM, pts_static_cm, CM_COLOR_STATIC, 2.0)
+	plot.add_series(N_STAT_STALL, pts_static_stall, STALL_COLOR_STATIC, 2.0)
 
 	# 2. Add Live Curves
-	plot.add_series(N_LIVE_CL, pts_live_cl, Color.CYAN, 2.0)
-	plot.add_series(N_LIVE_CD, pts_live_cd, Color.ORANGE, 2.0)
-	plot.add_series(N_LIVE_CM, pts_live_cm, Color.GREEN_YELLOW, 2.0)
-	plot.add_series(N_LIVE_STALL, pts_live_stall, Color.VIOLET, 2.0)
+	plot.add_series(N_LIVE_CL, pts_live_cl, CL_COLOR_LIVE, 2.0)
+	plot.add_series(N_LIVE_CD, pts_live_cd, CD_COLOR_LIVE, 2.0)
+	plot.add_series(N_LIVE_CM, pts_live_cm, CM_COLOR_LIVE, 2.0)
+	plot.add_series(N_LIVE_STALL, pts_live_stall, STALL_COLOR_LIVE, 2.0)
 
 	# 3. Add Markers (Thick White/Yellow lines)
-	plot.add_marker(N_MARK_CL, pts_marker_cl, markers_radius, Color.AQUA, 2.0, true) #(N_MARK_CL, pts_marker_cl, Color.AQUA, 2.0)
-	plot.add_series(N_MARK_CD, pts_marker_cd, Color.ORANGE_RED, 2.0)
-	plot.add_series(N_MARK_CM, pts_marker_cm, Color.YELLOW, 2.0)
-	plot.add_series(N_MARK_STALL, pts_marker_stall, Color.BLUE_VIOLET, 2.0)
+	plot.add_marker(N_MARK_CL, pos_marker_cl, markers_radius, CL_COLOR_LIVE, 2.0, false) #(N_MARK_CL, pos_marker_cl, Color.AQUA, 2.0)
+	plot.add_marker(N_MARK_CD, pos_marker_cd, markers_radius, CD_COLOR_LIVE, 2.0, false)
+	plot.add_marker(N_MARK_CM, pos_marker_cm, markers_radius, CM_COLOR_LIVE, 2.0, false)
+	plot.add_marker(N_MARK_STALL, pos_marker_stall, markers_radius, STALL_COLOR_LIVE, 2.0, false)
 	# 4. Apply Visibility Logic
 	var show_static = show_calculated_lut_curves.button_pressed
 	var show_live = show_live_curves.button_pressed
@@ -238,7 +287,10 @@ func _refresh_chart_visuals():
 	plot.set_series_visible(N_LIVE_CL, show_live)
 	plot.set_series_visible(N_LIVE_CD, show_live)
 	plot.set_series_visible(N_LIVE_CM, show_live)
+	plot.set_series_visible(N_LIVE_STALL, show_live)
 
 	# Markers follow Live visibility
-	plot.set_series_visible(N_MARK_CL, show_live)
-	plot.set_series_visible(N_MARK_CD, show_live)
+	plot.set_marker_visible(N_MARK_CL, show_live)
+	plot.set_marker_visible(N_MARK_CD, show_live)
+	plot.set_marker_visible(N_MARK_CM, show_live)
+	plot.set_marker_visible(N_MARK_STALL, show_live)

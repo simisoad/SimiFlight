@@ -120,10 +120,11 @@ suffix = "(r)"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
-max_value = 5.0
+min_value = -30.0
+max_value = 30.0
 step = 0.01
 page = 0.1
-value = 0.9
+value = 0.8999999999999986
 prefix = "TE Thickness:"
 suffix = "%"
 

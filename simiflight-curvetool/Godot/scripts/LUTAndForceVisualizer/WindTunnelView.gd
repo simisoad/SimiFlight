@@ -7,6 +7,7 @@ class_name WindTunnelView extends Control
 @export var drag_color: Color = Color.ORANGE
 @export var moment_color: Color = Color.GREEN
 @export var wind_color: Color = Color(1, 1, 1, 0.15)
+@onready var reset_view: SquareButton = %ResetView
 
 # --- State ---
 var profile_points: Array[Vector2] = []
@@ -23,6 +24,7 @@ var cm: float = 0.0
 
 # Viewport Transform
 var view_zoom: float = 300.0
+var default_zoom: float = 0.0
 # CHANGE: This is now relative to the screen center (0,0 = Centered)
 var pan_offset: Vector2 = Vector2.ZERO
 
@@ -35,7 +37,9 @@ var _wind_speed_px: float = 50.0
 var auto_scale_vectors: bool = true
 
 func _ready() -> void:
+	default_zoom = view_zoom
 	clip_contents = true
+	reset_view.pressed.connect(func(): view_zoom = default_zoom; pan_offset = Vector2.ZERO)
 	# We DO NOT set view_offset here anymore.
 	# The center is calculated dynamically in _draw().
 
@@ -189,12 +193,17 @@ func _draw_moment(center: Vector2, m: float, m_coeff: float):
 # --- Input (Zoom / Pan) ---
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_MIDDLE or event.button_index == MOUSE_BUTTON_LEFT:
+		if event.button_index == MOUSE_BUTTON_MIDDLE:
 			if event.pressed:
 				_is_dragging = true
 				_last_mouse_pos = event.position
 			else:
 				_is_dragging = false
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.double_click:
+				view_zoom = default_zoom
+				pan_offset = Vector2.ZERO
+				queue_redraw()
 
 		if event.pressed:
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:

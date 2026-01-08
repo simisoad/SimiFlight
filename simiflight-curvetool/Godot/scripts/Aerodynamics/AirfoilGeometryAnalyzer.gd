@@ -170,7 +170,7 @@ static func _analyze_geometry_integrated(profile: AirfoilProfile) -> Dictionary:
 		te_radius_approx = te_thick * 0.5
 	# The mathematical shape of the profile creates a completely sharp edge,
 	# which is not realistic in the real world.
-	if te_thick == 0.0: te_thick = 0.005
+	if te_thick == 0.0: te_thick = 0.0001
 
 	# Fullness
 	var fullness = 0.5

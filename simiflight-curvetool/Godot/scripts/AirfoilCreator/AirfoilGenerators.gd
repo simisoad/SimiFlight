@@ -103,6 +103,7 @@ static func _gen_naca4(params: Dictionary) -> Dictionary:
 	var upper = []
 	var lower = []
 
+
 	for i in range(num_points + 1):
 		var beta = (float(i) / num_points) * PI
 		var x = (1.0 - cos(beta)) / 2.0
@@ -119,6 +120,16 @@ static func _gen_naca4(params: Dictionary) -> Dictionary:
 		upper.append(Vector2(x - yt * sin(theta), cam.y + yt * cos(theta)))
 		lower.append(Vector2(x + yt * sin(theta), cam.y - yt * cos(theta)))
 
+	if upper[0] != Vector2.ZERO:
+		upper[0] = Vector2.ZERO
+
+	if lower[0] != Vector2.ZERO:
+		lower[0] = Vector2.ZERO
+
+	if te_thick != 0.0 and t != 0.0:
+		upper.append(Vector2(1.0,0.0))
+		lower.append(Vector2(1.0,0.0))
+
 	return _finalize_output(upper, lower, params)
 
 static func _gen_supershape(params: Dictionary) -> Dictionary:
@@ -131,7 +142,7 @@ static func _gen_supershape(params: Dictionary) -> Dictionary:
 	var upper = []
 	var lower = []
 
-	for i in range(num_points + 1):
+	for i in range(num_points-1):
 		var beta = (float(i) / num_points) * PI
 		var x = (1.0 - cos(beta)) / 2.0
 
@@ -149,7 +160,8 @@ static func _gen_supershape(params: Dictionary) -> Dictionary:
 
 		upper.append(Vector2(x - yt * sin(theta), cam.y + yt * cos(theta)))
 		lower.append(Vector2(x + yt * sin(theta), cam.y - yt * cos(theta)))
-
+	upper.append(Vector2(1.0,0.0))
+	lower.append(Vector2(1.0,0.0))
 	return _finalize_output(upper, lower, params)
 
 static func _gen_flat_plate(params: Dictionary) -> Dictionary:
@@ -159,6 +171,11 @@ static func _gen_flat_plate(params: Dictionary) -> Dictionary:
 
 	var upper = []
 	var lower = []
+
+
+	if t != 0.0:
+		upper.append(Vector2(0.0,0.0))
+		lower.append(Vector2(0.0,0.0))
 
 	for i in range(num_points + 1):
 		var x = float(i) / num_points
@@ -170,44 +187,101 @@ static func _gen_flat_plate(params: Dictionary) -> Dictionary:
 
 		upper.append(Vector2(x - yt * sin(theta), cam.y + yt * cos(theta)))
 		lower.append(Vector2(x + yt * sin(theta), cam.y - yt * cos(theta)))
-
+	if t != 0.0:
+		upper.append(Vector2(1.0,0.0))
+		lower.append(Vector2(1.0,0.0))
 	return _finalize_output(upper, lower, params)
 
 static func _gen_joukowski(params: Dictionary) -> Dictionary:
-	# NOTE: Joukowski ignores 'camber_type' because the math
-	# intrinsically defines the camber shape via the circle offset.
 	var num_points = params.get("num_points", 100)
+	# Joukowski input scaling:
+	# Thickness: 0.05 - 0.3 typically. We map user t (0.0-0.4) to this.
 	var t_param = params.t * 0.8
+	# Camber: 0.0 - 0.2 typically.
 	var m_param = params.m * 1.0
+
+	# 1. Circle Setup (Zeta Plane)
+	# Center is offset (-thickness, +camber)
+	var center_x = -t_param
+	var center_y = m_param
+
+	# Radius must reach the singularity at (1,0)
+	# This ensures the Trailing Edge is sharp (Kutta conditionish)
+	var radius = sqrt(pow(1.0 - center_x, 2) + pow(0.0 - center_y, 2))
+
+	# 2. Generate Raw Points (Z Plane)
+	# We store them temporarily to calculate bounds before finalizing
+	var raw_points: Array[Vector2] = []
+	var min_x = 10000.0
+	var max_x = -10000.0
+
+	for i in range(num_points + 1):
+		var beta = (float(i) / num_points) * PI * 2.0
+
+		# Point on Circle
+		var zeta_x = center_x + radius * cos(beta)
+		var zeta_y = center_y + radius * sin(beta)
+
+		# Joukowski Transform: z = zeta + 1/zeta
+		var denom = (zeta_x * zeta_x) + (zeta_y * zeta_y)
+		if denom == 0: denom = 0.00001
+
+		var z_x = zeta_x + (zeta_x / denom)
+		var z_y = zeta_y - (zeta_y / denom) # Minus because of complex conjugate logic 1/(x+iy)
+
+		var pt = Vector2(z_x, z_y)
+		raw_points.append(pt)
+
+		# Track Bounds
+		if pt.x < min_x: min_x = pt.x
+		if pt.x > max_x: max_x = pt.x
+
+	# 3. Normalize and Split
+	# We want min_x to be 0.0 and max_x to be 1.0
+	var chord_length = max_x - min_x
+	if chord_length == 0: chord_length = 1.0 # Safety
+	var scale_factor = 1.0 / chord_length
 
 	var upper = []
 	var lower = []
 
-	var center_x = -t_param
-	var center_y = m_param
-	var radius = sqrt(pow(1.0 - center_x, 2) + pow(0.0 - center_y, 2))
+	for i in range(raw_points.size()):
+		var pt = raw_points[i]
 
-	for i in range(num_points + 1):
-		var beta = (float(i) / num_points) * PI * 2.0
-		var zeta_x = center_x + radius * cos(beta)
-		var zeta_y = center_y + radius * sin(beta)
-		var denom = (zeta_x * zeta_x) + (zeta_y * zeta_y)
-		if denom == 0: denom = 0.0001
+		# Normalize: Shift X to 0, Scale X and Y
+		pt.x = (pt.x - min_x) * scale_factor
+		pt.y = pt.y * scale_factor
 
-		var final_x = (zeta_x + (zeta_x / denom))
-		var final_y = (zeta_y - (zeta_y / denom)) # Minus because 1/(x+iy)
+		# The loop goes 0 -> 2PI.
+		# 0 to PI is usually the "bottom" arc in typical Joukowski winding,
+		# PI to 2PI is the "top".
+		if i <= num_points / 2:
+			upper.append(pt)
+		else:
+			lower.append(pt)
 
-		final_x = (final_x + 2.0) / 4.0
-		final_y = final_y / 4.0
+	# Joukowski lower side usually comes out Tail -> Nose.
+	# We want Nose -> Tail for consistency with other generators.
+	upper.append(lower.front())
+	upper.reverse()
 
-		if i <= num_points / 2: lower.append(Vector2(final_x, final_y))
-		else: upper.append(Vector2(final_x, final_y))
-
-	lower.reverse()
 	return _finalize_output(upper, lower, params)
 
 static func _finalize_output(upper: Array, lower: Array, params: Dictionary) -> Dictionary:
+
 	if params.get("mirror_y", false):
 		for i in range(upper.size()): upper[i].y = -upper[i].y
 		for i in range(lower.size()): lower[i].y = -lower[i].y
 	return {"upper": upper, "lower": lower}
+
+#static func _close_airfoil(upper_lower: Array[Vector2], params: Dictionary) -> Array[Vector2]:
+	#var closed_upper_lower: Array[Vector2] = []
+	#if params.thick_type == Family.FLAT_PLATE:
+		#var p_xy_zero: Vector2 = Vector2.ZERO
+		#var p_x_one_y_zero: Vector2 = Vector2(1.0,0.0)
+		#closed_upper_lower.append(p_xy_zero)
+		#closed_upper_lower.append()
+#
+#
+#
+	#return closed_upper_lower

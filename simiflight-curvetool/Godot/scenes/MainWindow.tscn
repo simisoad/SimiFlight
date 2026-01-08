@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://4no4pkrbhtp0"]
 
-[ext_resource type="Script" uid="uid://o1dhggvhj2na" path="res://scenes/MainWindow.gd" id="1_08rn7"]
+[ext_resource type="Script" uid="uid://o1dhggvhj2na" path="res://scripts/MainWindow.gd" id="1_08rn7"]
 [ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_khv74"]
 [ext_resource type="PackedScene" uid="uid://dtapqfpemfk0" path="res://scenes/LutGeneratorView.tscn" id="2_08rn7"]
 [ext_resource type="PackedScene" uid="uid://x8npjygfm4fd" path="res://scenes/LutVisualizer.tscn" id="3_c2m3h"]
@@ -9,6 +9,11 @@
 [sub_resource type="Theme" id="Theme_aefve"]
 
 [node name="MainWindow" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 mouse_filter = 2
 theme = SubResource("Theme_aefve")
