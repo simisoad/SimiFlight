@@ -4,46 +4,78 @@
 [ext_resource type="Script" uid="uid://blm8e45wnxo0r" path="res://scripts/AirfoilCreator/AirfoilCreatorView.gd" id="1_jxo0w"]
 [ext_resource type="Script" uid="uid://bd36psmww5euc" path="res://scripts/SimpleChart/SimpleChart.gd" id="2_jxo0w"]
 
-[node name="AirfoilCreatorView" type="HSplitContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HBoxContainer" type="HBoxContainer"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+theme = ExtResource("1_cn54y")
+script = ExtResource("1_jxo0w")
+
+[node name="AirfoilCreatorView" type="HSplitContainer" parent="."]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_cn54y")
-touch_dragger_enabled = true
-script = ExtResource("1_jxo0w")
+dragger_visibility = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="PlotGeometry" type="Control" parent="AirfoilCreatorView"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_cn54y")
+script = ExtResource("2_jxo0w")
+margin_bottom = 60.0
+margin_right = 60.0
+auto_zoom_limit = true
+max_zoom_factor = 10.0
+max_zoom_out = 4.0
+metadata/_custom_type_script = "uid://bd36psmww5euc"
+
+[node name="PanelContainer" type="PanelContainer" parent="AirfoilCreatorView"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AirfoilCreatorView/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
 theme = ExtResource("1_cn54y")
 
-[node name="AirfoilGenLabel" type="Label" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="AirfoilGenLabel" type="Label" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Airfoil Generator"
 
-[node name="OptionShapeMode" type="OptionButton" parent="VBoxContainer"]
+[node name="OptionShapeMode" type="OptionButton" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+focus_mode = 0
 
-[node name="NumPointsSpinBox" type="SpinBox" parent="VBoxContainer"]
+[node name="OptionCamberMode" type="OptionButton" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+focus_mode = 0
+
+[node name="NumPointsSpinBox" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 min_value = 20.0
 max_value = 1000.0
 value = 200.0
 prefix = "Number of Points:"
 
-[node name="OptionCamberMode" type="OptionButton" parent="VBoxContainer"]
+[node name="CamberSpinBox" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
-layout_mode = 2
-
-[node name="CamberSpinBox" type="SpinBox" parent="VBoxContainer"]
-unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 min_value = -9.5
 max_value = 9.5
@@ -52,8 +84,9 @@ value = 0.5
 prefix = "Camber:"
 suffix = "%"
 
-[node name="PositionSpinBox" type="SpinBox" parent="VBoxContainer"]
+[node name="PositionSpinBox" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 min_value = -9.0
 max_value = 9.0
@@ -61,8 +94,9 @@ step = 0.1
 prefix = "Position:"
 suffix = "/10"
 
-[node name="ThicknessSpinbox" type="SpinBox" parent="VBoxContainer"]
+[node name="ThicknessSpinbox" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 min_value = -40.0
 max_value = 40.0
@@ -71,8 +105,9 @@ value = 1.0
 prefix = "Thickness:"
 suffix = "%"
 
-[node name="SpinNoseRadius" type="SpinBox" parent="VBoxContainer"]
+[node name="SpinNoseRadius" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 max_value = 2.0
 step = 0.01
@@ -81,8 +116,9 @@ value = 0.9
 prefix = "Nose Sharpnes(LE):"
 suffix = "(r)"
 
-[node name="SpinTEThick" type="SpinBox" parent="VBoxContainer"]
+[node name="SpinTEThick" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 max_value = 5.0
 step = 0.01
@@ -91,8 +127,9 @@ value = 0.9
 prefix = "TE Thickness:"
 suffix = "%"
 
-[node name="SpinShapeExp" type="SpinBox" parent="VBoxContainer"]
+[node name="SpinShapeExp" type="SpinBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 tooltip_text = "2.0 is a circle/ellipse. 1.0 is a diamond. 10.0 is a square/board."
 min_value = 0.1
@@ -101,42 +138,43 @@ step = 0.1
 value = 0.1
 prefix = "Shape Exponent:"
 
-[node name="CheckMirrorY" type="CheckBox" parent="VBoxContainer"]
+[node name="CheckMirrorY" type="CheckBox" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
-text = "Invert (Mirror Y)"
+focus_mode = 0
+text = "   Invert (Mirror Y)"
 
-[node name="PreviewBtn" type="Button" parent="VBoxContainer"]
+[node name="PreviewBtn" type="Button" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+focus_mode = 0
 text = "Generate Preview"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 
-[node name="FileNameLineEdit" type="LineEdit" parent="VBoxContainer"]
+[node name="FileNameLineEdit" type="LineEdit" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+focus_mode = 0
 placeholder_text = "Filename"
 
-[node name="SaveBtn" type="Button" parent="VBoxContainer"]
+[node name="SaveBtn" type="Button" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
+focus_mode = 0
 text = "Save to file."
 
-[node name="StatusLabel" type="Label" parent="VBoxContainer"]
+[node name="StatusLabel" type="Label" parent="AirfoilCreatorView/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 
-[node name="PlotGeometry" type="Control" parent="."]
-unique_name_in_owner = true
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = ExtResource("1_cn54y")
-script = ExtResource("2_jxo0w")
-background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
-auto_zoom_limit = true
-max_zoom_factor = 10.0
-max_zoom_out = 4.0
-metadata/_custom_type_script = "uid://bd36psmww5euc"

@@ -27,7 +27,6 @@ EventBus="*res://scripts/Autoload/EventBus.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/extend_to_title=true
 window/subwindows/embed_subwindows=false
 window/per_pixel_transparency/allowed=true
 window/vsync/vsync_mode=0

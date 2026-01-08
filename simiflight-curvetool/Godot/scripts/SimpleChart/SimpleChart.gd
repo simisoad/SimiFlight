@@ -59,6 +59,7 @@ var initial_min_y: float = -2.5
 var initial_max_y: float = 2.5
 
 var _series: Array[Dictionary] = []
+var _markers: Array[Dictionary] = []
 
 # --- Internal Nodes ---
 var _plot_area: Control
@@ -201,6 +202,11 @@ func _draw() -> void:
 # ------------------------------------------------------------------------------
 func _on_plot_area_draw() -> void:
 	var plot_size = _plot_area.size
+	_plot_area.draw_circle(plot_size/2, 100.0, Color.DARK_GREEN, false, 5.0)
+
+	for m: Dictionary in _markers:
+		#({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill})
+		_draw_marker(m.pos, m.radius, m.color, m.fill, m.width)
 
 	for s in _series:
 		if not s.visible or s.points.is_empty(): continue
@@ -222,6 +228,8 @@ func _on_plot_area_draw() -> void:
 		if polyline.size() > 1:
 			_plot_area.draw_polyline(polyline, s.color, s.width, true)
 
+func _draw_marker(pos: Vector2, radius: float, color: Color, fill: bool, width: float) -> void:
+	_plot_area.draw_circle(pos, radius, color, fill, width)
 # ------------------------------------------------------------------------------
 # MATH
 # ------------------------------------------------------------------------------
@@ -261,8 +269,13 @@ func _calc_step_size(range_min: float, range_max: float, desired_count: float) -
 # ------------------------------------------------------------------------------
 # API
 # ------------------------------------------------------------------------------
-func add_series(series_name: String, points: Array, color: Color, width: float = 2.0) -> void:
-	_series.append({ "name": series_name, "points": points, "color": color, "width": width, "visible": true })
+# (pos: Vector2, radius: float, color: Color, fill: bool)
+func add_marker(marker_name: String, pos: Vector2, radius: float, color: Color, width: float, fill: bool) -> void:
+	_markers.append({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill})
+	queue_redraw()
+
+func add_series(series_name: String, points: Array, color: Color, width: float = 2.0, s_visible: bool = true) -> void:
+	_series.append({ "name": series_name, "points": points, "color": color, "width": width, "visible": s_visible })
 	queue_redraw()
 
 func clear_series() -> void:

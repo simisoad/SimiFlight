@@ -1,4 +1,4 @@
-class_name ForceVisualizer extends HSplitContainer
+class_name ForceVisualizer extends Control
 # UI References (please link in Inspector or via Unique Name)
 
 signal params_changed(mach: float, re: float) # When environment changes (recalculate curve)

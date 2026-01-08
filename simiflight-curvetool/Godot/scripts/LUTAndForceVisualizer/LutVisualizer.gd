@@ -1,5 +1,7 @@
 class_name LUTVisualizer extends Control
 
+@export_group("LiveMarkers")
+@export var markers_radius: float = 5.0
 # --- UI References ---
 @onready var file_selector: OptionButton = %FileSelector
 @onready var mach_selector: OptionButton = %MachSelector
@@ -11,7 +13,7 @@ class_name LUTVisualizer extends Control
 @onready var plot: SimpleChart = %PlotVisu
 
 # External Component (Simulation Driver)
-@onready var force_vis: ForceVisualizer = $VSplitContainer/ForceVisualizer
+@onready var force_vis: ForceVisualizer = %ForceVisualizer
 
 # --- Constants & State ---
 const LUT_DIR = "res://data/luts/"
@@ -30,7 +32,7 @@ var pts_live_cd: Array[Vector2] = []
 var pts_live_cm: Array[Vector2] = []
 var pts_live_stall: Array[Vector2] = []
 
-var pts_marker_cl: Array[Vector2] = []
+var pts_marker_cl: Vector2
 var pts_marker_cd: Array[Vector2] = []
 var pts_marker_cm: Array[Vector2] = []
 var pts_marker_stall: Array[Vector2] = []
@@ -49,6 +51,7 @@ const N_MARK_CL: String = "Current Cl"
 const N_MARK_CD: String = "Current Cd"
 const N_MARK_CM: String = "Current Cm"
 const N_MARK_STALL: String = "Current Stall"
+
 func _ready():
 	_setup_plot()
 	_refresh_file_list()
@@ -175,15 +178,15 @@ func _on_sim_params_changed(mach: float, re: float):
 
 func _on_sim_state_changed(alpha: float, cl: float, cd: float, cm: float, stall: float):
 	# Updates the Marker positions
-	pts_marker_cl.clear()
+
 	pts_marker_cd.clear()
 	pts_marker_cm.clear()
 	pts_marker_stall.clear()
 
 	var offset = 0.5 # 1 degree width for the marker line
 
-	pts_marker_cl.append(Vector2(alpha - offset, cl))
-	pts_marker_cl.append(Vector2(alpha + offset, cl))
+	pts_marker_cl = Vector2(alpha, cl)
+
 
 	pts_marker_cm.append(Vector2(alpha - offset, cm))
 	pts_marker_cm.append(Vector2(alpha + offset, cm))
@@ -219,7 +222,7 @@ func _refresh_chart_visuals():
 	plot.add_series(N_LIVE_STALL, pts_live_stall, Color.VIOLET, 2.0)
 
 	# 3. Add Markers (Thick White/Yellow lines)
-	plot.add_series(N_MARK_CL, pts_marker_cl, Color.AQUA, 2.0)
+	plot.add_marker(N_MARK_CL, pts_marker_cl, markers_radius, Color.AQUA, 2.0, true) #(N_MARK_CL, pts_marker_cl, Color.AQUA, 2.0)
 	plot.add_series(N_MARK_CD, pts_marker_cd, Color.ORANGE_RED, 2.0)
 	plot.add_series(N_MARK_CM, pts_marker_cm, Color.YELLOW, 2.0)
 	plot.add_series(N_MARK_STALL, pts_marker_stall, Color.BLUE_VIOLET, 2.0)

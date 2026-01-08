@@ -119,7 +119,7 @@ func _init_plots():
 
 	# 2. Setup Geometry Chart (Visual)
 	# Range: 0..1 X (Chord), -0.5..0.5 Y (Thickness)
-	plot_geometry.set_domain(0.0, 1.0, -0.25, 0.25)
+	#plot_geometry.set_domain(0.0, 1.0, -0.25, 0.25)
 
 	# Optional: Adjust Geometry colors/settings if exposed in SimpleChart
 	# plot_geometry.show_grid = false # Example if you added that property

@@ -16,81 +16,115 @@ theme = ExtResource("2_dtayv")
 script = ExtResource("1_vnhl4")
 metadata/_custom_type_script = "uid://11ym0j6u1mfa"
 
-[node name="VSplitContainer" type="VSplitContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_dtayv")
-touch_dragger_enabled = true
 
-[node name="HBoxContainer" type="HSplitContainer" parent="VSplitContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_dtayv")
+dragger_visibility = 1
+
+[node name="HBoxContainer" type="HSplitContainer" parent="HBoxContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_dtayv")
-touch_dragger_enabled = true
+dragger_visibility = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/HBoxContainer"]
-custom_minimum_size = Vector2(268, 0)
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-
-[node name="FileSelectorLabel" type="Label" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-
-[node name="FileSelector" type="OptionButton" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
+[node name="PlotVisu" type="Control" parent="HBoxContainer/VSplitContainer/HBoxContainer"]
 unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-
-[node name="MachNumberLabel" type="Label" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-text = "Mach-Zahl:"
-
-[node name="MachSelector" type="OptionButton" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-
-[node name="ReynoldsSelectorLabel" type="Label" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-text = "Reynolds Number:"
-
-[node name="ReynoldsSelector" type="OptionButton" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-
-[node name="ShowLiveCurves" type="CheckBox" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-button_pressed = true
-text = "Live Curves"
-
-[node name="ShowCalculatedLutCurves" type="CheckBox" parent="VSplitContainer/HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_dtayv")
-button_pressed = true
-text = "Calculated Curves"
-
-[node name="PlotVisu" type="Control" parent="VSplitContainer/HBoxContainer"]
-unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("2_dtayv")
 script = ExtResource("3_dtayv")
-background_color = Color(0.16700011, 0.17952147, 0.21397674, 1)
+margin_bottom = 60.0
+margin_right = 60.0
 auto_zoom_limit = true
 show_range_highlight = true
 metadata/_custom_type_script = "uid://bd36psmww5euc"
 
-[node name="ForceVisualizer" parent="VSplitContainer" instance=ExtResource("3_3v3rj")]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+theme = ExtResource("2_dtayv")
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="FileSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_dtayv")
+text = "LUT:"
+
+[node name="FileSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+
+[node name="MachNumberLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_dtayv")
+text = "Mach Number:"
+
+[node name="MachSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+
+[node name="ReynoldsSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_dtayv")
+text = "Reynolds Number:"
+
+[node name="ReynoldsSelector" type="OptionButton" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+
+[node name="ShowLiveCurves" type="CheckBox" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+button_pressed = true
+text = "  Live Curves"
+
+[node name="ShowCalculatedLutCurves" type="CheckBox" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_dtayv")
+button_pressed = true
+text = "  Calculated Curves"
+
+[node name="ForceVisualizer" parent="HBoxContainer/VSplitContainer" instance=ExtResource("3_3v3rj")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.65
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2

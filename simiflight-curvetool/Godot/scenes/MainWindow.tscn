@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3 uid="uid://4no4pkrbhtp0"]
+
+[ext_resource type="Script" uid="uid://o1dhggvhj2na" path="res://scenes/MainWindow.gd" id="1_08rn7"]
+[ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_khv74"]
+[ext_resource type="PackedScene" uid="uid://dtapqfpemfk0" path="res://scenes/LutGeneratorView.tscn" id="2_08rn7"]
+[ext_resource type="PackedScene" uid="uid://x8npjygfm4fd" path="res://scenes/LutVisualizer.tscn" id="3_c2m3h"]
+[ext_resource type="PackedScene" uid="uid://co5lhdilj1n8y" path="res://scenes/AirfoilCreatorView.tscn" id="4_08th6"]
+
+[sub_resource type="Theme" id="Theme_aefve"]
+
+[node name="MainWindow" type="MarginContainer"]
+size_flags_vertical = 3
+mouse_filter = 2
+theme = SubResource("Theme_aefve")
+script = ExtResource("1_08rn7")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("1_khv74")
+current_tab = 0
+clip_tabs = false
+drag_to_rearrange_enabled = true
+tab_focus_mode = 0
+deselect_enabled = true
+
+[node name="LUT Generator" type="MarginContainer" parent="TabContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_aefve")
+metadata/_tab_index = 0
+
+[node name="LutGeneratorView" parent="TabContainer/LUT Generator" instance=ExtResource("2_08rn7")]
+unique_name_in_owner = true
+layout_mode = 2
+theme = SubResource("Theme_aefve")
+
+[node name="LUT Visualizer" type="MarginContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+theme = SubResource("Theme_aefve")
+metadata/_tab_index = 1
+
+[node name="LutVisualizer" parent="TabContainer/LUT Visualizer" instance=ExtResource("3_c2m3h")]
+unique_name_in_owner = true
+layout_mode = 2
+theme = SubResource("Theme_aefve")
+
+[node name="Airfoil Creator" type="MarginContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+theme = SubResource("Theme_aefve")
+metadata/_tab_index = 2
+
+[node name="AirfoilCreatorView" parent="TabContainer/Airfoil Creator" instance=ExtResource("4_08th6")]
+unique_name_in_owner = true
+layout_mode = 2

@@ -1,4 +1,4 @@
-class_name AirfoilCreatorView extends HSplitContainer
+class_name AirfoilCreatorView extends Container
 
 signal airfoil_saved(filename: String)
 
