@@ -15,7 +15,12 @@ Currently, only simiflight_p1 (prototype for ground control of aircraft) and sim
 simiflight_p1:
 ![simiflight_p1 Screenshot](./Screenshot_p1.png)
 
-simiflight-curvetool:
-![CurveTool Screenshot](./Screenshot_CurveTool.png)
+simiflight-Curve LUT and Airfoil Tool:
+LUT Generator:
+![LUT Generator Screenshot](./Screenshot_CurveTool.png)
+LUT and Force Visualizer:
+![LUT and Force Visualizer Screenshot](./Screenshot_LUTAndForceVisualizer.png)
+Airfoil Creator:
+![CurveTool Airfoil Creator](./Screenshot_AirfoilCreator.png)
 
 SimiFlight is an open-source project designed to provide tools for simulating flight physics, specifically for aircraft dynamics and flight simulation in a 3D environment. The project is developed in Godot and Python, and it aims to offer a realistic and interactive flight simulation experience. 

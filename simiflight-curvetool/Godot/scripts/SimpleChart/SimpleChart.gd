@@ -202,7 +202,7 @@ func _draw() -> void:
 # ------------------------------------------------------------------------------
 func _on_plot_area_draw() -> void:
 	var plot_size = _plot_area.size
-	_plot_area.draw_circle(plot_size/2, 100.0, Color.DARK_GREEN, false, 5.0)
+
 
 	for m: Dictionary in _markers:
 		#({"name": marker_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill})
