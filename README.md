@@ -17,7 +17,7 @@ simiflight_p1:
 
 simiflight-Curve LUT and Airfoil Tool:
 LUT Generator:
-![LUT Generator Screenshot](./Screenshot_CurveTool.png)
+![LUT Generator Screenshot](./Screenshot_LUTGenerator.png)
 LUT and Force Visualizer:
 ![LUT and Force Visualizer Screenshot](./Screenshot_LUTAndForceVisualizer.png)
 Airfoil Creator:
