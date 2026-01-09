@@ -196,9 +196,9 @@ static func _gen_joukowski(params: Dictionary) -> Dictionary:
 	var num_points = params.get("num_points", 100)
 	# Joukowski input scaling:
 	# Thickness: 0.05 - 0.3 typically. We map user t (0.0-0.4) to this.
-	var t_param = params.t * 0.8
+	var t_param = params.t
 	# Camber: 0.0 - 0.2 typically.
-	var m_param = params.m * 1.0
+	var m_param = params.m
 
 	# 1. Circle Setup (Zeta Plane)
 	# Center is offset (-thickness, +camber)

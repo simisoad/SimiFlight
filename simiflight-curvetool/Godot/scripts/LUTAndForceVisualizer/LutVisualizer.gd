@@ -129,10 +129,7 @@ func _ready():
 
 
 func _setup_plot():
-	# Configure the SimpleChart view
 	plot.set_domain(-180.0, 180.0, -2.5, 2.5)
-	# Optional: Enable grid if your SimpleChart has that property exposed
-	# plot.show_grid = true
 
 func refresh_file_list(select_id_hash = null):
 	file_selector.clear()

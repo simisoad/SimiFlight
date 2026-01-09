@@ -2,64 +2,84 @@ extends VBoxContainer
 
 @onready var stall_re_ref: SpinBoxExtended = %stall_re_ref
 @onready var stall_le_quality_factor: SpinBoxExtended = %stall_le_quality_factor
-@onready var stall_max_cap_deg: SpinBoxExtended = %stall_max_cap_deg
-@onready var stall_min_deg: SpinBoxExtended = %stall_min_deg
-@onready var stall_te_roundness_threshold: SpinBoxExtended = %stall_te_roundness_threshold
 
+# FWD Limits
+@onready var stall_max_cap_deg_fwd: SpinBoxExtended = %stall_max_cap_deg_fwd
+@onready var stall_min_deg_fwd: SpinBoxExtended = %stall_min_deg_fwd
+
+# BWD Limits
+@onready var stall_max_cap_deg_bwd: SpinBoxExtended = %stall_max_cap_deg_bwd
+@onready var stall_min_deg_bwd: SpinBoxExtended = %stall_min_deg_bwd
+
+# Other params
+@onready var stall_te_roundness_threshold: SpinBoxExtended = %stall_te_roundness_threshold
 @onready var stall_camber_shift_sensitivity: SpinBoxExtended = %stall_camber_shift_sensitivity
 @onready var stall_camber_shift_min: SpinBoxExtended = %stall_camber_shift_min
 @onready var stall_camber_shift_max: SpinBoxExtended = %stall_camber_shift_max
 
 func _ready() -> void:
 	# Reynolds
-	_setup_spinbox(stall_re_ref, 10000.0, 50000000.0, 10000.0, AeroPhysicsModel.stall_re_ref,
+	SpinBoxSetupUtils.setup(stall_re_ref, 10000.0, 50000000.0, 10000.0, AeroPhysicsModel.stall_re_ref,
 		"Reference Reynolds Number.\nAt this Re, the Stall Angle Factor is nominal.\nLower Re reduces stall angle.")
 
 	# LE Quality
-	_setup_spinbox(stall_le_quality_factor, 1.0, 50.0, 0.5, AeroPhysicsModel.stall_le_quality_factor,
+	SpinBoxSetupUtils.setup(stall_le_quality_factor, 1.0, 50.0, 0.5, AeroPhysicsModel.stall_le_quality_factor,
 		"Leading Edge Quality.\nMultiplies the LE Radius to determine circulation efficiency.\nHigher = Better flow attachment.")
 
-	# Caps
-	_setup_spinbox(stall_max_cap_deg, 15.0, 45.0, 0.5, AeroPhysicsModel.stall_max_cap_deg,
-		"Absolute maximum Stall Angle allowed (in degrees).\nPrevents physics explosions for extreme geometries.")
-	EventBus.stall_max_cap_deg_set.emit(AeroPhysicsModel.stall_max_cap_deg)
-	_setup_spinbox(stall_min_deg, 1.0, 15.0, 0.5, AeroPhysicsModel.stall_min_deg,
-		"Absolute minimum Stall Angle (in degrees).\nEven at Mach 2.0, a wing will usually hold flow for a few degrees.")
-	EventBus.stall_max_cap_deg_set.emit(AeroPhysicsModel.stall_max_cap_deg)
-	# TE Roundness
-	_setup_spinbox(stall_te_roundness_threshold, 0.001, 0.2, 0.001, AeroPhysicsModel.stall_te_roundness_threshold,
-		"Thickness Threshold.\nIf Trailing Edge thickness > this value, the back is considered 'Round'.\nAffects Backward Flight stall logic.")
 
+	SpinBoxSetupUtils.setup(stall_te_roundness_threshold, 0.001, 0.2, 0.001, AeroPhysicsModel.stall_te_roundness_threshold,
+		"Thickness Threshold.\nIf Trailing Edge thickness > this value, the back is considered 'Round'.\nAffects Backward Flight stall logic.")
+	# --- FWD LIMITS ---
+	SpinBoxSetupUtils.setup(stall_min_deg_fwd, 1.0, 45.0, 0.5, AeroPhysicsModel.stall_min_deg_fwd,
+		"Minimum Forward Stall Angle.", "Fwd Min")
+
+	# The setup for Max must account for the current Min to prevent errors
+	SpinBoxSetupUtils.setup(stall_max_cap_deg_fwd, AeroPhysicsModel.stall_min_deg_fwd, 90.0, 0.5, AeroPhysicsModel.stall_max_cap_deg_fwd,
+		"Maximum Forward Stall Angle Cap.", "Fwd Max")
+
+	# --- BWD LIMITS ---
+	SpinBoxSetupUtils.setup(stall_min_deg_bwd, 1.0, 45.0, 0.5, AeroPhysicsModel.stall_min_deg_bwd,
+		"Minimum Backward Stall Angle.", "Bwd Min")
+
+	SpinBoxSetupUtils.setup(stall_max_cap_deg_bwd, AeroPhysicsModel.stall_min_deg_bwd, 90.0, 0.5, AeroPhysicsModel.stall_max_cap_deg_bwd,
+		"Maximum Backward Stall Angle Cap.", "Bwd Max")
 	# Camber Shifts
-	_setup_spinbox(stall_camber_shift_sensitivity, 0.0, 100.0, 1.0, AeroPhysicsModel.stall_camber_shift_sensitivity,
+	SpinBoxSetupUtils.setup(stall_camber_shift_sensitivity, 0.0, 100.0, 1.0, AeroPhysicsModel.stall_camber_shift_sensitivity,
 		"How much Camber shifts the Stall Angle range.\nHigh camber stalls later on top, earlier on bottom.")
-	_setup_spinbox(stall_camber_shift_min, -20.0, 0.0, 0.5, AeroPhysicsModel.stall_camber_shift_min,
+	SpinBoxSetupUtils.setup(stall_camber_shift_min, -20.0, 0.0, 0.5, AeroPhysicsModel.stall_camber_shift_min,
 		"Max negative shift (degrees) due to camber.")
-	_setup_spinbox(stall_camber_shift_max, 0.0, 20.0, 0.5, AeroPhysicsModel.stall_camber_shift_max,
+	SpinBoxSetupUtils.setup(stall_camber_shift_max, 0.0, 20.0, 0.5, AeroPhysicsModel.stall_camber_shift_max,
 		"Max positive shift (degrees) due to camber.")
 
 	# Connections
-	stall_re_ref.value_changed.connect(func(v): AeroPhysicsModel.stall_re_ref = v)
-	stall_le_quality_factor.value_changed.connect(func(v): AeroPhysicsModel.stall_le_quality_factor = v)
-	stall_max_cap_deg.value_changed.connect(func(v):
-			AeroPhysicsModel.stall_max_cap_deg = v
-			EventBus.stall_max_cap_deg_set.emit(v))
+	stall_re_ref.value_changed.connect(func(v): AeroPhysicsModel.stall_re_ref = v; EventBus.reanalyze_requested.emit())
+	stall_le_quality_factor.value_changed.connect(func(v): AeroPhysicsModel.stall_le_quality_factor = v; EventBus.reanalyze_requested.emit())
+# 1. Update Model & Emit Signal for FWD
+	stall_min_deg_fwd.value_changed.connect(func(v):
+		AeroPhysicsModel.stall_min_deg_fwd = v
+		stall_max_cap_deg_fwd.min_value = v # Ensure Max can't go below Min
+		EventBus.stall_limits_fwd_changed.emit(v, stall_max_cap_deg_fwd.value)
+	)
 
-	stall_min_deg.value_changed.connect(func(v):
-			AeroPhysicsModel.stall_min_deg = v
-			EventBus.stall_min_deg_set.emit(v))
+	stall_max_cap_deg_fwd.value_changed.connect(func(v):
+		AeroPhysicsModel.stall_max_cap_deg_fwd = v
+		EventBus.stall_limits_fwd_changed.emit(stall_min_deg_fwd.value, v)
+	)
 
-	stall_te_roundness_threshold.value_changed.connect(func(v): AeroPhysicsModel.stall_te_roundness_threshold = v)
+	# 2. Update Model & Emit Signal for BWD
+	stall_min_deg_bwd.value_changed.connect(func(v):
+		AeroPhysicsModel.stall_min_deg_bwd = v
+		stall_max_cap_deg_bwd.min_value = v
+		EventBus.stall_limits_bwd_changed.emit(v, stall_max_cap_deg_bwd.value)
+	)
 
-	stall_camber_shift_sensitivity.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_sensitivity = v)
-	stall_camber_shift_min.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_min = v)
-	stall_camber_shift_max.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_max = v)
+	stall_max_cap_deg_bwd.value_changed.connect(func(v):
+		AeroPhysicsModel.stall_max_cap_deg_bwd = v
+		EventBus.stall_limits_bwd_changed.emit(stall_min_deg_bwd.value, v)
+	)
 
-func _setup_spinbox(node: SpinBoxExtended, min_v: float, max_v: float, step_v: float, default_v: float, tip: String) -> void:
-	node.min_value = min_v
-	node.max_value = max_v
-	node.step = step_v
-	node.value = default_v
-	node.default_val = node.value
-	node.tooltip_text = tip
-	node.prefix = node.name + ":"
+	stall_te_roundness_threshold.value_changed.connect(func(v): AeroPhysicsModel.stall_te_roundness_threshold = v; EventBus.reanalyze_requested.emit())
+
+	stall_camber_shift_sensitivity.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_sensitivity = v; EventBus.reanalyze_requested.emit())
+	stall_camber_shift_min.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_min = v; EventBus.reanalyze_requested.emit())
+	stall_camber_shift_max.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_max = v; EventBus.reanalyze_requested.emit())

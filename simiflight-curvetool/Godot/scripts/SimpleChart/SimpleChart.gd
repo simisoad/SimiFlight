@@ -1,6 +1,5 @@
 @tool
-class_name SimpleChart
-extends Control
+class_name SimpleChart extends Control
 
 # --- Visual Settings ---
 @export_group("Colors")

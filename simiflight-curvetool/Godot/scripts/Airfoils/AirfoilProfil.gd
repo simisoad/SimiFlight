@@ -84,7 +84,11 @@ func load_from_dat(path: String) -> bool:
 	upper_surface.reverse()
 	# lower_surface.reverse()
 	# The points on the lower surface are already ordered from x=0.0 to x=1.0.
-
+	#print("upper:")
+	#for vec in upper_surface:
+		#print(vec)
+	#for vec in lower_surface:
+		#print(vec)
 	if upper_surface.is_empty() or lower_surface.is_empty():
 		push_error("Failed to parse upper or lower surface correctly. Path: %s" % path)
 		return false

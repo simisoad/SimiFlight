@@ -71,13 +71,37 @@ func _ready():
 	opt_profile.item_selected.connect(_on_profile_selected)
 	btn_calc.pressed.connect(_on_calculate_preview_pressed)
 	btn_generate.pressed.connect(_on_generate_full_lut_pressed)
+	EventBus.reanalyze_requested.connect(func():
+		if current_profile:
+			 # Re-run the analyzer with new static settings
+			var geo_data = AirfoilGeometryAnalyzer.analyze(current_profile)
 
-	EventBus.stall_max_cap_deg_set.connect(func(v):
-			input_stall_bwd.max_value = v
-			input_stall_fwd.max_value = v)
-	EventBus.stall_min_deg_set.connect(func(v):
-			input_stall_bwd.min_value = v
-			input_stall_fwd.min_value = v)
+			 # Update the UI inputs with the new estimation
+			input_stall_fwd.value = geo_data.stall_angle_fwd
+			input_stall_bwd.value = geo_data.stall_angle_back
+
+			 # Optionally trigger a recalc of the curve
+			_on_calculate_preview_pressed()
+	)
+	 # Connect FWD Limits
+	input_stall_fwd.min_value = AeroPhysicsModel.stall_min_deg_fwd
+	input_stall_fwd.max_value = AeroPhysicsModel.stall_max_cap_deg_fwd
+	EventBus.stall_limits_fwd_changed.connect(func(min_v, max_v):
+		input_stall_fwd.min_value = min_v
+		input_stall_fwd.max_value = max_v
+		# Optional: Clamp current value if it's now out of bounds
+		if input_stall_fwd.value > max_v: input_stall_fwd.value = max_v
+		if input_stall_fwd.value < min_v: input_stall_fwd.value = min_v
+	)
+	input_stall_bwd.min_value = AeroPhysicsModel.stall_min_deg_bwd
+	input_stall_bwd.max_value = AeroPhysicsModel.stall_max_cap_deg_bwd
+	# Connect BWD Limits
+	EventBus.stall_limits_bwd_changed.connect(func(min_v, max_v):
+		input_stall_bwd.min_value = min_v
+		input_stall_bwd.max_value = max_v
+		if input_stall_bwd.value > max_v: input_stall_bwd.value = max_v
+		if input_stall_bwd.value < min_v: input_stall_bwd.value = min_v
+	)
 
 	LutGenerator.preview_alpha_start_deg = alpha_start.value
 	LutGenerator.preview_alpha_end_deg = alpha_end.value

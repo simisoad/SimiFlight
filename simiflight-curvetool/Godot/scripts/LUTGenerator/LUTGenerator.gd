@@ -34,7 +34,12 @@ func _init() -> void:
 ## Generates a single curve for UI previewing without generating the full LUT
 static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorConfig) -> Dictionary:
 	var geo = AirfoilGeometryAnalyzer.analyze(profile)
-	var alpha_0 = AirfoilGeometryAnalyzer.calculate_alpha_0(profile)
+
+	print("Airfoil: %s geometry from AirfoilGeometryAnalyzer.analyze():" % profile.name)
+	for entry in geo:
+		print(entry, ": ", geo[entry])
+
+	var alpha_0 = geo.alpha_0
 
 	# 1. Create temporary float arrays (for smoothing)
 	var raw_cl: Array[float] = []
@@ -93,7 +98,7 @@ static func generate_lut(profile: AirfoilProfile, config: GeneratorConfig) -> Ai
 
 	# 1. Analyze Geometry once
 	var geo = AirfoilGeometryAnalyzer.analyze(profile)
-	var alpha_0 = AirfoilGeometryAnalyzer.calculate_alpha_0(profile)
+	var alpha_0 = geo.alpha_0
 
 	# 2. Iterate over all dimensions (Re -> Mach -> Alpha)
 	for re in lut.reynolds_points:
