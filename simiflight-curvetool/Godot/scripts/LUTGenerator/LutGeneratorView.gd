@@ -8,6 +8,7 @@ const LUT_DIR = "res://data/luts/"
 
 # --- UI References ---
 @onready var opt_profile: OptionButton = %ProfileSelector
+@onready var tab_container: TabContainer = %TabContainer
 
 # Inputs
 @onready var input_stall_fwd: SpinBox = %StallAngleFwd
@@ -33,6 +34,7 @@ const LUT_DIR = "res://data/luts/"
 # Plots (SimpleChart)
 @onready var plot_preview: SimpleChart = %PlotPreview
 @onready var plot_geometry: SimpleChart = %PlotGeometry
+@onready var polar_chart: SimpleChart = %PolarView
 
 # Status
 @onready var lbl_state: Label = %StateLabelInfo
@@ -40,7 +42,7 @@ const LUT_DIR = "res://data/luts/"
 # Data Caching
 var current_profile: AirfoilProfile
 var current_config: LutGenerator.GeneratorConfig
-
+var current_results: Dictionary
 # Store the reference points so we don't recalculate them every frame
 var ref_points_naca0012: Array[Vector2] = []
 
@@ -92,7 +94,7 @@ func _ready():
 		# Optional: Clamp current value if it's now out of bounds
 		if input_stall_fwd.value > max_v: input_stall_fwd.value = max_v
 		if input_stall_fwd.value < min_v: input_stall_fwd.value = min_v
-	)
+		)
 	input_stall_bwd.min_value = AeroPhysicsModel.stall_min_deg_bwd
 	input_stall_bwd.max_value = AeroPhysicsModel.stall_max_cap_deg_bwd
 	# Connect BWD Limits
@@ -101,23 +103,26 @@ func _ready():
 		input_stall_bwd.max_value = max_v
 		if input_stall_bwd.value > max_v: input_stall_bwd.value = max_v
 		if input_stall_bwd.value < min_v: input_stall_bwd.value = min_v
-	)
+		)
 
 	LutGenerator.preview_alpha_start_deg = alpha_start.value
 	LutGenerator.preview_alpha_end_deg = alpha_end.value
 	alpha_start.default_val = alpha_start.value
 	alpha_end.default_val = alpha_end.value
-	alpha_start.value_changed.connect(func(v): LutGenerator.preview_alpha_start_deg = v)
-	alpha_end.value_changed.connect(func(v): LutGenerator.preview_alpha_end_deg = v)
-
+	alpha_start.value_changed.connect(func(v): LutGenerator.preview_alpha_start_deg = v; EventBus.reanalyze_requested.emit())
+	alpha_end.value_changed.connect(func(v): LutGenerator.preview_alpha_end_deg = v; EventBus.reanalyze_requested.emit())
+	#input_stall_bwd.value_changed.connect(func(_v): EventBus.reanalyze_requested.emit())
+	#input_stall_fwd.value_changed.connect(func(_v): EventBus.reanalyze_requested.emit())
+	input_sharpness.value_changed.connect(func(_v): EventBus.reanalyze_requested.emit())
+	input_mach.value_changed.connect(func(_v): EventBus.reanalyze_requested.emit())
+	input_re.value_changed.connect(func(_v): EventBus.reanalyze_requested.emit())
 	# Toggles (using new plot_preview reference)
 	show_cl.toggled.connect(func(v): plot_preview.set_series_visible(NAME_CL, v))
 	show_cd.toggled.connect(func(v): plot_preview.set_series_visible(NAME_CD, v))
 	show_cm.toggled.connect(func(v): plot_preview.set_series_visible(NAME_CM, v))
 	show_stall.toggled.connect(func(v): plot_preview.set_series_visible(NAME_STALL, v))
 	show_naca_0012_ref.toggled.connect(func(v): plot_preview.set_series_visible(NAME_REF, v))
-#^"theme_override_colors/font_color"
-	# Load first profile if available
+
 	if opt_profile.item_count > 0:
 		_on_profile_selected(0)
 
@@ -228,27 +233,30 @@ func _on_calculate_preview_pressed():
 
 	var config = _get_current_config()
 	var results = LutGenerator.calculate_preview_curve(current_profile, config)
-
+	current_results = results
 	# 1. Clear Chart
 	plot_preview.clear_series()
-
+	_update_ghost_visuals()
+	_update_polar_plot()
 	# 2. Prepare Data Arrays
 	var cl_points: Array[Vector2] = []
 	var cd_points: Array[Vector2] = []
 	var cm_points: Array[Vector2] = []
 	var stall_points: Array[Vector2] = []
+	var direction_points: Array[Vector2] = []
 
 	for p in results.cl: cl_points.append(Vector2(p.x, p.y))
 	for p in results.cd: cd_points.append(Vector2(p.x, p.y))
 	for p in results.cm: cm_points.append(Vector2(p.x, p.y))
 	for p in results.sigma: stall_points.append(Vector2(p.x, p.y))
+	for p in results.direction: direction_points.append(Vector2(p.x, p.y))
 
 	# 3. Add to Chart
 	plot_preview.add_series(NAME_CL, cl_points, Color.CYAN)
 	plot_preview.add_series(NAME_CD, cd_points, Color.RED)
 	plot_preview.add_series(NAME_CM, cm_points, Color.GREEN)
 	plot_preview.add_series(NAME_STALL, stall_points, Color.DARK_VIOLET)
-
+	#plot_preview.add_series("Direction", direction_points, Color.ANTIQUE_WHITE)
 	# Add Reference Curve
 	plot_preview.add_series(NAME_REF, ref_points_naca0012_points_copy(), Color(1, 1, 1, 0.3), 1.0)
 
@@ -295,3 +303,28 @@ func _draw_geometry():
 
 	plot_geometry.add_series("Upper", current_profile.upper_surface, Color.WEB_GREEN, 2.0)
 	plot_geometry.add_series("Lower", current_profile.lower_surface, Color.YELLOW_GREEN, 2.0)
+var cached_ghost_series: Dictionary = {} # Stores { "cl": [points], "cd": [points] }
+
+func _on_snapshot_button_pressed():
+	# Save current visible data
+	cached_ghost_series["cl"] = plot_preview.get_series_points("Lift (Cl)")
+	cached_ghost_series["cd"] = plot_preview.get_series_points("Drag (Cd)")
+	_update_ghost_visuals()
+
+func _update_ghost_visuals():
+	if cached_ghost_series.has("cl"):
+		plot_preview.add_series("Ghost Cl", cached_ghost_series["cl"], Color(0.5, 0.5, 0.5, 0.5))
+
+func _update_polar_plot():
+	var polar_points: Array[Vector2] = []
+
+	# Assuming 'results' contains your computed arrays
+	for i in range(current_results.cl.size()):
+		# X = Drag, Y = Lift
+		var cd = current_results.cd[i].y
+		var cl = current_results.cl[i].y
+		polar_points.append(Vector2(cd, cl))
+
+	polar_chart.clear_series()
+	polar_chart.add_series("Polar", polar_points, Color.ORANGE)
+	# Set domain: X (0 to 0.4), Y (-1.5 to 1.5)

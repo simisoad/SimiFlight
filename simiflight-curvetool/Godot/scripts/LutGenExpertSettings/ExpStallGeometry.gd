@@ -17,6 +17,10 @@ extends VBoxContainer
 @onready var stall_camber_shift_min: SpinBoxExtended = %stall_camber_shift_min
 @onready var stall_camber_shift_max: SpinBoxExtended = %stall_camber_shift_max
 
+# NEW PARAMETERS
+@onready var stall_sharpness_fwd_mult: SpinBoxExtended = %stall_sharpness_fwd_mult
+@onready var stall_sharpness_bwd_mult: SpinBoxExtended = %stall_sharpness_bwd_mult
+
 func _ready() -> void:
 	# Reynolds
 	SpinBoxSetupUtils.setup(stall_re_ref, 10000.0, 50000000.0, 10000.0, AeroPhysicsModel.stall_re_ref,
@@ -50,7 +54,12 @@ func _ready() -> void:
 		"Max negative shift (degrees) due to camber.")
 	SpinBoxSetupUtils.setup(stall_camber_shift_max, 0.0, 20.0, 0.5, AeroPhysicsModel.stall_camber_shift_max,
 		"Max positive shift (degrees) due to camber.")
+	# --- SHARPNESS MULTIPLIERS ---
+	SpinBoxSetupUtils.setup(stall_sharpness_fwd_mult, 0.5, 5.0, 0.1, AeroPhysicsModel.stall_sharpness_fwd_mult,
+		"Multiplier for the base sharpness in Forward flight. Default 1.0.", "Sharpness Mult Fwd")
 
+	SpinBoxSetupUtils.setup(stall_sharpness_bwd_mult, 0.5, 10.0, 0.1, AeroPhysicsModel.stall_sharpness_bwd_mult,
+		"Multiplier for the base sharpness in Backward flight. Higher = snappier stall break.", "Sharpness Mult Bwd")
 	# Connections
 	stall_re_ref.value_changed.connect(func(v): AeroPhysicsModel.stall_re_ref = v; EventBus.reanalyze_requested.emit())
 	stall_le_quality_factor.value_changed.connect(func(v): AeroPhysicsModel.stall_le_quality_factor = v; EventBus.reanalyze_requested.emit())
@@ -83,3 +92,5 @@ func _ready() -> void:
 	stall_camber_shift_sensitivity.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_sensitivity = v; EventBus.reanalyze_requested.emit())
 	stall_camber_shift_min.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_min = v; EventBus.reanalyze_requested.emit())
 	stall_camber_shift_max.value_changed.connect(func(v): AeroPhysicsModel.stall_camber_shift_max = v; EventBus.reanalyze_requested.emit())
+	stall_sharpness_fwd_mult.value_changed.connect(func(v): AeroPhysicsModel.stall_sharpness_fwd_mult = v; EventBus.reanalyze_requested.emit())
+	stall_sharpness_bwd_mult.value_changed.connect(func(v): AeroPhysicsModel.stall_sharpness_bwd_mult = v; EventBus.reanalyze_requested.emit())

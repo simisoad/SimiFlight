@@ -74,7 +74,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="FileSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LUTSelectHBox"]
-custom_minimum_size = Vector2(150, 27)
+custom_minimum_size = Vector2(160, 27)
 layout_mode = 2
 theme = ExtResource("2_dtayv")
 text = "LUT:"
@@ -92,7 +92,7 @@ theme = ExtResource("2_dtayv")
 layout_mode = 2
 
 [node name="MachNumberLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/MachNumberSelectHBox"]
-custom_minimum_size = Vector2(150, 27)
+custom_minimum_size = Vector2(160, 27)
 layout_mode = 2
 theme = ExtResource("2_dtayv")
 text = "Mach Number:"
@@ -110,7 +110,7 @@ theme = ExtResource("2_dtayv")
 layout_mode = 2
 
 [node name="ReynoldsSelectorLabel" type="Label" parent="HBoxContainer/VSplitContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ReSelectHBox"]
-custom_minimum_size = Vector2(150, 27)
+custom_minimum_size = Vector2(160, 27)
 layout_mode = 2
 size_flags_vertical = 1
 theme = ExtResource("2_dtayv")

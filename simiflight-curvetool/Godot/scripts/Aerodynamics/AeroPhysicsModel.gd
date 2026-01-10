@@ -28,6 +28,8 @@ static var stall_te_roundness_threshold: float = 0.05
 static var stall_camber_shift_sensitivity: float = 40.0
 static var stall_camber_shift_min: float = -5.0
 static var stall_camber_shift_max: float = 8.0
+static var stall_sharpness_fwd_mult: float = 1.0
+static var stall_sharpness_bwd_mult: float = 2.0
 # ==============================================================================
 # --- 3. Plate Lift (Post-Stall Blending) ---
 # ==============================================================================
@@ -39,13 +41,13 @@ static var plate_trans_width_deg: float = 20.0
 static var plate_deep_stall_start_deg: float = 110.0
 static var plate_deep_stall_peak_deg: float = 170.0
 # ==============================================================================
-# --- 4. Suction Spike & Crash (SPLIT FORWARD / BACKWARD) ---
+# --- 4. Suction Spike & Crash
 # ==============================================================================
-static var spike_ref_radius: float = 0.012
 static var spike_camber_penalty: float = 25.0
 # ==============================================================================
 # -- Forward Parameters --
 # ==============================================================================
+static var spike_ref_radius_fwd: float = 0.012
 static var spike_max_capacity_fwd: float = 1.15
 static var spike_boost_mag_fwd: float = 0.25
 static var spike_crash_mag_fwd: float = 0.255
@@ -54,6 +56,7 @@ static var recovery_thick_max_fwd: float = 10.0
 # ==============================================================================
 # -- Backward Parameters --
 # ==============================================================================
+static var spike_ref_radius_bwd: float = 0.005 # Default smaller for sharp tails
 static var spike_max_capacity_bwd: float = 0.90  # Usually lower for backward flight
 static var spike_boost_mag_bwd: float = 0.15     # Softer peak
 static var spike_crash_mag_bwd: float = 0.20     # Softer crash
@@ -114,6 +117,10 @@ static var camber_eff_slope: float = 10.0
 static var te_open_pen_min: float = 0.02
 static var te_open_pen_max: float = 0.15
 
+# Forward vs Backward:
+static var is_forward_dir: float = 1.0
+static var is_backward_dir: float = -1.0
+
 # ==============================================================================
 #  INTERNAL CONTEXT
 # ==============================================================================
@@ -159,6 +166,9 @@ class _CalcContext:
 	var final_cm: float = 0.0
 
 	var symmetry: float = 0.0 # New Variable
+
+	# forward vs backward:
+	var direction: float = 0.0
 
 	func _init(_alpha: float, _a0: float, _geo: Dictionary, _m: float, _re: float, _cfg: LutGenerator.GeneratorConfig):
 			alpha_rad = _alpha
@@ -221,8 +231,8 @@ class _CalcContext:
 				camber_efficiency = clamp(1.0 - (abs_camber - AeroPhysicsModel.camber_eff_threshold) * AeroPhysicsModel.camber_eff_slope, 0.5, 1.0)
 
 			# --- TE THICKNESS PENALTY ---
-			var te_open = geo.te_openness
-			te_efficiency_penalty = smoothstep(AeroPhysicsModel.te_open_pen_min, AeroPhysicsModel.te_open_pen_max, te_open)
+			var effective_te_openness = passive_bluff_width
+			te_efficiency_penalty = smoothstep(AeroPhysicsModel.te_open_pen_min, AeroPhysicsModel.te_open_pen_max, effective_te_openness)
 
 # ==============================================================================
 #  MAIN COMPUTE
@@ -230,7 +240,7 @@ class _CalcContext:
 
 static func compute_coefficients(alpha_rad: float, alpha_0: float, geo: Dictionary, mach: float, re: float, config: LutGenerator.GeneratorConfig) -> Dictionary:
 	var ctx = _CalcContext.new(alpha_rad, alpha_0, geo, mach, re, config)
-
+	ctx.direction = _get_directional_param(ctx, is_forward_dir, is_backward_dir)
 	_calc_compressibility(ctx)
 	_calc_stall_geometry(ctx)
 	_calc_sigma(ctx)
@@ -244,7 +254,8 @@ static func compute_coefficients(alpha_rad: float, alpha_0: float, geo: Dictiona
 		"cl": ctx.final_cl,
 		"cd": ctx.final_cd,
 		"cm": ctx.final_cm,
-		"sigma": ctx.sigma
+		"sigma": ctx.sigma,
+		"direction": ctx.direction
 	}
 
 static func _calc_compressibility(ctx: _CalcContext) -> void:
@@ -279,8 +290,7 @@ static func _calc_stall_geometry(ctx: _CalcContext) -> void:
 
 	# 3. Thick TE (Banana):
 	# ADJUSTMENT 4: Max penalty 50% (down from 30%).
-	if ctx.is_forward:
-		efficiency *= lerp(1.0, 0.5, ctx.te_efficiency_penalty)
+	efficiency *= lerp(1.0, 0.5, ctx.te_efficiency_penalty)
 
 	# 4. High Camber
 	efficiency *= ctx.camber_efficiency
@@ -305,12 +315,21 @@ static func _calc_stall_geometry(ctx: _CalcContext) -> void:
 		var te_rad = ctx.geo.get("te_radius", 0.0)
 		var te_quality = clamp(te_rad / 0.02, 0.0, 1.0)
 
-		active_stall_base_deg = lerp(ctx.config.stall_angle_deg_bwd, ctx.config.stall_angle_deg_fwd, te_quality)
+		# 1. Calculate the "Physics Derived" angle for a wing flying backwards
+		var derived_base = lerp(ctx.config.stall_angle_deg_bwd, ctx.config.stall_angle_deg_fwd, te_quality)
 
+		# 2. Apply the Bluff Body Penalty (The "Crushing" line you found)
 		if ctx.bluff_factor > 0.0:
-			active_stall_base_deg = lerp(active_stall_base_deg, 4.0, ctx.bluff_factor)
+			derived_base = lerp(derived_base, 4.0, ctx.bluff_factor)
 
-		orientation_stall_factor = lerp(1.0, 0.9, te_quality)
+		# 3. SYMMETRY OVERRIDE (New)
+		# If the object is symmetric (Oval/Diamond), we ignore the "Bad Aerodynamics" penalties
+		# and trust the Bwd Config value (which matches Fwd Config)
+		active_stall_base_deg = lerp(derived_base, ctx.config.stall_angle_deg_bwd, ctx.symmetry)
+
+		# Orientation Factor (Fixed in previous step, but included here for completeness)
+		var raw_orientation = lerp(1.0, 0.9, te_quality)
+		orientation_stall_factor = lerp(raw_orientation, 1.0, ctx.symmetry)
 
 		ctx.used_alpha0 = -ctx.alpha_0
 		active_camber_sign = -1.0
@@ -335,9 +354,22 @@ static func _calc_stall_geometry(ctx: _CalcContext) -> void:
 	ctx.current_stall_angle = max(deg_to_rad(limit_stall), (base_stall_rad + final_shift) * ctx.mach_stall_factor)
 
 static func _calc_sigma(ctx: _CalcContext) -> void:
-	ctx.stall_center_bias = ctx.alpha_0 * 0.5 if ctx.is_forward else 0.0
+	# Backward bias for a symmetric object should be the inverse (because the camber is reversed).
+	var bias_fwd = ctx.alpha_0 * 0.5
+	var bias_bwd = 0.0 # Standard assumption for sharp TE
+
+	# If symmetric, flying backward against "positive" camber means the bias flips.
+	var bias_bwd_symmetric = -ctx.alpha_0 * 0.5
+
+	if ctx.is_forward:
+		ctx.stall_center_bias = bias_fwd
+	else:
+		ctx.stall_center_bias = lerp(bias_bwd, bias_bwd_symmetric, ctx.symmetry)
+
+	var sharpnes_multiplier: float = _get_directional_param(ctx, stall_sharpness_fwd_mult, stall_sharpness_bwd_mult)
 
 	var base_sharpness = ctx.config.sharpness
+	base_sharpness *= sharpnes_multiplier
 
 	var final_sharpness = lerp(base_sharpness, base_sharpness * 2.0, ctx.bluff_factor)
 
@@ -385,26 +417,37 @@ static func _calc_base_lift(ctx: _CalcContext) -> void:
 	ctx.blended_cl = (ctx.sigma * cl_linear) + ((1.0 - ctx.sigma) * cl_plate)
 
 static func _calc_suction_spike(ctx: _CalcContext) -> void:
-	var p_capacity = spike_max_capacity_fwd if ctx.is_forward else spike_max_capacity_bwd
-	var p_boost = spike_boost_mag_fwd if ctx.is_forward else spike_boost_mag_bwd
-	var p_crash = spike_crash_mag_fwd if ctx.is_forward else spike_crash_mag_bwd
-	var p_rec_min = recovery_thick_min_fwd if ctx.is_forward else recovery_thick_min_bwd
-	var p_rec_max = recovery_thick_max_fwd if ctx.is_forward else recovery_thick_max_bwd
+
+	var p_capacity = _get_directional_param(ctx, spike_max_capacity_fwd, spike_max_capacity_bwd)
+	var p_boost = _get_directional_param(ctx, spike_boost_mag_fwd, spike_boost_mag_bwd)
+	var p_crash = _get_directional_param(ctx, spike_crash_mag_fwd, spike_crash_mag_bwd)
+
+	var p_rec_min = _get_directional_param(ctx, recovery_thick_min_fwd, recovery_thick_min_bwd)
+	var p_rec_max = _get_directional_param(ctx, recovery_thick_max_fwd, recovery_thick_max_bwd)
 
 	var active_radius = 0.0
+
+	# Get the raw geometric properties
+	var r_fwd = ctx.geo.get("le_radius", 0.0)
+	var r_bwd = ctx.geo.get("te_radius", 0.0)
+
+	# Apply the "Sharp Edge" fallback logic for the backward radius
+	if r_bwd <= 0.0001:
+		var te_thick = ctx.geo.get("te_openness", 0.0001)
+		r_bwd = (te_thick * te_thick) / 0.1
+
 	if ctx.is_forward:
-		active_radius = ctx.geo.get("le_radius", 0.0)
+		active_radius = r_fwd
 	else:
-		var te_r = ctx.geo.get("te_radius", 0.0)
-		if te_r <= 0.0001:
-			var te_thick = ctx.geo.get("te_openness", 0.0001)
-			te_r = (te_thick * te_thick) / 0.1
-		active_radius = te_r
+		# If flying backward, usually use r_bwd.
+		# BUT if symmetric, r_bwd should ideally equal r_fwd.
+		# We blend to force consistency.
+		active_radius = lerp(r_bwd, r_fwd, ctx.symmetry)
 
 	# Clamp Active Radius to prevent super-lift from massive TE radius
-	active_radius = min(active_radius, 0.05)
-
-	var raw_suction = sqrt(active_radius / spike_ref_radius)
+	active_radius = min(active_radius, 0.005)
+	var p_ref_radius = _get_directional_param(ctx, spike_ref_radius_fwd, spike_ref_radius_bwd)
+	var raw_suction = sqrt(active_radius / p_ref_radius)
 	var suction_capacity = clamp(raw_suction, 0.0, p_capacity)
 
 	# Bluff bodies separate immediately
@@ -575,4 +618,25 @@ static func _get_directional_param(ctx: _CalcContext, fwd_val: float, bwd_val: f
 	else:
 		# If perfectly symmetric (1.0), use fwd_val.
 		# If normal wing (0.0), use bwd_val.
-		return lerp(bwd_val, fwd_val, ctx.symmetry)
+
+		return lerp(bwd_val, fwd_val, ctx.symmetry) #
+
+static func calculate_finite_wing(cl_2d: float, cd_2d: float, alpha_rad: float, ar: float, e: float = 0.85) -> Dictionary:
+	# 1. Estimate 2D Slope (approx 2*PI is a safe standard if calculating is hard)
+	# Ideally, you measure this from the linear part of your curve.
+	var a0 = 2.0 * PI
+
+	# 2. Calculate 3D Lift Slope multiplier
+	# Formula: a = a0 / (1 + a0 / (pi * AR * e))
+	var lift_multiplier = 1.0 / (1.0 + (a0 / (PI * ar * e)))
+
+	# 3. Calculate 3D Cl
+	# The slope decreases, meaning you need MORE alpha to get the same lift.
+	# Alternatively, at same alpha, you get less lift.
+	var cl_3d = cl_2d * lift_multiplier
+
+	# 4. Calculate Induced Drag (The cost of 3D lift)
+	var cd_induced = (cl_3d * cl_3d) / (PI * ar * e)
+	var cd_3d = cd_2d + cd_induced
+
+	return {"cl": cl_3d, "cd": cd_3d}

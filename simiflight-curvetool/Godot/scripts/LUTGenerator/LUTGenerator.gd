@@ -48,6 +48,8 @@ static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorCo
 	var raw_sigma: Array[float] = []
 	var alpha_values: Array[float] = []
 
+	var raw_direction: Array[float] = []
+
 	var grid = _get_alpha_grid(preview_alpha_start_deg, preview_alpha_end_deg)
 
 	# 2. Calculate Physics
@@ -62,7 +64,7 @@ static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorCo
 		raw_cd.append(coeffs.cd)
 		raw_cm.append(coeffs.cm)
 		raw_sigma.append(coeffs.sigma) # We usually don't smooth sigma, or only very lightly
-
+		raw_direction.append(coeffs.direction)
 	# 3. Apply Smoothing (Identical to LUT generation)
 	# Here we use the static function _smooth_array
 	var smoothed_cl = _smooth_array(raw_cl, SMOOTH_PASSES)
@@ -71,7 +73,7 @@ static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorCo
 	# Leave Sigma unsmoothed so one can see exactly where the logic switches
 
 	# 4. Pack data into return format (Vector2 Arrays)
-	var curves = {"cl": [], "cd": [], "cm": [], "sigma": []}
+	var curves = {"cl": [], "cd": [], "cm": [], "sigma": [], "direction": []}
 
 	for i in range(grid.size()):
 		var a = alpha_values[i]
@@ -79,6 +81,7 @@ static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorCo
 		curves.cd.append(Vector2(a, smoothed_cd[i]))
 		curves.cm.append(Vector2(a, smoothed_cm[i]))
 		curves.sigma.append(Vector2(a, raw_sigma[i]))
+		curves.direction.append(Vector2(a, raw_direction[i]))
 
 	return curves
 

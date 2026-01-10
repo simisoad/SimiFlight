@@ -17,7 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xxvdj")
 
-[node name="ForceVisualizer" type="HSplitContainer" parent="."]
+[node name="ForceVisualizer" type="VSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,49 +28,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_s6ns7")
 dragger_visibility = 1
-
-[node name="WindTunnelVBoxContainer" type="VBoxContainer" parent="ForceVisualizer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="AlphaSlider" type="HSlider" parent="ForceVisualizer/WindTunnelVBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("1_s6ns7")
-min_value = -180.0
-max_value = 180.0
-step = 0.5
-tick_count = 36
-ticks_on_borders = true
-ticks_position = 3
-
-[node name="WindTunnelView" type="Control" parent="ForceVisualizer/WindTunnelVBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = ExtResource("1_s6ns7")
-script = ExtResource("2_fkr2s")
-wind_color = Color(1, 1, 1, 0.1)
-metadata/_custom_type_script = "uid://dft5p6a1fylqy"
-
-[node name="ResetView" type="Button" parent="ForceVisualizer/WindTunnelVBoxContainer/WindTunnelView"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(31, 31)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -31.0
-offset_bottom = 31.0
-grow_horizontal = 0
-focus_mode = 0
-theme_type_variation = &"SquareButton"
-text = "R"
-script = ExtResource("4_p44gh")
-metadata/_custom_type_script = "uid://74m75dnsy7av"
 
 [node name="PanelContainer2" type="PanelContainer" parent="ForceVisualizer"]
 custom_minimum_size = Vector2(400, 0)
@@ -169,6 +126,50 @@ focus_mode = 0
 theme = ExtResource("1_s6ns7")
 button_pressed = true
 text = "  Auto Scale Vectors"
+
+[node name="WindTunnelVBoxContainer" type="VBoxContainer" parent="ForceVisualizer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AlphaSlider" type="HSlider" parent="ForceVisualizer/WindTunnelVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("1_s6ns7")
+min_value = -180.0
+max_value = 180.0
+step = 0.5
+tick_count = 36
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="WindTunnelView" type="Control" parent="ForceVisualizer/WindTunnelVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_s6ns7")
+script = ExtResource("2_fkr2s")
+wind_color = Color(1, 1, 1, 0.1)
+metadata/_custom_type_script = "uid://dft5p6a1fylqy"
+
+[node name="ResetView" type="Button" parent="ForceVisualizer/WindTunnelVBoxContainer/WindTunnelView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 31)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -31.0
+offset_bottom = 31.0
+grow_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"SquareButton"
+text = "R"
+script = ExtResource("4_p44gh")
+metadata/_custom_type_script = "uid://74m75dnsy7av"
 
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 1

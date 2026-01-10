@@ -13,6 +13,8 @@ static var stall_peak_pos_penalty: float = 8.0
 # Limits
 static var min_stall_angle: float = 2.0
 static var max_stall_angle: float = 25.0
+# 0.0025 = 0.25% thickness. This is a realistic "Razor Sharp" edge in physics terms.
+static var MIN_PHYSICAL_THICKNESS = 0.0025
 
 static func analyze(profile: AirfoilProfile) -> Dictionary:
 	# 1. Sanitize Data (Sort by X)
@@ -180,7 +182,11 @@ static func _analyze_geometry_robust(upper: Array[Vector2], lower: Array[Vector2
 
 	# --- TE GEOMETRY (Normalized) ---
 	# Check at actual Tail (max_x) and 99% chord
-	var te_openness = abs(_get_y_at_x_sorted(upper, max_x) - _get_y_at_x_sorted(lower, max_x)) * scale_factor
+	var raw_te_openness = abs(_get_y_at_x_sorted(upper, max_x) - _get_y_at_x_sorted(lower, max_x)) * scale_factor
+
+	# NEW: Apply Virtual Minimum Thickness (Boundary Layer / Manufacturing limit)
+
+	var te_openness = max(raw_te_openness, MIN_PHYSICAL_THICKNESS)
 
 	var x_99pct = max_x - (0.01 * chord_length)
 	var te_bluntness = abs(_get_y_at_x_sorted(upper, x_99pct) - _get_y_at_x_sorted(lower, x_99pct)) * scale_factor
@@ -188,6 +194,9 @@ static func _analyze_geometry_robust(upper: Array[Vector2], lower: Array[Vector2
 	# TE Radius (Geometric fit at 99.5%)
 	var x_sample_te = max_x - (0.005 * chord_length)
 	var t_tail = abs(_get_y_at_x_sorted(upper, x_sample_te) - _get_y_at_x_sorted(lower, x_sample_te)) * scale_factor
+
+	# Enforce minimums on the tail thickness calculation too
+	t_tail = max(t_tail, MIN_PHYSICAL_THICKNESS)
 
 	var te_radius_approx = 0.0
 	if t_tail > 0.0:

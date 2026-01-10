@@ -282,13 +282,7 @@ func clear_markers() -> void:
 func add_series(series_name: String, points: Array, color: Color, width: float = 2.0, s_visible: bool = true) -> void:
 	_series.append({ "name": series_name, "points": points, "color": color, "width": width, "visible": s_visible })
 	queue_redraw()
-func get_series_points(series_name: String) -> Array:
-	var series_points: Array[Vector2]
-	for s in _series:
-		if s.name == series_name:
-			series_points = s.points
-			break
-	return series_points
+
 func clear_series() -> void:
 	_series.clear()
 	queue_redraw()
