@@ -1,4 +1,4 @@
-class_name AirfoilCreatorView extends Container
+class_name AirfoilCreatorView extends Control
 
 signal airfoil_saved(filename: String)
 
@@ -7,6 +7,7 @@ signal airfoil_saved(filename: String)
 @onready var input_name: LineEdit = %FileNameLineEdit
 @onready var lbl_status: Label = %StatusLabel
 @onready var plot: SimpleChart = %PlotGeometry
+@onready var btn_save: Button = %BtnSave
 
 # --- Parameters UI ---
 @onready var spin_m: SpinBox = %CamberSpinBox       # Camber %
@@ -28,11 +29,16 @@ func _ready():
 	_init_ui()
 	_init_plot()
 	_generate()
+	if OS.has_feature("web"):
+		btn_save.disabled = true
+		btn_save.text = "Save Airfoil (Desktop Only)"
+	if OS.has_feature("release"):
+		%AirfoilGeneratorFoldable.folded = false
 
 func _init_ui():
 	# Populate Option Buttons
 	opt_shape.clear()
-	opt_shape.add_item("NACA 4-Series", AirfoilGenerators.Family.NACA_4_DIGIT)
+	opt_shape.add_item("NACA 4-Digit-Series", AirfoilGenerators.Family.NACA_4_DIGIT)
 	opt_shape.add_item("Joukowski (Organic)", AirfoilGenerators.Family.JOUKOWSKI)
 	opt_shape.add_item("Super-Shape (Geo)", AirfoilGenerators.Family.SUPER_SHAPE)
 	opt_shape.add_item("Flat Plate", AirfoilGenerators.Family.FLAT_PLATE)
@@ -51,7 +57,7 @@ func _init_ui():
 	opt_shape.item_selected.connect(func(_i):  _generate()) #_update_visibility();
 	opt_camber.item_selected.connect(func(_i): _generate())
 	check_mirror.toggled.connect(func(_b): _generate())
-	%SaveBtn.pressed.connect(_on_save_pressed)
+	btn_save.pressed.connect(_on_save_pressed)
 
 	# Set Default Values
 	spin_m.value = 2.0
@@ -65,16 +71,6 @@ func _init_ui():
 
 func _init_plot():
 	plot.set_domain(-0.1, 1.1, -0.4, 0.4)
-
-#func _update_visibility():
-	## Hide/Show controls based on mode
-	#var mode = opt_shape.get_selected_id()
-#
-	## "Shape Exponent" is only useful for SuperShape
-	##spin_exp.editable = (mode == AirfoilGenerators.ThicknessType.SUPER_SHAPE)
-##
-	### "Nose Sharpness" (LE Mult) is only useful for NACA
-	##spin_le.editable = (mode == AirfoilGenerators.ThicknessType.NACA_4_DIGIT)
 
 func _generate():
 	var selected_family = opt_shape.get_selected_id()
@@ -209,14 +205,17 @@ func _get_auto_name(family: int, params: Dictionary) -> String:
 	# --- 4. Assemble ---
 	# Join with underscores for file safety (JavaFoil uses spaces, but Godot prefers _)
 	return "_".join(name_parts)
+
 func _on_save_pressed():
-	# (Keep your existing save logic here, it was fine)
 	if current_points.is_empty(): return
 	var fname = input_name.text.strip_edges()
 	if fname.is_empty(): fname = input_name.placeholder_text.strip_edges()
 	if not fname.ends_with(".dat"): fname += ".dat"
 
-	var path = "res://data/airfoils/" + fname
+	# NEW: Use the helper to get the safe path
+	var directory = FileSystemHandler.get_user_airfoil_dir()
+	var path = directory.path_join(fname)
+
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if not file:
 		lbl_status.text = "Error writing file."
@@ -237,5 +236,5 @@ func _on_save_pressed():
 		file.store_line("%.6f   %.6f" % [pt.x, pt.y])
 
 	file.close()
-	lbl_status.text = "Saved: " + fname
+	lbl_status.text = "Saved to Documents: " + fname
 	airfoil_saved.emit(path)

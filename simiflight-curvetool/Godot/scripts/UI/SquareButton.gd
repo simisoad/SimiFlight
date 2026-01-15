@@ -6,7 +6,7 @@ class_name SquareButton extends Button
 func _ready() -> void:
 	_squarify_btn()
 	self.theme_type_variation = theme_variation
-
+	self.self_modulate.a = 0.6
 func _notification(what):
 	# This detects if the window size/mode changes (e.g. via Win+UpArrow or Restore)
 	if what == NOTIFICATION_WM_SIZE_CHANGED:

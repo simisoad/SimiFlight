@@ -22,6 +22,8 @@ var cl: float = 0.0
 var cd: float = 0.0
 var cm: float = 0.0
 
+var auto_scale_vectors: bool = true
+
 # Viewport Transform
 var view_zoom: float = 300.0
 var default_zoom: float = 0.0
@@ -34,7 +36,7 @@ var _last_mouse_pos: Vector2
 # Wind Animation
 var _wind_offset: float = 0.0
 var _wind_speed_px: float = 50.0
-var auto_scale_vectors: bool = true
+var enable_animation: bool = true
 
 func _ready() -> void:
 	default_zoom = view_zoom
@@ -43,10 +45,13 @@ func _ready() -> void:
 	# We DO NOT set view_offset here anymore.
 	# The center is calculated dynamically in _draw().
 
+
 func _process(delta: float) -> void:
-	_wind_offset += delta * -_wind_speed_px
-	if _wind_offset < -10000.0: _wind_offset += 10000.0
-	queue_redraw()
+	# Only calculate if enabled
+	if enable_animation:
+		_wind_offset += delta * -_wind_speed_px
+		if _wind_offset < -10000.0: _wind_offset += 10000.0
+		queue_redraw()
 
 # --- Public API ---
 func update_state(alpha: float, l: float, d: float, m: float, raw_cl: float, raw_cd: float, raw_cm: float, airspeed: float = 50.0):
@@ -96,9 +101,27 @@ func _draw() -> void:
 			var rotated_p = local_p.rotated(rot_rad)
 			poly.append(screen_center + (rotated_p * view_zoom))
 
-		draw_colored_polygon(poly, Color(0.6, 0.6, 0.6, 0.8))
-		poly.append(poly[0])
-		draw_polyline(poly, airfoil_color, 2.0, true)
+		# --- FIX START ---
+		# Check if the polygon is valid for filling.
+		# Geometry2D.triangulate_polygon returns empty if it can't figure it out.
+		var indices = Geometry2D.triangulate_polygon(poly)
+
+		if not indices.is_empty():
+			# Geometry is safe: Draw the Fill
+			draw_colored_polygon(poly, Color(0.6, 0.6, 0.6, 0.8))
+		else:
+			# Geometry is broken (self-intersecting):
+			# Skip the fill to prevent Error Spam.
+			# Optionally draw a visual warning or just the outline.
+			pass
+		# --- FIX END ---
+
+		# The Outline (polyline) handles crossings fine, so we always draw this.
+		# Ensure the loop is closed for the outline
+		var outline = poly.duplicate()
+		outline.append(poly[0])
+
+		draw_polyline(outline, airfoil_color, 2.0, true)
 
 	# 2. Draw Aerodynamic Center
 	draw_circle(screen_center, 4.0, Color.WHITE)
@@ -134,6 +157,7 @@ func _draw_grid(center_ref: Vector2):
 		draw_line(Vector2(0, y), Vector2(size.x, y), col, 1.0)
 
 func _draw_wind():
+	if not enable_animation: return # Don't draw lines if disabled
 	var spacing = 40.0
 	var gap = 60.0
 	var dash_len = 30.0
@@ -189,6 +213,7 @@ func _draw_moment(center: Vector2, m: float, m_coeff: float):
 	])
 	draw_colored_polygon(tri, moment_color)
 	draw_string(get_theme_default_font(), center + Vector2(70, -40), "M: %.1f" % m, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, moment_color)
+
 
 # --- Input (Zoom / Pan) ---
 func _gui_input(event: InputEvent) -> void:

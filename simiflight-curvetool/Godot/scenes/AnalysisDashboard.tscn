@@ -1,0 +1,2323 @@
+[gd_scene load_steps=33 format=3 uid="uid://cgdqpxfcvq4f1"]
+
+[ext_resource type="Script" uid="uid://sdaaanxbu8c1" path="res://scripts/AnalysisDashboard.gd" id="1_qpb4q"]
+[ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="2_5lp6x"]
+[ext_resource type="StyleBox" uid="uid://6m6n7cp316nd" path="res://ui/elements/BlackBackgroundPanel.tres" id="3_2pufc"]
+[ext_resource type="Script" uid="uid://qrqyogpuh5nv" path="res://scripts/UI/UIRow.gd" id="3_4umof"]
+[ext_resource type="Script" uid="uid://qe2ig1ke5w00" path="res://scripts/GeneratorSettingsPanel.gd" id="3_kuipa"]
+[ext_resource type="Script" uid="uid://btyt8b8wl3mqe" path="res://scripts/UI/SpinBoxExtended.gd" id="3_v4lwo"]
+[ext_resource type="Script" uid="uid://d0a25auqfhruj" path="res://scripts/LutGenExpertSettings/ExpDragMoment.gd" id="5_mnymq"]
+[ext_resource type="Script" uid="uid://db7oxn6smcp6y" path="res://scripts/LutGenExpertSettings/ExpBuffetNoise.gd" id="6_flgvq"]
+[ext_resource type="Script" uid="uid://b4gxmx61vkcqv" path="res://scripts/LutGenExpertSettings/ExpCompressibility.gd" id="7_plld7"]
+[ext_resource type="StyleBox" uid="uid://dqihl2ujrgdp4" path="res://ui/Theme/Buttons/Btn_normal.tres" id="8_2pufc"]
+[ext_resource type="Script" uid="uid://cjhrqrh2t4x4w" path="res://scripts/LutGenExpertSettings/ExpPlateLift.gd" id="8_ykqxi"]
+[ext_resource type="Script" uid="uid://bucn6rt0a3uuo" path="res://scripts/LutGenExpertSettings/ExpStallGeometry.gd" id="9_kuipa"]
+[ext_resource type="Script" uid="uid://csanwgxdfihw8" path="res://scripts/LutGenExpertSettings/ExpSuctionSpike.gd" id="10_bfatx"]
+[ext_resource type="Script" uid="uid://dpajm888whqp6" path="res://scripts/LutGenExpertSettings/ExpAbnormalGeometry.gd" id="11_jtdcm"]
+[ext_resource type="Script" uid="uid://hkfuwsa5a8r7" path="res://scripts/LutGenExpertSettings/ExpAnalyzerSettings.gd" id="12_2pufc"]
+[ext_resource type="Script" uid="uid://bd36psmww5euc" path="res://scripts/SimpleChart/SimpleChart.gd" id="14_4umof"]
+[ext_resource type="Script" uid="uid://boari7r8qeh58" path="res://scripts/UI/SimInputPanel.gd" id="15_flgvq"]
+[ext_resource type="Script" uid="uid://b5mlewhb80edl" path="res://scripts/ToolbarBottomTop.gd" id="17_bfatx"]
+[ext_resource type="Script" uid="uid://c2rbp8pdqyral" path="res://scripts/LUTAndForceVisualizer/ForceVisualizer.gd" id="17_kuipa"]
+[ext_resource type="Script" uid="uid://dft5p6a1fylqy" path="res://scripts/LUTAndForceVisualizer/WindTunnelView.gd" id="17_plld7"]
+[ext_resource type="Script" uid="uid://74m75dnsy7av" path="res://scripts/UI/SquareButton.gd" id="18_ykqxi"]
+[ext_resource type="StyleBox" uid="uid://chykdvali1jnm" path="res://ui/Theme/Buttons/BlueStyleBox.tres" id="19_jtdcm"]
+[ext_resource type="Script" uid="uid://cwy2o7848c0mm" path="res://scripts/UI/TabContainerExtended.gd" id="20_g6t25"]
+[ext_resource type="Script" uid="uid://dgnlhabriuwpv" path="res://scripts/WingVisualizer/WingPlanformView.gd" id="23_wb0nw"]
+
+[sub_resource type="Theme" id="Theme_kuipa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jtdcm"]
+bg_color = Color(0.16862746, 0.21568628, 0.25490198, 1)
+border_width_left = 3
+border_width_right = 3
+border_color = Color(0.12156863, 0.12156863, 0.14117648, 1)
+
+[sub_resource type="GDScript" id="GDScript_2pufc"]
+resource_name = "ShowRef"
+script/source = "extends CheckBox
+
+func _ready() -> void:
+	if OS.has_feature(\"release\"):
+		self.visible = false
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kuipa"]
+bg_color = Color(0.16470589, 0.16470589, 0.18431373, 1)
+
+[sub_resource type="GDScript" id="GDScript_kuipa"]
+script/source = "@tool
+extends PanelContainer
+@onready var chart_polar: SimpleChart = %ChartPolar
+@export_tool_button(\"SetPos\") var set_pos_btn = set_pos
+func _ready() -> void:
+	set_pos()
+
+func set_pos() -> void:
+	position = Vector2(chart_polar.margin_left, chart_polar.size.y-chart_polar.margin_bottom-self.size.y)
+"
+
+[sub_resource type="FoldableGroup" id="FoldableGroup_bfatx"]
+allow_folding_all = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ykqxi"]
+bg_color = Color(0.16470589, 0.16470589, 0.18431373, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kuipa"]
+content_margin_left = 0.0
+content_margin_right = 3.0
+
+[node name="AnalysisDashboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_behavior_recursive = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("1_qpb4q")
+metadata/_custom_type_script = "uid://sdaaanxbu8c1"
+
+[node name="FoldableFoldFix" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 32.0
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("3_2pufc")
+
+[node name="MainLayout" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConfigSettingsFoldable" type="FoldableContainer" parent="MainLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+title = "Configuration"
+title_text_overrun_behavior = 4
+
+[node name="LeftPanel" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("3_kuipa")
+metadata/_custom_type_script = "uid://qe2ig1ke5w00"
+
+[node name="LeftPanelHBoxContainer" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel"]
+layout_mode = 2
+
+[node name="Settings" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_5lp6x")
+
+[node name="MainSettingsMargin" type="MarginContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="LeftConfigVBoxContainer" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="LeftPanelTopSeperator" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+custom_minimum_size = Vector2(400, 36)
+layout_mode = 2
+
+[node name="AirfoilSelectLutNameVBox" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox"]
+layout_mode = 2
+
+[node name="AirfoilChooseLabelUIRow" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox/VBoxContainer"]
+custom_minimum_size = Vector2(132, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="AirfoilChooseLabel" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox/VBoxContainer/AirfoilChooseLabelUIRow"]
+layout_mode = 2
+tooltip_text = "Airfoil Profile used for Analysis."
+mouse_filter = 1
+text = "Airfoil:"
+
+[node name="ProfileSelector" type="OptionButton" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_5lp6x")
+text_overrun_behavior = 3
+fit_to_longest_item = false
+allow_reselect = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox"]
+layout_mode = 2
+
+[node name="UIRow" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox/HBoxContainer"]
+custom_minimum_size = Vector2(132, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="SaveLutNameLabel" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox/HBoxContainer/UIRow"]
+layout_mode = 2
+tooltip_text = "File Name for the LUT export."
+mouse_filter = 1
+text = "LUT Name:"
+
+[node name="OutputName" type="LineEdit" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/AirfoilSelectLutNameVBox/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_5lp6x")
+caret_blink = true
+
+[node name="ExportSettings" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="GenerateFullLUT" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Generates the LUT for selected Airfoil. 
+First, you need to select the desired file format.
+Waring: This could freez the UI for some seconds."
+theme = ExtResource("2_5lp6x")
+text = "Export LUT"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings"]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckExportJson" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Export the LUT as JSON for general use."
+theme = ExtResource("2_5lp6x")
+text = "LUT as JSON"
+
+[node name="CheckExportTres" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.05
+tooltip_text = "Export the LUT as a Godot resource .tres for SimiFlight (my flight simulator in development)."
+theme = ExtResource("2_5lp6x")
+text = "LUT as .tres"
+
+[node name="PathSelector" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings"]
+layout_mode = 2
+
+[node name="JsonPathDisplay" type="LineEdit" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings/PathSelector"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_5lp6x")
+placeholder_text = "JSON Phat not set."
+editable = false
+
+[node name="BtnSelectPath" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings/PathSelector"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.6)
+custom_minimum_size = Vector2(29, 29)
+layout_mode = 2
+tooltip_text = "Select Export Folder for JSON
+"
+focus_next = NodePath("../../../Parameters/VBoxContainer/GridContainer/UIRow/StallFwd/StallAngleFwd")
+theme_type_variation = &"SquareButton"
+text = "..."
+script = ExtResource("18_ykqxi")
+metadata/_custom_type_script = "uid://74m75dnsy7av"
+
+[node name="FolderDialog" type="FileDialog" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ExportSettings"]
+unique_name_in_owner = true
+title = "Select folder to save the JSON-LUT."
+size = Vector2i(640, 400)
+min_size = Vector2i(600, 400)
+theme = SubResource("Theme_kuipa")
+mode_overrides_title = false
+file_mode = 2
+access = 2
+
+[node name="StateLabelInfo" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+theme = ExtResource("2_5lp6x")
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "State: "
+vertical_alignment = 1
+text_overrun_behavior = 6
+
+[node name="HSeparator" type="HSeparator" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Parameters" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="LeftParameterLabel" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = ExtResource("19_jtdcm")
+text = "Flight Regime Parameters"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelSeparator" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+columns = 2
+
+[node name="UIRow" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="StallFwd" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="StallAngleFwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow/StallFwd"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stall angle(forward: Leading Edge) estimated by airfoil analysis, can be adjusted."
+theme = ExtResource("2_5lp6x")
+min_value = 1.0
+max_value = 25.0
+step = 0.1
+value = 6.0
+prefix = "Stall [fwd] :"
+suffix = "°"
+
+[node name="UIRow2" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="StallBwd" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+
+[node name="StallAngleBwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow2/StallBwd"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stall angle(backwards: Trailing Edge) estimated by airfoil analysis, can be adjusted."
+theme = ExtResource("2_5lp6x")
+min_value = 6.0
+max_value = 25.0
+step = 0.01
+value = 6.0
+prefix = "Stall [bwd] :"
+suffix = "°"
+
+[node name="UIRow3" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3/HBoxContainer"]
+layout_mode = 2
+text = "Vortex Lift"
+
+[node name="EnableVortexLiftCheckBox" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "M1"
+
+[node name="EnableVortexLiftCheckBox2" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "M2"
+
+[node name="UIRow4" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="StallBwd" type="HBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+
+[node name="VortexIntensity" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow4/StallBwd"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stall angle(backwards: Trailing Edge) estimated by airfoil analysis, can be adjusted."
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 10.0
+step = 0.01
+value = 2.0
+prefix = "Intensity"
+
+[node name="PanelSeparator" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ButtonsPreviewSnapshot" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="GridContainer" type="GridContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+columns = 2
+
+[node name="CalcCurve" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Calculates a new preview."
+theme = ExtResource("2_5lp6x")
+text = "Preview"
+
+[node name="BtnSnapshot" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Creates a snapshot of the current lift curve.
+
+Can be shown or hidden with the Snapshot toggle."
+text = "Snapshot"
+
+[node name="PanelSeparator2" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ExpertSettingsFoldable" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+title = "Expert Settings"
+
+[node name="MarginContainer" type="MarginContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+
+[node name="ExpSettingsPanelContainer" type="ScrollContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="ExpertSettings" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_5lp6x")
+theme_override_constants/separation = 0
+
+[node name="AeroPhysicsModelSettings" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = ExtResource("8_2pufc")
+text = "Aerodynamic Phsyics Modell"
+vertical_alignment = 1
+
+[node name="DragAndMomentFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+folded = true
+title = "Drag & Moment"
+
+[node name="DragAndMoment" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("5_mnymq")
+
+[node name="drag_re_floor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+theme_type_variation = &"SpinBoxInnerLineEdit"
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_wave_peak_mach" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_wave_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_mcrit_thick_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+step = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="drag_base_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_base_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="ac_offset_supersonic" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "ac_offset_supersonic:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="BuffetNoiseFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+folded = true
+title = "Buffet / Noise"
+
+[node name="BuffetNoise" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("6_flgvq")
+
+[node name="buffet_base_shake_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_base_shake_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_sharp_bonus" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_window_width" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_freq_alpha" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="buffet_freq_mach" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer/BuffetNoise"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+max_value = 80.0
+page = 5.0
+prefix = "drag_base_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="CompressibilityMachEffectsFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+folded = true
+title = "Compressibility (Mach Effects)"
+
+[node name="CompressibilityMachEffects" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("7_plld7")
+
+[node name="mach_limit_sub" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_limit_sup" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_onset_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_onset_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_reduction" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="PlateLiftFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+folded = true
+title = "Plate Lift (Post-Stall Blending)"
+
+[node name="PlateLift" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+theme_override_constants/separation = 0
+script = ExtResource("8_ykqxi")
+
+[node name="plate_scale_sharp" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "plate_scale_sharp:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_scale_blunt" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "plate_scale_blunt:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_blunt_threshold" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "plate_blunt_threshold:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_thickness_damping_threshold" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "plate_thickness_damping_threshold:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_trans_width_deg" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+max_value = 80.0
+page = 5.0
+prefix = "plate_trans_width_deg:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_deep_stall_start_deg" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 90.0
+max_value = 140.0
+page = 5.0
+value = 90.0
+prefix = "plate_deep_stall_start_deg:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="plate_deep_stall_peak_deg" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer/PlateLift"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 140.0
+max_value = 175.0
+page = 5.0
+value = 140.0
+prefix = "plate_deep_stall_peak_deg:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="StallGeometryFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+folded = true
+title = "Stall Geometry"
+
+[node name="StallGeometry" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("9_kuipa")
+
+[node name="Sharpness" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stall Transition Sharpness. Controls how abruptly the lift breaks at the stall angle. High (30+) = Sudden, sharp drop (Thin/Laminar wings). Low (10-20) = Gentle, rounded peak (Thick/Trainer wings). Default (25) is optimal for most standard airfoils."
+theme = ExtResource("2_5lp6x")
+prefix = "Stall Transition Sharpness:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_re_ref" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_le_quality_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_max_cap_deg_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_min_deg_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_max_cap_deg_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_min_deg_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_te_roundness_threshold" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_sensitivity" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_sharpness_fwd_mult" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_sharpness_bwd_mult" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="SuctionSpikeAndCrashFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+folded = true
+title = "Suction Spike & Crash"
+
+[node name="SuctionSpikeAndCrash" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("10_bfatx")
+
+[node name="spike_camber_penalty" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_ref_radius_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_max_capacity_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_boost_mag_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_crash_mag_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="recovery_thick_min_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="recovery_thick_max_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_ref_radius_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_max_capacity_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_boost_mag_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="spike_crash_mag_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="recovery_thick_min_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="recovery_thick_max_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer/SuctionSpikeAndCrash"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="AbnormalGeometryFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+folded = true
+title = "Abnormal Geometry"
+
+[node name="AbnormalGeometry" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("11_jtdcm")
+
+[node name="bluff_nose_threshold_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="bluff_nose_threshold_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="bluff_abs_threshold_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="bluff_abs_threshold_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="rect_threshold_start" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="rect_threshold_width" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="thick_pen_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="thick_pen_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="te_open_pen_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="te_open_pen_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer/AbnormalGeometry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="AirfoilAnalyzerSettingsLabel" type="Label" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = ExtResource("8_2pufc")
+text = "Airfoil Analyzer"
+vertical_alignment = 1
+
+[node name="AnalyzerFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+folded = true
+title = "Analyzer"
+
+[node name="AnalyzerSettings" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("12_2pufc")
+
+[node name="base_stall_deg" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+prefix = "drag_re_floor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_radius_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.1
+prefix = "drag_wave_peak_mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_thickness_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+page = 0.01
+value = 0.001
+prefix = "drag_wave_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_shape_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_fwd_camber_penalty" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_bwd_camber_penalty" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+page = 0.1
+value = 0.01
+prefix = "drag_mcrit_thick_factor:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="LeftPanelRightSeparator10px" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Seperator" type="PanelContainer" parent="MainLayout"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jtdcm")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WorkArea" type="HSplitContainer" parent="MainLayout/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 15
+
+[node name="CenterPanelTabContainer" type="TabContainer" parent="MainLayout/HBoxContainer/WorkArea"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+current_tab = 0
+drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
+use_hidden_tabs_for_min_size = true
+script = ExtResource("20_g6t25")
+metadata/_custom_type_script = "uid://cwy2o7848c0mm"
+
+[node name="2D Analysis" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ToolbarTop" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+script = ExtResource("17_bfatx")
+metadata/_custom_type_script = "uid://b5mlewhb80edl"
+
+[node name="Chart2D" type="Control" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("14_4umof")
+min_range_x = 28.8
+max_range_x = 1440.0
+min_range_y = 0.4
+max_range_y = 20.0
+show_range_highlight = true
+metadata/_custom_type_script = "uid://bd36psmww5euc"
+
+[node name="ToolbarBottom" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("17_bfatx")
+metadata/_custom_type_script = "uid://b5mlewhb80edl"
+
+[node name="Toolbar" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
+
+[node name="ShowCl" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+tooltip_text = "Toggle Lift-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_font_sizes/font_size = 16
+button_pressed = true
+text = "Lift(CL)"
+expand_icon = true
+
+[node name="ShowCd" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+tooltip_text = "Toggle Drag-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_font_sizes/font_size = 16
+button_pressed = true
+text = "Drag (Cd)"
+autowrap_trim_flags = 192
+
+[node name="ShowCm" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+tooltip_text = "Toggle Moment-Curve in Chart"
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_font_sizes/font_size = 16
+button_pressed = true
+text = "Moment (Cm)"
+
+[node name="ShowStall" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+tooltip_text = "Toggles Stall-Curve in Chart (VThe stall value is displayed from 0.0 to 1.0.
+Where 1.0 means no stall and 0.0 means full stall.)"
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_font_sizes/font_size = 16
+button_pressed = true
+text = "Stall"
+
+[node name="ShowSnapshot" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+tooltip_text = "Toggles Snapshot Cl-Curve.
+First, a snapshot must be created.
+See Configuration (left panel) for the parameters -> Snapshot button.
+"
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_font_sizes/font_size = 16
+text = "Snapshot
+"
+
+[node name="ShowRef" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+tooltip_text = "Displays the NACA-0012 reference curve, which was experimentally created in a wind tunnel.
+
+Note: This curve is not perfectly represented in this tool and serves only as a rough reference."
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_font_sizes/font_size = 16
+text = "RefC"
+script = SubResource("GDScript_2pufc")
+
+[node name="Polar Analysis" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ToolbarTop" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+script = ExtResource("17_bfatx")
+metadata/_custom_type_script = "uid://b5mlewhb80edl"
+
+[node name="ChartPolar" type="Control" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 80.0
+script = ExtResource("14_4umof")
+x_label = "Drag Coefficient (Cd)"
+y_label = "Lift Coefficient (Cl)"
+min_x = -0.1
+max_x = 3.0
+min_y = -4.0
+max_y = 4.0
+min_range_x = 0.248
+max_range_x = 12.4
+min_range_y = 0.64
+max_range_y = 32.0
+metadata/_custom_type_script = "uid://bd36psmww5euc"
+
+[node name="InfoOverlay" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ChartPolar"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -81.0
+offset_right = 204.0
+offset_bottom = -60.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_kuipa")
+script = SubResource("GDScript_kuipa")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ChartPolar/InfoOverlay"]
+layout_mode = 2
+
+[node name="ld_ratio" type="Label" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ChartPolar/InfoOverlay/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "ld_ratio"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BestGlide" type="Label" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ChartPolar/InfoOverlay/HBoxContainer"]
+unique_name_in_owner = true
+y_sort_enabled = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "ld_ratio"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ToolbarBottom" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("17_bfatx")
+metadata/_custom_type_script = "uid://b5mlewhb80edl"
+
+[node name="Toolbar" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="PolarShowCurve" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+tooltip_text = "Toggle the main Drag Polar curve (Cl vs Cd)."
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_colors/font_color = Color(0.17272583, 0.3629984, 0.7137648, 1)
+theme_override_colors/font_focus_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
+button_pressed = true
+text = "Show Curve"
+
+[node name="PolarShowGlide" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+tooltip_text = "Marks the point of Maximum Lift-to-Drag Ratio (L/D max). This is your \"Best Glide\" speed (furthest distance for altitude lost)."
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_colors/font_color = Color(0.49718744, 0.1868529, 0.19135019, 1)
+theme_override_colors/font_focus_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
+button_pressed = true
+text = "Show Glide
+"
+
+[node name="PolarShowSink" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+tooltip_text = "Marks the point of Minimum Sink Rate (Max Power Factor). This is your \"Max Endurance\" speed (longest time in air)."
+focus_mode = 0
+theme = ExtResource("2_5lp6x")
+theme_override_colors/font_color = Color(0, 0.3079468, 1.92523e-07, 1)
+theme_override_colors/font_focus_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 1, 0, 1)
+button_pressed = true
+text = "Show Sink"
+
+[node name="Raw Data" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Raw Data" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data"]
+layout_mode = 2
+
+[node name="ToolbarTop" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+script = ExtResource("17_bfatx")
+metadata/_custom_type_script = "uid://b5mlewhb80edl"
+
+[node name="RawDataTree" type="Tree" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+columns = 5
+column_titles_visible = true
+hide_root = true
+select_mode = 2
+
+[node name="ToolbarBottom" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+script = ExtResource("17_bfatx")
+metadata/_custom_type_script = "uid://b5mlewhb80edl"
+
+[node name="RawDataToolbar" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data/ToolbarBottom"]
+layout_mode = 2
+alignment = 1
+
+[node name="ExportLabel" type="Label" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data/ToolbarBottom/RawDataToolbar"]
+layout_mode = 2
+text = "Export:"
+
+[node name="BtnExportCSV" type="Button" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data/ToolbarBottom/RawDataToolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Export as CSV (.csv)"
+
+[node name="BtnExportXFoil" type="Button" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data/ToolbarBottom/RawDataToolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Export XFoil (.pol)"
+
+[node name="RightPanel" type="VSplitContainer" parent="MainLayout/HBoxContainer/WorkArea"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="TabContainer" type="TabContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.65
+current_tab = 0
+drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
+use_hidden_tabs_for_min_size = true
+script = ExtResource("20_g6t25")
+metadata/_custom_type_script = "uid://cwy2o7848c0mm"
+
+[node name="Airfoil Preview" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer/Airfoil Preview"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer/Airfoil Preview/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="GeometryPreview" type="Control" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer/Airfoil Preview/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 50.0
+script = ExtResource("14_4umof")
+lock_aspect_ratio = true
+margin_left = 40.0
+margin_bottom = 40.0
+margin_top = 60.0
+margin_right = 40.0
+min_x = -0.05
+max_x = 1.05
+min_y = -0.25
+max_y = 0.25
+min_range_x = 0.08800000000000001
+max_range_x = 4.4
+min_range_y = 0.04
+max_range_y = 2.0
+metadata/_custom_type_script = "uid://bd36psmww5euc"
+
+[node name="FoldableFoldFix" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("3_2pufc")
+
+[node name="ForceVisualizerAndSimControlsVSplit" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SimulationControlsFoldable" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+title = "Simulation Controls"
+title_alignment = 1
+title_text_overrun_behavior = 4
+foldable_group = SubResource("FoldableGroup_bfatx")
+
+[node name="SimulationControls" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("15_flgvq")
+metadata/_custom_type_script = "uid://boari7r8qeh58"
+
+[node name="FoldableContainer" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls"]
+layout_mode = 2
+folded = true
+title = "General Controls"
+
+[node name="SimInputsGridContainer" type="GridContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer"]
+visible = false
+layout_mode = 2
+columns = 2
+
+[node name="UIRow" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="AlphaSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer/UIRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Angle of Attack (AoA). The angle between the chord line and the relative wind vector."
+theme = ExtResource("2_5lp6x")
+min_value = -180.0
+max_value = 180.0
+step = 0.01
+value = 5.0
+allow_greater = true
+allow_lesser = true
+prefix = "Alpha:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="UIRow2" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="MachSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer/UIRow2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Flight speed relative to the speed of sound (approx. 340 m/s). Effects compressibility and shock waves."
+theme = ExtResource("2_5lp6x")
+max_value = 11.0
+step = 0.01
+value = 0.1
+allow_greater = true
+allow_lesser = true
+prefix = "Mach:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="UIRow3" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="ReynoldsSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer/UIRow3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Reynolds Number (Re). Defines the ratio of inertial forces to viscous forces. Low Re (<100k) = \"Sticky\" air (RC planes, birds). High Re (>1M) = \"Fluid\" air (General Aviation, Airliners)."
+theme = ExtResource("2_5lp6x")
+max_value = 100000000.0
+step = 1000.0
+value = 2303000.0
+allow_greater = true
+allow_lesser = true
+prefix = "Re:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="UIRow4" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="AirspeedSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer/UIRow4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "True Airspeed (TAS) in meters per second. Changing this automatically recalculates Mach and Reynolds numbers."
+theme = ExtResource("2_5lp6x")
+max_value = 50000.0
+step = 0.01
+value = 34.0
+allow_greater = true
+allow_lesser = true
+prefix = "Airspeed:"
+suffix = "m/s"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="UIRow6" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="AirDensitySpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer/UIRow6"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Atmospheric density in kg/m³. 1.225 is Standard Sea Level. Lower values simulate high altitude."
+theme = ExtResource("2_5lp6x")
+step = 0.001
+value = 1.225
+allow_greater = true
+allow_lesser = true
+prefix = "AirDens:"
+suffix = "kg/m3"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="UIRow7" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="SamplingStep" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer/SimInputsGridContainer/UIRow7"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "\"The interval between calculation points in degrees.
+Higher values (e.g., 1.0°) = Faster performance.
+Lower values (e.g., 0.1°) = Smoother curves but higher CPU load.
+Recommended for Web: 0.5° to 1.0°.\""
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 10.0
+step = 0.01
+value = 1.0
+prefix = "Sampling Step:"
+suffix = "°"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="ChartRangeLabelUIRow" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+folded = true
+title = "Chart Range"
+
+[node name="ChartRangeGrid" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ChartRangeLabelUIRow"]
+visible = false
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_5lp6x")
+
+[node name="UIRow" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ChartRangeLabelUIRow/ChartRangeGrid"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="AlphaStart" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ChartRangeLabelUIRow/ChartRangeGrid/UIRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Start angle of attack for aerodynamic calculations."
+theme = ExtResource("2_5lp6x")
+min_value = -1000.0
+max_value = 1000.0
+value = -180.0
+prefix = "α:  "
+suffix = "°"
+script = ExtResource("3_v4lwo")
+size_flags_horizontal_reset_btn = 3
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="UIRow2" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ChartRangeLabelUIRow/ChartRangeGrid"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="AlphaEnd" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ChartRangeLabelUIRow/ChartRangeGrid/UIRow2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Final angle of attack for aerodynamic calculations."
+theme = ExtResource("2_5lp6x")
+min_value = -1000.0
+max_value = 1000.0
+value = 180.0
+prefix = "α:  "
+suffix = "°"
+script = ExtResource("3_v4lwo")
+size_flags_horizontal_reset_btn = 3
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="FiniteWingLabel" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+title = "Finite Wing"
+
+[node name="FiniteWingVBox" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel"]
+layout_mode = 2
+
+[node name="Row01" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="ShowFiniteWing" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row01"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Enable 3D Wing Simulation. Calculates \"Induced Drag\" (Tip Vortex losses) and reduces the Lift Slope based on the Aspect Ratio. Dashed lines represent the 3D performance."
+text = "Finite Wing (3D)"
+
+[node name="InputAR" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row01"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Aspect Ratio (Span² / Area). High AR (15+) = Gliders (Efficient, Low Induced Drag). Low AR (3-6) = Fighter Jets / Deltas (High Induced Drag)."
+step = 0.01
+value = 6.0
+prefix = "AR:"
+
+[node name="InputEff" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row01"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Oswald Efficiency Factor (e). 1.0 = Theoretical ideal (Elliptical Lift Distribution). 0.85 = Standard rectangular wing. 0.7 = Biplanes or inefficient shapes."
+step = 0.01
+value = 0.85
+prefix = "e:"
+
+[node name="Row02" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="InputTaper" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row02"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Aspect Ratio (Span² / Area). High AR (15+) = Gliders (Efficient, Low Induced Drag). Low AR (3-6) = Fighter Jets / Deltas (High Induced Drag)."
+max_value = 1.0
+step = 0.01
+value = 0.55
+prefix = "Taper:"
+
+[node name="InputSweep" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row02"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Oswald Efficiency Factor (e). 1.0 = Theoretical ideal (Elliptical Lift Distribution). 0.85 = Standard rectangular wing. 0.7 = Biplanes or inefficient shapes."
+min_value = -89.0
+max_value = 89.0
+step = 0.1
+value = 30.0
+prefix = "Sweep:"
+suffix = "°"
+
+[node name="InputSweepLocation" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row02"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Oswald Efficiency Factor (e). 1.0 = Theoretical ideal (Elliptical Lift Distribution). 0.85 = Standard rectangular wing. 0.7 = Biplanes or inefficient shapes."
+max_value = 1.0
+step = 0.01
+prefix = "Loc:"
+
+[node name="ForceVisualizerFoldable" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+folded = true
+title = "Force Visualizer"
+
+[node name="ForceVisualizerControls" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable"]
+visible = false
+layout_mode = 2
+
+[node name="Row01" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls"]
+layout_mode = 2
+
+[node name="UIRow5" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row01"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="WingAreaSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row01/UIRow5"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Reference Wing Area (m²). Used to calculate the final Forces (Newtons). Does not affect the Coefficients (Cl/Cd)."
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+step = 0.01
+value = 1.0
+allow_greater = true
+allow_lesser = true
+prefix = "Area:"
+suffix = "m2"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="Row02" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls"]
+layout_mode = 2
+
+[node name="UIRow7" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row02"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="CheckAutoScale" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row02/UIRow7"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Automatically adjust the length of the visual force vectors to keep them visible within the window."
+theme = ExtResource("2_5lp6x")
+button_pressed = true
+text = "Auto Scale Vectors"
+
+[node name="UIRow8" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row02"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_4umof")
+metadata/_custom_type_script = "uid://qrqyogpuh5nv"
+
+[node name="CheckWindAnim" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row02/UIRow8"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+tooltip_text = "Toggle the moving streamline animation. Disable to save performance or reduce visual noise."
+theme = ExtResource("2_5lp6x")
+button_pressed = true
+text = "Airstream  Animation"
+
+[node name="PanelContainer" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+theme_override_styles/panel = ExtResource("19_jtdcm")
+
+[node name="TabContainer" type="TabContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
+use_hidden_tabs_for_min_size = true
+script = ExtResource("20_g6t25")
+metadata/_custom_type_script = "uid://cwy2o7848c0mm"
+
+[node name="Force Visualizer" type="MarginContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ForceVisualizer" type="Control" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+script = ExtResource("17_kuipa")
+metadata/_custom_type_script = "uid://c2rbp8pdqyral"
+
+[node name="PanelContainer" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ForceVisualizerVBoxContainer" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AlphaSlider" type="HSlider" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/ForceVisualizerVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Angle of Attack (AoA). The angle between the chord line and the relative wind vector."
+theme = ExtResource("2_5lp6x")
+min_value = -180.0
+max_value = 180.0
+step = 0.5
+tick_count = 36
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="WindTunnelView" type="Control" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/ForceVisualizerVBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_5lp6x")
+script = ExtResource("17_plld7")
+wind_color = Color(1, 1, 1, 0.1)
+metadata/_custom_type_script = "uid://dft5p6a1fylqy"
+
+[node name="ResetView" type="Button" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/ForceVisualizerVBoxContainer/WindTunnelView"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.6)
+custom_minimum_size = Vector2(31, 31)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -31.0
+offset_bottom = 31.0
+grow_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"SquareButton"
+text = "R"
+script = ExtResource("18_ykqxi")
+metadata/_custom_type_script = "uid://74m75dnsy7av"
+
+[node name="LiveInfoForceVisu" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -29.0
+offset_right = 254.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ykqxi")
+
+[node name="LiveInfoForceVisuMargin" type="MarginContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="LiveInfoForceVisuVBox" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu/LiveInfoForceVisuMargin"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="LblCl" type="Label" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu/LiveInfoForceVisuMargin/LiveInfoForceVisuVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kuipa")
+text = "Cl:"
+vertical_alignment = 1
+
+[node name="LblCd" type="Label" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu/LiveInfoForceVisuMargin/LiveInfoForceVisuVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kuipa")
+text = "Cd:"
+vertical_alignment = 1
+
+[node name="LblCm" type="Label" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu/LiveInfoForceVisuMargin/LiveInfoForceVisuVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kuipa")
+text = "Cd:"
+vertical_alignment = 1
+
+[node name="LblLift" type="Label" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu/LiveInfoForceVisuMargin/LiveInfoForceVisuVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kuipa")
+text = "Force:"
+vertical_alignment = 1
+
+[node name="LblDrag" type="Label" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Force Visualizer/ForceVisualizer/LiveInfoForceVisu/LiveInfoForceVisuMargin/LiveInfoForceVisuVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("2_5lp6x")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kuipa")
+text = "Force:"
+vertical_alignment = 1
+
+[node name="Wing Visualizer" type="MarginContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="WingPlanformView" type="Control" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Wing Visualizer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+script = ExtResource("23_wb0nw")
+metadata/_custom_type_script = "uid://dgnlhabriuwpv"
+
+[node name="ResetViewWingVisu" type="Button" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/TabContainer/Wing Visualizer/WingPlanformView"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.6)
+custom_minimum_size = Vector2(31, 31)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -31.0
+offset_bottom = 31.0
+grow_horizontal = 0
+focus_mode = 0
+theme_type_variation = &"SquareButton"
+text = "R"
+script = ExtResource("18_ykqxi")
+metadata/_custom_type_script = "uid://74m75dnsy7av"
+
+[node name="SaveFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+size = Vector2i(640, 400)
+min_size = Vector2i(600, 400)
+theme = ExtResource("2_5lp6x")
+mode_overrides_title = false
+access = 2

@@ -13,8 +13,12 @@ static var stall_peak_pos_penalty: float = 8.0
 # Limits
 static var min_stall_angle: float = 2.0
 static var max_stall_angle: float = 25.0
-# 0.0025 = 0.25% thickness. This is a realistic "Razor Sharp" edge in physics terms.
+# 0.0025 = 0.25% thickness.
 static var MIN_PHYSICAL_THICKNESS = 0.0025
+
+static var MAX_STEPS_AREA_CALC_WEB: float = 150
+static var MAX_STEPS_AREA_CALC: float = 500
+
 
 static func analyze(profile: AirfoilProfile) -> Dictionary:
 	# 1. Sanitize Data (Sort by X)
@@ -26,9 +30,9 @@ static func analyze(profile: AirfoilProfile) -> Dictionary:
 	# 2. Analyze Geometry (Robust)
 	var geo = _analyze_geometry_robust(upper, lower)
 
-	print("Airfoil: %s result from _analyze_geometry_robust:" % profile.name)
-	for entry in geo:
-		print(entry, ": ", geo[entry])
+	#print("Airfoil: %s result from _analyze_geometry_robust:" % profile.name)
+	#for entry in geo:
+		#print(entry, ": ", geo[entry])
 	# 3. Integrals
 	var alpha_0 = calculate_alpha_0(upper, lower)
 	var cm_0 = _calculate_cm0_integrated(upper, lower)
@@ -142,7 +146,6 @@ static func _analyze_geometry_robust(upper: Array[Vector2], lower: Array[Vector2
 	for p in upper: x_coords.append(p.x)
 
 	for x in x_coords:
-		# REMOVED: if x < 0.0 or x > 1.0 check. We scan everything now.
 		var y_u = _get_y_at_x_sorted(upper, x)
 		var y_l = _get_y_at_x_sorted(lower, x)
 		var t = abs(y_u - y_l) * scale_factor # Normalize!
@@ -157,14 +160,17 @@ static func _analyze_geometry_robust(upper: Array[Vector2], lower: Array[Vector2
 
 	# Area Calc (Approximation)
 	var total_area = 0.0
-	var steps = 10000
+	# INFO: this will fix the performance issue for WEB!
+	var steps = MAX_STEPS_AREA_CALC
+	if OS.has_feature("web"): steps = MAX_STEPS_AREA_CALC_WEB
+
 	for i in range(steps):
 		var t = float(i)/float(steps-1)
 		# Map t (0..1) to actual x coordinates (min_x..max_x)
 		var x = lerp(min_x, max_x, t)
 		var local_h = (_get_y_at_x_sorted(upper, x) - _get_y_at_x_sorted(lower, x)) * scale_factor
 		total_area += local_h * (1.0/steps)
-
+	print("tot area: ", total_area)
 	# --- LE GEOMETRY (Normalized) ---
 	# We check at the actual Tip (min_x) and 1% chord (min_x + 0.01 * chord)
 	var le_tip_thickness = abs(_get_y_at_x_sorted(upper, min_x) - _get_y_at_x_sorted(lower, min_x)) * scale_factor

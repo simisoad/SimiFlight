@@ -6,6 +6,8 @@ const REYNOLDS_POINTS: Array[float] = [1.0e4, 0.5e5, 1.0e5, 5.0e5, 1.0e6, 5.0e6,
 
 const SMOOTH_PASSES: int = 1
 
+static var sampling_steps: float = 0.5
+
 # Alpha_range for Preview:
 static var preview_alpha_start_deg: float = -360.0
 static var preview_alpha_end_deg: float = 360.0
@@ -17,7 +19,12 @@ class GeneratorConfig:
 	var sharpness: float = 25.0
 	var cd_max: float = 2.1
 	var ac_position: float = 0.25
-
+	var enable_vortex_lift_m1: bool = false
+	var enable_vortex_lift_m2: bool = false
+	var vortex_intensity: float = 2.0
+	var sweep_deg: float = 30.0
+	var aspect_ratio: float = 6.0
+	var oswald_efficiency: float = 0.85
 
 	# Preview Settings
 	var preview_mach: float = 0.1
@@ -27,7 +34,7 @@ func _init() -> void:
 	EventBus.preview_start_alpha_set.connect(
 		func(v):
 		preview_alpha_start_deg = v
-		print("hoio"))
+		)
 	EventBus.preview_end_alpha_set.connect(func(v): preview_alpha_end_deg = v)
 
 # -- Main Logic --
@@ -35,9 +42,9 @@ func _init() -> void:
 static func calculate_preview_curve(profile: AirfoilProfile, config: GeneratorConfig) -> Dictionary:
 	var geo = AirfoilGeometryAnalyzer.analyze(profile)
 
-	print("Airfoil: %s geometry from AirfoilGeometryAnalyzer.analyze():" % profile.name)
-	for entry in geo:
-		print(entry, ": ", geo[entry])
+	#print("Airfoil: %s geometry from AirfoilGeometryAnalyzer.analyze():" % profile.name)
+	#for entry in geo:
+		#print(entry, ": ", geo[entry])
 
 	var alpha_0 = geo.alpha_0
 
@@ -91,7 +98,7 @@ static func generate_lut(profile: AirfoilProfile, config: GeneratorConfig) -> Ai
 		push_error("LutGenerator: No profile provided.")
 		return null
 
-	print("LutGenerator: Starting generation for '%s'..." % profile.resource_name)
+	#print("LutGenerator: Starting generation for '%s'..." % profile.resource_name)
 
 	var lut = AirfoilLut.new()
 	lut.airfoil = profile
@@ -124,7 +131,7 @@ static func generate_lut(profile: AirfoilProfile, config: GeneratorConfig) -> Ai
 	lut.cd_data = _smooth_array(lut.cd_data, SMOOTH_PASSES)
 	lut.cm_data = _smooth_array(lut.cm_data, SMOOTH_PASSES)
 
-	print("LutGenerator: Smoothing applied.")
+	#print("LutGenerator: Smoothing applied.")
 	return lut
 
 
@@ -148,9 +155,9 @@ static func _smooth_array(data: Array[float], passes: int = 1) -> Array[float]:
 			result[i] = 0.25 * temp[i-1] + 0.5 * temp[i] + 0.25 * temp[i+1]
 	return result
 
-static func _get_alpha_grid(start_deg: float = -180.0, end_deg: float = 180.0, density: float = 0.5) -> Array[float]:
+static func _get_alpha_grid(start_deg: float = -180.0, end_deg: float = 180.0) -> Array[float]:
 	var p: Array[float] = []
-	var step_deg: float = density
+	var step_deg: float = sampling_steps
 	var start := start_deg
 	var end := end_deg
 

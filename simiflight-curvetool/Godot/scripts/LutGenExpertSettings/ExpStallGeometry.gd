@@ -42,7 +42,7 @@ func _ready() -> void:
 		"Maximum Forward Stall Angle Cap.", "Fwd Max")
 
 	# --- BWD LIMITS ---
-	SpinBoxSetupUtils.setup(stall_min_deg_bwd, 1.0, 45.0, 0.5, AeroPhysicsModel.stall_min_deg_bwd,
+	SpinBoxSetupUtils.setup(stall_min_deg_bwd, 0.1, 45.0, 0.1, AeroPhysicsModel.stall_min_deg_bwd,
 		"Minimum Backward Stall Angle.", "Bwd Min")
 
 	SpinBoxSetupUtils.setup(stall_max_cap_deg_bwd, AeroPhysicsModel.stall_min_deg_bwd, 90.0, 0.5, AeroPhysicsModel.stall_max_cap_deg_bwd,
@@ -55,10 +55,10 @@ func _ready() -> void:
 	SpinBoxSetupUtils.setup(stall_camber_shift_max, 0.0, 20.0, 0.5, AeroPhysicsModel.stall_camber_shift_max,
 		"Max positive shift (degrees) due to camber.")
 	# --- SHARPNESS MULTIPLIERS ---
-	SpinBoxSetupUtils.setup(stall_sharpness_fwd_mult, 0.5, 5.0, 0.1, AeroPhysicsModel.stall_sharpness_fwd_mult,
+	SpinBoxSetupUtils.setup(stall_sharpness_fwd_mult, 0.1, 10.0, 0.1, AeroPhysicsModel.stall_sharpness_fwd_mult,
 		"Multiplier for the base sharpness in Forward flight. Default 1.0.", "Sharpness Mult Fwd")
 
-	SpinBoxSetupUtils.setup(stall_sharpness_bwd_mult, 0.5, 10.0, 0.1, AeroPhysicsModel.stall_sharpness_bwd_mult,
+	SpinBoxSetupUtils.setup(stall_sharpness_bwd_mult, 0.1, 10.0, 0.1, AeroPhysicsModel.stall_sharpness_bwd_mult,
 		"Multiplier for the base sharpness in Backward flight. Higher = snappier stall break.", "Sharpness Mult Bwd")
 	# Connections
 	stall_re_ref.value_changed.connect(func(v): AeroPhysicsModel.stall_re_ref = v; EventBus.reanalyze_requested.emit())

@@ -7,6 +7,7 @@ extends RefCounted
 # ==============================================================================
 # --- 1. Compressibility (Mach Effects) ---
 # ==============================================================================
+static var max_factor_cl: float = 2.5
 static var mach_limit_sub: float = 0.9
 static var mach_limit_sup: float = 1.2
 static var mach_stall_onset_fwd: float = 0.4
@@ -28,18 +29,18 @@ static var stall_te_roundness_threshold: float = 0.05
 static var stall_camber_shift_sensitivity: float = 40.0
 static var stall_camber_shift_min: float = -5.0
 static var stall_camber_shift_max: float = 8.0
-static var stall_sharpness_fwd_mult: float = 1.0
-static var stall_sharpness_bwd_mult: float = 2.0
+static var stall_sharpness_fwd_mult: float = 1.3
+static var stall_sharpness_bwd_mult: float = 1.0
 # ==============================================================================
 # --- 3. Plate Lift (Post-Stall Blending) ---
 # ==============================================================================
 static var plate_scale_sharp: float = 0.58
 static var plate_scale_blunt: float = 0.45
-static var plate_blunt_threshold: float = 0.04
+static var plate_blunt_threshold: float = 0.06
 static var plate_thickness_damping_threshold: float = 0.3
 static var plate_trans_width_deg: float = 20.0
-static var plate_deep_stall_start_deg: float = 110.0
-static var plate_deep_stall_peak_deg: float = 170.0
+static var plate_deep_stall_start_deg: float = 151.0
+static var plate_deep_stall_peak_deg: float = 174.0
 # ==============================================================================
 # --- 4. Suction Spike & Crash
 # ==============================================================================
@@ -59,9 +60,10 @@ static var recovery_thick_max_fwd: float = 10.0
 static var spike_ref_radius_bwd: float = 0.005 # Default smaller for sharp tails
 static var spike_max_capacity_bwd: float = 0.90  # Usually lower for backward flight
 static var spike_boost_mag_bwd: float = 0.15     # Softer peak
-static var spike_crash_mag_bwd: float = 0.20     # Softer crash
+static var spike_crash_mag_bwd: float = 0.05     # Softer crash
 static var recovery_thick_min_bwd: float = 25.0
 static var recovery_thick_max_bwd: float = 15.0
+
 # ==============================================================================
 # --- 5. Buffet / Noise ---
 # ==============================================================================
@@ -246,6 +248,10 @@ static func compute_coefficients(alpha_rad: float, alpha_0: float, geo: Dictiona
 	_calc_sigma(ctx)
 	_calc_base_lift(ctx)
 	_calc_suction_spike(ctx)
+	if ctx.config.enable_vortex_lift_m1:
+		_calc_vortex_lift(ctx)
+	if ctx.config.enable_vortex_lift_m2:
+		_calc_vortex_lift_2(ctx)
 	_calc_buffet(ctx)
 	_calc_drag(ctx)
 	_calc_moment(ctx)
@@ -259,19 +265,38 @@ static func compute_coefficients(alpha_rad: float, alpha_0: float, geo: Dictiona
 	}
 
 static func _calc_compressibility(ctx: _CalcContext) -> void:
+	var MAX_FACTOR = 2.5
+	# NEW: Define how strong the supersonic lift is.
+	# 4.0 is theoretical max. 2.0-2.5 is more realistic for real wings.
+	var ACKERET_FACTOR = 2.5
+
 	var factor = 1.0
+
 	if ctx.mach <= mach_limit_sub:
+		# Subsonic
 		factor = 1.0 / sqrt(1.0 - pow(ctx.mach, 2))
+
 	elif ctx.mach >= mach_limit_sup:
-		factor = 4.0 / sqrt(pow(ctx.mach, 2) - 1.0)
+		# Supersonic: Ackeret
+		# Use the lower factor here
+		var raw_sup = ACKERET_FACTOR / sqrt(pow(ctx.mach, 2) - 1.0)
+		factor = min(raw_sup, MAX_FACTOR)
+
 	else:
+		# Transonic: Linear Blend
 		var val_sub = 1.0 / sqrt(1.0 - pow(mach_limit_sub, 2))
-		var val_sup = min(4.0 / sqrt(pow(mach_limit_sup, 2) - 1.0), 3.0)
+
+		# Calculate target using the new factor
+		var raw_sup_target = ACKERET_FACTOR / sqrt(pow(mach_limit_sup, 2) - 1.0)
+
+		var val_sup = min(raw_sup_target, MAX_FACTOR)
+
 		var t = (ctx.mach - mach_limit_sub) / (mach_limit_sup - mach_limit_sub)
 		factor = lerp(val_sub, val_sup, t)
 
-	ctx.cl_slope_factor = min(factor, 4.0)
+	ctx.cl_slope_factor = min(factor, MAX_FACTOR)
 
+	# Stall Reduction Logic
 	var limit = _get_directional_param(ctx, mach_stall_onset_fwd, mach_stall_onset_bwd)
 	if ctx.mach > limit:
 		ctx.mach_stall_factor = clamp(1.0 - mach_stall_reduction * (ctx.mach - limit), 0.5, 1.0)
@@ -341,7 +366,20 @@ static func _calc_stall_geometry(ctx: _CalcContext) -> void:
 
 	var clamped_stall = min(active_stall_base_deg, current_max_cap)
 	var base_stall_rad = deg_to_rad(clamped_stall) * ctx.re_factor * orientation_stall_factor
+	if ctx.config.enable_vortex_lift_m1 or ctx.config.enable_vortex_lift_m2:
+		# Ein Delta-Flügel stallt nicht wegen der Nasengeometrie,
+		# sondern weil der Wirbel irgendwann platzt (Vortex Breakdown).
+		# Das passiert bei hohen Pfeilungen erst sehr spät.
+		var sweep_factor = clamp(ctx.config.sweep_deg / 60.0, 0.0, 1.0)
+		var ar_factor = clamp(4.0 / max(ctx.config.aspect_ratio, 0.5), 0.0, 1.0)
 
+		# Bonus-Winkel: Bis zu 15 Grad zusätzlich bei 60° Pfeilung und kleinem AR
+		var delta_bonus_deg = 18.0 * sweep_factor * ar_factor
+		base_stall_rad += deg_to_rad(delta_bonus_deg)
+
+		# Wir machen den Stall bei Deltas IMMER weicher
+		# (Wir überschreiben hier die Schärfe für die spätere Sigma-Berechnung)
+		ctx.stall_center_bias *= 0.5 # Weniger Einfluss der Wölbung auf den Stall-Punkt
 	var stall_shift_deg = clamp(ctx.geo.camber * stall_camber_shift_sensitivity * active_camber_sign, stall_camber_shift_min, stall_camber_shift_max)
 	var stall_shift_rad = deg_to_rad(stall_shift_deg) * ctx.camber_efficiency
 
@@ -484,6 +522,133 @@ static func _calc_suction_spike(ctx: _CalcContext) -> void:
 
 	ctx.final_cl = ctx.blended_cl + ctx.spike_cl
 
+static func _calc_vortex_lift(ctx: _CalcContext) -> void:
+
+	var sweep_deg = ctx.config.sweep_deg
+	var alpha_abs = abs(ctx.effective_alpha)
+
+	# 1. Weicher Übergangsfaktor für die gesamte Methode (Blending)
+	# Wir fangen bei 15° Pfeilung an und sind bei 35° voll aktiv.
+	var weight = smoothstep(15.0, 35.0, sweep_deg)
+	if weight <= 0.0: return
+
+	# 2. Den linearen Auftriebsanstieg (Slope) dämpfen!
+	# Das ist der wichtigste Teil gegen die "steile Wand".
+	# Wir emulieren hier die Helmbold-Gleichung direkt im Kern.
+	var a0 = 2.0 * PI
+	var ar_eff = ctx.config.aspect_ratio * ctx.config.oswald_efficiency
+	var helmbold_term = a0 / (PI * ar_eff)
+	var low_ar_multiplier = 1.0 / (sqrt(1.0 + pow(helmbold_term, 2.0)) + helmbold_term)
+
+	# Wir mischen den 2D-Slope mit dem Low-AR-Slope
+	ctx.effective_slope = lerp(ctx.effective_slope, a0 * low_ar_multiplier * cos(deg_to_rad(sweep_deg)), weight)
+
+	# 3. Polhamus Vortex Lift (Zusatzkraft)
+	# Kv-Werte für reale Flugzeuge liegen eher bei 1.0 - 1.5
+	var kv = 1.2 * PI * sin(deg_to_rad(sweep_deg)) * ctx.config.vortex_intensity
+	var cl_vortex = kv * pow(sin(alpha_abs), 2.0) * cos(alpha_abs) * weight
+
+	# 4. Nahtloses Blending von Cl, Cd und Cm
+	# Wir nutzen SIGMA um zu bestimmen, wie viel Vortex noch da ist
+	# Im tiefen Stall (sigma -> 0) bricht auch der Wirbel zusammen
+	var vortex_stability = ctx.sigma
+
+	ctx.final_cl += cl_vortex * sign(ctx.effective_alpha) * vortex_stability
+
+	# Cd: Vortex Lift ist fast rein induzierter Widerstand
+	var cd_vortex = cl_vortex * tan(alpha_abs) * vortex_stability
+	ctx.final_cd += cd_vortex
+
+	# Cm: Der Wirbel drückt das Aerodynamische Zentrum nach hinten
+	var cm_vortex = -cl_vortex * 0.15 * vortex_stability
+	ctx.final_cm += cm_vortex
+static func _calc_vortex_lift_2(ctx: _CalcContext) -> void:
+
+	var sweep_deg = ctx.config.sweep_deg
+	var alpha_abs = abs(ctx.effective_alpha)
+
+	# --- 1. DER WEIGHT-FAKTOR (Das Herzstück der Glättung) ---
+	# Wir nutzen smoothstep für einen weichen Übergang der Pfeilung.
+	# Keine if-Abfrage mehr! Wenn weight 0 ist, ist der Effekt 0.
+	var vortex_weight = smoothstep(10.0, 35.0, sweep_deg)
+
+	# --- 2. INTENSITÄT ---
+	var nose_sharpness = clamp(1.0 - (ctx.geo.le_radius / 0.015), 0.1, 1.0)
+	var ar_factor = clamp(4.0 / max(ctx.config.aspect_ratio, 0.1), 0.0, 1.0)
+	var final_intensity = vortex_weight * nose_sharpness * ar_factor * ctx.config.vortex_intensity
+
+	# --- 3. SLOPE & STALL (Vorbereitung) ---
+	# WICHTIG: Im finalen Refactoring sollten diese Werte in _calc_stall_geometry
+	# berechnet werden. Hier berechnen wir sie "on the fly" für das Blending.
+
+	var a0 = 2.0 * PI
+	var ar_eff = max(ctx.config.aspect_ratio, 0.1) * ctx.config.oswald_efficiency
+	var helmbold_term = a0 / (PI * ar_eff)
+	var low_ar_multiplier = 1.0 / (sqrt(1.0 + pow(helmbold_term, 2.0)) + helmbold_term)
+	var target_slope = a0 * low_ar_multiplier * cos(deg_to_rad(sweep_deg))
+
+	# Wir dämpfen den Slope fließend
+	ctx.effective_slope = lerp(ctx.effective_slope, target_slope, final_intensity)
+
+	# --- 4. POLHAMUS KRÄFTE ---
+	var kv = 1.15 * PI * sin(deg_to_rad(sweep_deg)) * final_intensity
+	var cl_vortex_raw = kv * pow(sin(alpha_abs), 2.0) * cos(alpha_abs)
+
+	# Wir nutzen das aktuelle Sigma.
+	# WICHTIG: Wir überschreiben Sigma hier NICHT mehr, um Knicke zu vermeiden!
+	# Stattdessen lassen wir den Vortex-Lift mit dem bestehenden Stall auslaufen.
+	var vortex_stability = ctx.sigma
+	var final_vortex_cl = cl_vortex_raw * vortex_stability
+
+	# --- 5. ANWENDUNG (Immer additiv, keine Sprünge) ---
+	ctx.final_cl += final_vortex_cl * sign(ctx.effective_alpha)
+	ctx.final_cd += final_vortex_cl * tan(alpha_abs)
+	ctx.final_cm -= final_vortex_cl * 0.15
+
+	# Suction Spike Dämpfung (fließend)
+	ctx.spike_cl *= (1.0 - (final_intensity * ctx.sigma))
+static func _calc_vortex_lift_3(ctx: _CalcContext) -> void:
+
+	# Nutze die statische Variable oder (besser) einen Wert aus der Config
+	var intensity = ctx.config.vortex_intensity
+	var sweep_deg = ctx.config.sweep_deg
+
+	# --- WEICHER ÜBERGANG (Anti-Knick) ---
+	# Wir berechnen, wie stark der Delta-Effekt ist (0.0 bei 10°, 1.0 bei 40°)
+	var vortex_weight = clamp((sweep_deg - 10.0) / 30.0, 0.0, 1.0)
+
+	if vortex_weight <= 0.0: return # Gar kein Effekt bei wenig Pfeilung
+
+	# 1. Stall-Verschiebung (Gleitend!)
+	# Ein Delta-Flügel verschiebt den Stall um bis zu 20 Grad nach hinten
+	var max_stall_shift_rad = deg_to_rad(20.0)
+	var current_shift = max_stall_shift_rad * vortex_weight
+
+	# Wir ändern den Stall-Winkel sanft
+	ctx.current_stall_angle += current_shift
+
+	# Wir mischen die Schärfe des Stalls (Sigma)
+	# Delta-Wirbel stallen sehr weich (niedrige Sharpness)
+	var base_sharpness = ctx.config.sharpness
+	var target_sharpness = 1.5 # Sehr weich
+	var blended_sharpness = lerp(base_sharpness, target_sharpness, vortex_weight)
+
+	# Sigma neu berechnen mit den neuen, weichen Werten
+	ctx.sigma = _sigmoid_blend(ctx.effective_alpha, -ctx.current_stall_angle, ctx.current_stall_angle, blended_sharpness)
+
+	# 2. Polhamus Auftrieb
+	var alpha = abs(ctx.effective_alpha)
+	var sweep_rad = deg_to_rad(sweep_deg)
+
+	# Kv skaliert mit dem Gewicht und der Intensität
+	var kv = 1.15 * PI * sin(sweep_rad) * intensity * vortex_weight
+	var cl_vortex = kv * pow(sin(alpha), 2.0) * cos(alpha)
+
+	# Werte anwenden
+	ctx.final_cl += cl_vortex * sign(ctx.effective_alpha)
+	ctx.final_cd += cl_vortex * tan(alpha)
+	ctx.final_cm -= cl_vortex * 0.15
+
 static func _calc_buffet(ctx: _CalcContext) -> void:
 	var buffet_signal = 0.0
 
@@ -614,29 +779,68 @@ static func _sigmoid_blend(val: float, min_boundary: float, max_boundary: float,
 
 static func _get_directional_param(ctx: _CalcContext, fwd_val: float, bwd_val: float) -> float:
 	if ctx.is_forward:
-		return fwd_val
+		return fwd_val # Forward is the "Anchor" / Truth
 	else:
-		# If perfectly symmetric (1.0), use fwd_val.
-		# If normal wing (0.0), use bwd_val.
+		# If symmetric, the back behaves like the front.
+		# If asymmetric, the back behaves like the back.
+		return lerp(bwd_val, fwd_val, ctx.symmetry)
 
-		return lerp(bwd_val, fwd_val, ctx.symmetry) #
+# Konvertiert den User-Sweep in den physikalisch korrekten Viertel-Chord-Sweep
+static func get_quarter_chord_sweep(sweep_deg: float, taper: float, ar: float, sweep_loc: float) -> float:
+	var sweep_rad = deg_to_rad(sweep_deg)
 
-static func calculate_finite_wing(cl_2d: float, cd_2d: float, alpha_rad: float, ar: float, e: float = 0.85) -> Dictionary:
-	# 1. Estimate 2D Slope (approx 2*PI is a safe standard if calculating is hard)
-	# Ideally, you measure this from the linear part of your curve.
+	# Formel zur Umrechnung der Pfeilungslinie:
+	# tan(Lambda_target) = tan(Lambda_user) + (4/AR) * (Loc_user - Loc_target) * (1-taper)/(1+taper)
+	# Wir wollen zu Target = 0.25 (Viertel-Chord)
+	var target_loc = 0.25
+	var tan_quarter = tan(sweep_rad) + (4.0 / ar) * (sweep_loc - target_loc) * (1.0 - taper) / (1.0 + taper)
+
+	return rad_to_deg(atan(tan_quarter))
+
+static func get_low_ar_multiplier(ar: float, sweep_deg: float) -> float:
+	var sweep_rad = deg_to_rad(sweep_deg)
+	# Helmbold-Gleichung für Low Aspect Ratio Flügel
+	# Diese Formel sorgt dafür, dass die Kurve bei kleinen AR-Werten flacher wird.
 	var a0 = 2.0 * PI
+	var denominator = sqrt(1.0 + pow(a0 / (PI * ar), 2.0)) + (a0 / (PI * ar))
+	var multiplier = 1.0 / denominator
 
-	# 2. Calculate 3D Lift Slope multiplier
-	# Formula: a = a0 / (1 + a0 / (pi * AR * e))
-	var lift_multiplier = 1.0 / (1.0 + (a0 / (PI * ar * e)))
+	# Korrektur für Pfeilung
+	return multiplier * cos(sweep_rad)
 
-	# 3. Calculate 3D Cl
-	# The slope decreases, meaning you need MORE alpha to get the same lift.
-	# Alternatively, at same alpha, you get less lift.
-	var cl_3d = cl_2d * lift_multiplier
+static func calculate_finite_wing(cl_2d: float, cd_2d: float, aspect_ratio: float, efficiency: float, sweep_deg_user: float, taper: float, sweep_loc: float) -> Dictionary:
+	# 1. Physikalischen Sweep berechnen
+	var sweep_c4 = get_quarter_chord_sweep(sweep_deg_user, taper, aspect_ratio, sweep_loc)
+	var sweep_rad = deg_to_rad(sweep_c4)
+	var cos_sweep = cos(sweep_rad)
 
-	# 4. Calculate Induced Drag (The cost of 3D lift)
-	var cd_induced = (cl_3d * cl_3d) / (PI * ar * e)
-	var cd_3d = cd_2d + cd_induced
+	# 2. Helmbold Lift Slope Correction (Viel besser für Delta-Flügel/Low AR)
+	var a0 = 2.0 * PI
+	# Wir nutzen AR * efficiency als effektive Streckung
+	var ar_eff = aspect_ratio * efficiency
 
-	return {"cl": cl_3d, "cd": cd_3d}
+	# Helmbold Formel:
+	var term = a0 / (PI * ar_eff)
+	var multiplier = 1.0 / (sqrt(1.0 + pow(term, 2.0)) + term)
+
+	# 3D Lift (Pfeilung reduziert den Anstieg zusätzlich)
+	var cl_3d = cl_2d * multiplier * cos_sweep
+
+	# 3. Drag
+	var cd_induced = (cl_3d * cl_3d) / (PI * aspect_ratio * efficiency)
+	var cd_profile_3d = cd_2d / cos(deg_to_rad(sweep_deg_user))
+	var cd_3d = cd_profile_3d + cd_induced
+
+	return {"cl": cl_3d, "cd": cd_3d, "sweep_c4": sweep_c4}
+
+static func estimate_oswald(aspect_ratio: float, taper: float, sweep_deg: float) -> float:
+	var taper_opt = 0.45
+	var e_straight = 1.0 - 0.5 * pow(taper - taper_opt, 2)
+
+	var sweep_rad = deg_to_rad(sweep_deg)
+	var e_swept = 4.61 * (1.0 - 0.045 * pow(aspect_ratio, 0.68)) * pow(cos(sweep_rad), 0.15) - 3.1
+
+	# Weicher Übergang zwischen 0° und 15° Pfeilung
+	var blend = clamp(abs(sweep_deg) / 15.0, 0.0, 1.0)
+	var final_e = lerp(e_straight, e_swept, blend)
+	return clamp(final_e, 0.1, 1.0)
