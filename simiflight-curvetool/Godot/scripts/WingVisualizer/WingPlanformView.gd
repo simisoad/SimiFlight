@@ -24,7 +24,7 @@ func _ready() -> void:
 	clip_contents = true
 	default_zoom = view_zoom
 	default_pan_offset = pan_offset
-	reset_view_wing_visu.pressed.connect(func(): view_zoom = default_zoom; pan_offset = default_pan_offset; print("judijuli"); queue_redraw())
+	reset_view_wing_visu.pressed.connect(_reset_zoom)
 
 func update_geometry(ar: float, t: float, s: float, loc: float):
 	aspect_ratio = ar
@@ -107,12 +107,20 @@ func _draw_grid(center_ref: Vector2):
 # --- Input-Handling (Pan & Zoom wie in WindTunnelView) ---
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			_is_dragging = event.pressed
+		if event.is_action_pressed(&"pan_chart"):
+			_is_dragging = true
 			_last_mouse_pos = event.position
+		elif event.is_action_released(&"pan_chart"):
+			_is_dragging = false
+		if event.is_action_pressed(&"reset_zoom_chart") and event.double_click:
+			_reset_zoom()
+
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP: view_zoom *= 1.1; queue_redraw()
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN: view_zoom *= 0.9; queue_redraw()
 	if event is InputEventMouseMotion and _is_dragging:
 		pan_offset += event.position - _last_mouse_pos
 		_last_mouse_pos = event.position
 		queue_redraw()
+func _reset_zoom() -> void:
+	view_zoom = default_zoom; pan_offset = default_pan_offset
+	queue_redraw()

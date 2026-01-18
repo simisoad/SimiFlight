@@ -5,6 +5,7 @@ class_name AirfoilProfile
 @export var upper_surface: Array[Vector2] = []
 @export var lower_surface: Array[Vector2] = []
 @export var name: String = "Unnamed"
+@export var metadata: Dictionary = {} # Stores design intent
 
 # Load profile data from a text file in Selig format.
 func load_from_dat(path: String) -> bool:
@@ -24,6 +25,19 @@ func load_from_dat(path: String) -> bool:
 	if lines.size() < 3: # Needs Name + at least 2 points
 		push_error("Invalid airfoil file: too short. Path: %s" % path)
 		return false
+	metadata.clear() # Reset for new load
+
+	for line_str in lines.slice(1):
+			var line = line_str.strip_edges()
+			if line.is_empty(): continue
+
+			# Look for Metadata line
+			if line.begins_with("#META:"):
+				var json_str = line.replace("#META:", "").strip_edges()
+				var json = JSON.new()
+				if json.parse(json_str) == OK:
+					metadata = json.get_data()
+				continue
 
 	name = lines[0].strip_edges()
 	upper_surface.clear()

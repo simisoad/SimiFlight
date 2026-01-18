@@ -1,20 +1,20 @@
 [gd_scene load_steps=33 format=3 uid="uid://cgdqpxfcvq4f1"]
 
-[ext_resource type="Script" uid="uid://sdaaanxbu8c1" path="res://scripts/AnalysisDashboard.gd" id="1_qpb4q"]
+[ext_resource type="Script" uid="uid://sdaaanxbu8c1" path="res://scripts/AnalysisDashboard/AnalysisDashboard.gd" id="1_qpb4q"]
 [ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="2_5lp6x"]
 [ext_resource type="StyleBox" uid="uid://6m6n7cp316nd" path="res://ui/elements/BlackBackgroundPanel.tres" id="3_2pufc"]
 [ext_resource type="Script" uid="uid://qrqyogpuh5nv" path="res://scripts/UI/UIRow.gd" id="3_4umof"]
-[ext_resource type="Script" uid="uid://qe2ig1ke5w00" path="res://scripts/GeneratorSettingsPanel.gd" id="3_kuipa"]
+[ext_resource type="Script" uid="uid://qe2ig1ke5w00" path="res://scripts/AnalysisDashboard/GeneratorSettingsPanel.gd" id="3_kuipa"]
 [ext_resource type="Script" uid="uid://btyt8b8wl3mqe" path="res://scripts/UI/SpinBoxExtended.gd" id="3_v4lwo"]
-[ext_resource type="Script" uid="uid://d0a25auqfhruj" path="res://scripts/LutGenExpertSettings/ExpDragMoment.gd" id="5_mnymq"]
-[ext_resource type="Script" uid="uid://db7oxn6smcp6y" path="res://scripts/LutGenExpertSettings/ExpBuffetNoise.gd" id="6_flgvq"]
-[ext_resource type="Script" uid="uid://b4gxmx61vkcqv" path="res://scripts/LutGenExpertSettings/ExpCompressibility.gd" id="7_plld7"]
+[ext_resource type="Script" uid="uid://d0a25auqfhruj" path="res://scripts/ExpertSettings/ExpDragMoment.gd" id="5_mnymq"]
+[ext_resource type="Script" uid="uid://db7oxn6smcp6y" path="res://scripts/ExpertSettings/ExpBuffetNoise.gd" id="6_flgvq"]
+[ext_resource type="Script" uid="uid://b4gxmx61vkcqv" path="res://scripts/ExpertSettings/ExpCompressibility.gd" id="7_plld7"]
 [ext_resource type="StyleBox" uid="uid://dqihl2ujrgdp4" path="res://ui/Theme/Buttons/Btn_normal.tres" id="8_2pufc"]
-[ext_resource type="Script" uid="uid://cjhrqrh2t4x4w" path="res://scripts/LutGenExpertSettings/ExpPlateLift.gd" id="8_ykqxi"]
-[ext_resource type="Script" uid="uid://bucn6rt0a3uuo" path="res://scripts/LutGenExpertSettings/ExpStallGeometry.gd" id="9_kuipa"]
-[ext_resource type="Script" uid="uid://csanwgxdfihw8" path="res://scripts/LutGenExpertSettings/ExpSuctionSpike.gd" id="10_bfatx"]
-[ext_resource type="Script" uid="uid://dpajm888whqp6" path="res://scripts/LutGenExpertSettings/ExpAbnormalGeometry.gd" id="11_jtdcm"]
-[ext_resource type="Script" uid="uid://hkfuwsa5a8r7" path="res://scripts/LutGenExpertSettings/ExpAnalyzerSettings.gd" id="12_2pufc"]
+[ext_resource type="Script" uid="uid://cjhrqrh2t4x4w" path="res://scripts/ExpertSettings/ExpPlateLift.gd" id="8_ykqxi"]
+[ext_resource type="Script" uid="uid://bucn6rt0a3uuo" path="res://scripts/ExpertSettings/ExpStallBehavior.gd" id="9_kuipa"]
+[ext_resource type="Script" uid="uid://csanwgxdfihw8" path="res://scripts/ExpertSettings/ExpSuctionSpike.gd" id="10_bfatx"]
+[ext_resource type="Script" uid="uid://dpajm888whqp6" path="res://scripts/ExpertSettings/ExpAbnormalGeometry.gd" id="11_jtdcm"]
+[ext_resource type="Script" uid="uid://hkfuwsa5a8r7" path="res://scripts/ExpertSettings/ExpAnalyzerSettings.gd" id="12_2pufc"]
 [ext_resource type="Script" uid="uid://bd36psmww5euc" path="res://scripts/SimpleChart/SimpleChart.gd" id="14_4umof"]
 [ext_resource type="Script" uid="uid://boari7r8qeh58" path="res://scripts/UI/SimInputPanel.gd" id="15_flgvq"]
 [ext_resource type="Script" uid="uid://b5mlewhb80edl" path="res://scripts/ToolbarBottomTop.gd" id="17_bfatx"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://74m75dnsy7av" path="res://scripts/UI/SquareButton.gd" id="18_ykqxi"]
 [ext_resource type="StyleBox" uid="uid://chykdvali1jnm" path="res://ui/Theme/Buttons/BlueStyleBox.tres" id="19_jtdcm"]
 [ext_resource type="Script" uid="uid://cwy2o7848c0mm" path="res://scripts/UI/TabContainerExtended.gd" id="20_g6t25"]
+[ext_resource type="Script" uid="uid://ccf2gybuo4077" path="res://scripts/AeroRayScanner/AeroRayVisualizer.gd" id="21_ay4ay"]
 [ext_resource type="Script" uid="uid://dgnlhabriuwpv" path="res://scripts/WingVisualizer/WingPlanformView.gd" id="23_wb0nw"]
 
 [sub_resource type="Theme" id="Theme_kuipa"]
@@ -32,15 +33,6 @@ bg_color = Color(0.16862746, 0.21568628, 0.25490198, 1)
 border_width_left = 3
 border_width_right = 3
 border_color = Color(0.12156863, 0.12156863, 0.14117648, 1)
-
-[sub_resource type="GDScript" id="GDScript_2pufc"]
-resource_name = "ShowRef"
-script/source = "extends CheckBox
-
-func _ready() -> void:
-	if OS.has_feature(\"release\"):
-		self.visible = false
-"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kuipa"]
 bg_color = Color(0.16470589, 0.16470589, 0.18431373, 1)
@@ -367,15 +359,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Vortex Lift"
 
-[node name="EnableVortexLiftCheckBox" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3/HBoxContainer"]
+[node name="BETMode" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "M1"
-
-[node name="EnableVortexLiftCheckBox2" type="CheckBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer/UIRow3/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "M2"
+text = "BET Mode"
 
 [node name="UIRow4" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/Parameters/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(0, 32)
@@ -400,7 +387,7 @@ theme = ExtResource("2_5lp6x")
 min_value = 0.01
 max_value = 10.0
 step = 0.01
-value = 2.0
+value = 1.0
 prefix = "Intensity"
 
 [node name="PanelSeparator" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer"]
@@ -421,14 +408,14 @@ size_flags_vertical = 3
 theme = ExtResource("2_5lp6x")
 columns = 2
 
-[node name="CalcCurve" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot/VBoxContainer/GridContainer"]
+[node name="BtnForceUpdate" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Calculates a new preview."
 theme = ExtResource("2_5lp6x")
-text = "Preview"
+text = "Force Update"
 
 [node name="BtnSnapshot" type="Button" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/MainSettingsMargin/LeftConfigVBoxContainer/ButtonsPreviewSnapshot/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
@@ -444,7 +431,6 @@ custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
 [node name="ExpertSettingsFoldable" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings"]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_5lp6x")
@@ -461,7 +447,6 @@ follow_focus = true
 horizontal_scroll_mode = 0
 
 [node name="ExpertSettings" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer"]
-unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -477,19 +462,360 @@ theme_override_styles/normal = ExtResource("8_2pufc")
 text = "Aerodynamic Phsyics Modell"
 vertical_alignment = 1
 
+[node name="CompressibilityMachEffectsFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+title = "Compressibility (Mach Effects)"
+
+[node name="CompressibilityMachEffects" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("7_plld7")
+metadata/_custom_type_script = "uid://b4gxmx61vkcqv"
+
+[node name="max_factor_cl" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "no tooltip :(."
+theme = ExtResource("2_5lp6x")
+min_value = 0.5
+max_value = 4.0
+step = 0.01
+page = 0.1
+value = 2.5
+allow_greater = true
+allow_lesser = true
+prefix = "Max Factor Cl:  "
+script = ExtResource("3_v4lwo")
+default_val = 2.5
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_limit_sub" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Prandtl-Glauert Limit.
+Below this Mach number, lift increases purely by 1/sqrt(1-M^2).
+Usually 0.8 to 0.9."
+theme = ExtResource("2_5lp6x")
+min_value = 0.5
+max_value = 0.99
+step = 0.01
+page = 0.1
+value = 0.89
+allow_greater = true
+allow_lesser = true
+prefix = "Mach Limit Sub:  "
+script = ExtResource("3_v4lwo")
+default_val = 0.89
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_limit_sup" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Ackeret Limit.
+Above this Mach number, lift decreases by 1/sqrt(M^2-1).
+Usually 1.1 to 1.5."
+theme = ExtResource("2_5lp6x")
+min_value = 1.0
+max_value = 3.0
+step = 0.01
+value = 1.2
+allow_greater = true
+allow_lesser = true
+prefix = "Mach Limit Sup:  "
+script = ExtResource("3_v4lwo")
+default_val = 1.2
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_onset_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Mach number where the Stall Angle starts to decrease.
+Shockwaves on the nose cause earlier stall at high speeds."
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 0.9
+step = 0.05
+page = 0.01
+value = 0.4
+allow_greater = true
+allow_lesser = true
+prefix = "Mach Stall Onset Fwd:  "
+script = ExtResource("3_v4lwo")
+default_val = 0.4
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_onset_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Backward Mach number where Stall Angle starts to decrease. Usually lower for sharp edges."
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 0.9
+step = 0.05
+page = 0.01
+value = 0.2
+allow_greater = true
+allow_lesser = true
+prefix = "Mach Stall Onset Bwd:  "
+script = ExtResource("3_v4lwo")
+default_val = 0.2
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="mach_stall_reduction" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "How aggressively the Stall Angle drops after passing the Onset Mach.
+Higher values mean the wing stalls much earlier at Transonic speeds."
+theme = ExtResource("2_5lp6x")
+max_value = 2.0
+step = 0.1
+page = 0.1
+value = 0.5
+allow_greater = true
+allow_lesser = true
+prefix = "Mach Stall Reduction:  "
+script = ExtResource("3_v4lwo")
+default_val = 0.5
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="StallGeometryFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
+layout_mode = 2
+theme = ExtResource("2_5lp6x")
+title = "Stall Behavior"
+
+[node name="StallBehavior" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 2
+theme = ExtResource("2_5lp6x")
+script = ExtResource("9_kuipa")
+
+[node name="Sharpness" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stall Transition Sharpness. Controls how abruptly the lift breaks at the stall angle. High (30+) = Sudden, sharp drop (Thin/Laminar wings). Low (10-20) = Gentle, rounded peak (Thick/Trainer wings). Default (25) is optimal for most standard airfoils."
+theme = ExtResource("2_5lp6x")
+value = 25.0
+prefix = "Stall Transition Sharpness:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_re_ref" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reference Reynolds Number.
+At this Re, the Stall Angle Factor is nominal.
+Lower Re reduces stall angle."
+theme = ExtResource("2_5lp6x")
+min_value = 10000.0
+max_value = 50000000.0
+step = 10000.0
+value = 500000.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Re Ref:  "
+script = ExtResource("3_v4lwo")
+default_val = 500000.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_le_quality_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Leading Edge Quality.
+Multiplies the LE Radius to determine circulation efficiency.
+Higher = Better flow attachment."
+theme = ExtResource("2_5lp6x")
+min_value = 1.0
+max_value = 50.0
+step = 0.5
+value = 15.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Le Quality Factor:  "
+script = ExtResource("3_v4lwo")
+default_val = 15.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_max_cap_deg_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Maximum Forward Stall Angle Cap."
+theme = ExtResource("2_5lp6x")
+min_value = 1.0
+max_value = 90.0
+step = 0.5
+value = 40.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Max Cap Deg Fwd:  "
+script = ExtResource("3_v4lwo")
+default_val = 40.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_min_deg_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Minimum Forward Stall Angle."
+theme = ExtResource("2_5lp6x")
+min_value = 1.0
+max_value = 45.0
+step = 0.5
+value = 1.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Min Deg Fwd:  "
+script = ExtResource("3_v4lwo")
+default_val = 1.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_max_cap_deg_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Maximum Backward Stall Angle Cap."
+theme = ExtResource("2_5lp6x")
+min_value = 1.0
+max_value = 90.0
+step = 0.5
+value = 40.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Max Cap Deg Bwd:  "
+script = ExtResource("3_v4lwo")
+default_val = 40.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_min_deg_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Minimum Backward Stall Angle."
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 45.0
+step = 0.1
+page = 0.1
+value = 1.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Min Deg Bwd:  "
+script = ExtResource("3_v4lwo")
+default_val = 1.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_te_roundness_threshold" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Thickness Threshold.
+If Trailing Edge thickness > this value, the back is considered 'Round'.
+Affects Backward Flight stall logic."
+theme = ExtResource("2_5lp6x")
+min_value = 0.001
+max_value = 0.2
+step = 0.001
+page = 0.1
+value = 0.05
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Te Roundness Threshold:  "
+script = ExtResource("3_v4lwo")
+default_val = 0.05
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_sensitivity" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "How much Camber shifts the Stall Angle range.
+High camber stalls later on top, earlier on bottom."
+theme = ExtResource("2_5lp6x")
+page = 0.1
+value = 40.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Camber Shift Sensitivity:  "
+script = ExtResource("3_v4lwo")
+default_val = 40.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Max negative shift (degrees) due to camber."
+theme = ExtResource("2_5lp6x")
+min_value = -20.0
+max_value = 0.0
+step = 0.5
+page = 0.1
+value = -5.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Camber Shift Min:  "
+script = ExtResource("3_v4lwo")
+default_val = -5.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_camber_shift_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Max positive shift (degrees) due to camber."
+theme = ExtResource("2_5lp6x")
+max_value = 20.0
+step = 0.5
+page = 0.1
+value = 8.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Camber Shift Max:  "
+script = ExtResource("3_v4lwo")
+default_val = 8.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_sharpness_fwd_mult" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Multiplier for the base sharpness in Forward flight. Default 1.0."
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+page = 0.1
+value = 1.3
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Sharpness Fwd Mult:  "
+script = ExtResource("3_v4lwo")
+default_val = 1.3
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="stall_sharpness_bwd_mult" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallBehavior"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Multiplier for the base sharpness in Backward flight. Higher = snappier stall break."
+theme = ExtResource("2_5lp6x")
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+value = 1.0
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Sharpness Bwd Mult:  "
+script = ExtResource("3_v4lwo")
+default_val = 1.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
 [node name="DragAndMomentFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
 layout_mode = 2
-folded = true
 title = "Drag & Moment"
 
 [node name="DragAndMoment" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer"]
-visible = false
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
 theme = ExtResource("2_5lp6x")
 script = ExtResource("5_mnymq")
 
-[node name="drag_re_floor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+[node name="cd_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_5lp6x")
@@ -498,45 +824,106 @@ prefix = "drag_re_floor:"
 script = ExtResource("3_v4lwo")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
+[node name="drag_re_floor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Minimum Reynolds Number for Drag calculations.
+Prevents infinite drag at zero speed."
+theme = ExtResource("2_5lp6x")
+theme_type_variation = &"SpinBoxInnerLineEdit"
+min_value = 1000.0
+max_value = 1000000.0
+step = 1000.0
+value = 10000.0
+allow_greater = true
+allow_lesser = true
+prefix = "Drag Re Floor:  "
+script = ExtResource("3_v4lwo")
+default_val = 10000.0
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
 [node name="drag_wave_peak_mach" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "The Mach number where Wave Drag (Sound Barrier) is strongest.
+Usually just above Mach 1.0."
 theme = ExtResource("2_5lp6x")
-prefix = "drag_wave_peak_mach:"
+min_value = 0.95
+max_value = 1.5
+step = 0.01
+value = 1.05
+allow_greater = true
+allow_lesser = true
+prefix = "Drag Wave Peak Mach:  "
 script = ExtResource("3_v4lwo")
+default_val = 1.05
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="drag_wave_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Multiplier for Thickness-based Wave Drag.
+Higher values create a massive 'wall' at Mach 1."
 theme = ExtResource("2_5lp6x")
-prefix = "drag_wave_factor:"
+min_value = 1.0
+max_value = 20.0
+step = 0.5
+value = 5.0
+allow_greater = true
+allow_lesser = true
+prefix = "Drag Wave Factor:  "
 script = ExtResource("3_v4lwo")
+default_val = 5.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="drag_mcrit_thick_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "How much Thickness reduces the Critical Mach number.
+Thick wings hit the sound barrier earlier."
 theme = ExtResource("2_5lp6x")
-step = 0.01
-prefix = "drag_mcrit_thick_factor:"
+min_value = 0.5
+max_value = 3.0
+step = 0.1
+value = 1.4
+allow_greater = true
+allow_lesser = true
+prefix = "Drag Mcrit Thick Factor:  "
 script = ExtResource("3_v4lwo")
+default_val = 1.4
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="drag_base_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Base Drag Factor.
+Drag caused by a blunt/cut-off Trailing Edge (vacuum effect)."
 theme = ExtResource("2_5lp6x")
-prefix = "drag_base_factor:"
+max_value = 1.0
+step = 0.01
+value = 0.25
+allow_greater = true
+allow_lesser = true
+prefix = "Drag Base Factor:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.25
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="ac_offset_supersonic" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/DragAndMomentFoldableContainer/DragAndMoment"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Aerodynamic Center Shift.
+How far aft the AC moves in supersonic flight (fraction of chord).
+Usually 0.25 (moves from 25% to 50%)."
 theme = ExtResource("2_5lp6x")
-prefix = "ac_offset_supersonic:"
+max_value = 0.5
+step = 0.01
+value = 0.25
+allow_greater = true
+allow_lesser = true
+prefix = "Ac Offset Supersonic:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.25
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="BuffetNoiseFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
@@ -545,6 +932,7 @@ folded = true
 title = "Buffet / Noise"
 
 [node name="BuffetNoise" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/BuffetNoiseFoldableContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 2
@@ -626,83 +1014,6 @@ prefix = "drag_base_factor:"
 script = ExtResource("3_v4lwo")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
-[node name="CompressibilityMachEffectsFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-folded = true
-title = "Compressibility (Mach Effects)"
-
-[node name="CompressibilityMachEffects" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer"]
-visible = false
-layout_mode = 2
-focus_mode = 2
-theme = ExtResource("2_5lp6x")
-script = ExtResource("7_plld7")
-
-[node name="mach_limit_sub" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_re_floor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_limit_sup" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_stall_onset_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_stall_onset_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="mach_stall_reduction" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/CompressibilityMachEffectsFoldableContainer/CompressibilityMachEffects"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
 [node name="PlateLiftFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
 layout_mode = 2
 theme = ExtResource("2_5lp6x")
@@ -710,6 +1021,7 @@ folded = true
 title = "Plate Lift (Post-Stall Blending)"
 
 [node name="PlateLift" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/PlateLiftFoldableContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 2
@@ -806,190 +1118,13 @@ prefix = "plate_deep_stall_peak_deg:"
 script = ExtResource("3_v4lwo")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
-[node name="StallGeometryFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-folded = true
-title = "Stall Geometry"
-
-[node name="StallGeometry" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer"]
-visible = false
-layout_mode = 2
-focus_mode = 2
-theme = ExtResource("2_5lp6x")
-script = ExtResource("9_kuipa")
-
-[node name="Sharpness" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Stall Transition Sharpness. Controls how abruptly the lift breaks at the stall angle. High (30+) = Sudden, sharp drop (Thin/Laminar wings). Low (10-20) = Gentle, rounded peak (Thick/Trainer wings). Default (25) is optimal for most standard airfoils."
-theme = ExtResource("2_5lp6x")
-prefix = "Stall Transition Sharpness:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_re_ref" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_re_floor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_le_quality_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_max_cap_deg_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_min_deg_fwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_max_cap_deg_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_min_deg_bwd" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_te_roundness_threshold" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_camber_shift_sensitivity" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_camber_shift_min" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_camber_shift_max" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_sharpness_fwd_mult" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
-[node name="stall_sharpness_bwd_mult" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/StallGeometryFoldableContainer/StallGeometry"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
-
 [node name="SuctionSpikeAndCrashFoldableContainer" type="FoldableContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings"]
 layout_mode = 2
 folded = true
 title = "Suction Spike & Crash"
 
 [node name="SuctionSpikeAndCrash" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/SuctionSpikeAndCrashFoldableContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 2
@@ -1161,6 +1296,7 @@ folded = true
 title = "Abnormal Geometry"
 
 [node name="AbnormalGeometry" type="VBoxContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AbnormalGeometryFoldableContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 2
@@ -1315,74 +1451,89 @@ script = ExtResource("12_2pufc")
 [node name="base_stall_deg" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Base stall angle for a generic airfoil before modifiers."
 theme = ExtResource("2_5lp6x")
-prefix = "drag_re_floor:"
+min_value = 1.0
+max_value = 20.0
+step = 0.5
+allow_greater = true
+allow_lesser = true
+prefix = "Base Stall Deg:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="stall_radius_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Impact of Leading Edge Radius on stall angle (Rounder = Higher Stall)."
 theme = ExtResource("2_5lp6x")
-min_value = 0.1
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.1
-prefix = "drag_wave_peak_mach:"
+min_value = 1.0
+max_value = 20.0
+step = 0.5
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Radius Factor:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="stall_thickness_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Impact of Thickness on stall angle."
 theme = ExtResource("2_5lp6x")
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-page = 0.01
-value = 0.001
-prefix = "drag_wave_factor:"
+min_value = 1.0
+max_value = 20.0
+step = 0.5
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Thickness Factor:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="stall_shape_factor" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Impact of 'Fullness' (Area) on stall angle."
 theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
+min_value = 1.0
+max_value = 20.0
+step = 0.5
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Shape Factor:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="stall_fwd_camber_penalty" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Stall penalty for high camber in Forward flight."
 theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
+max_value = 50.0
 page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Fwd Camber Penalty:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="stall_bwd_camber_penalty" type="SpinBox" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer/Settings/ExpertSettingsFoldable/MarginContainer/ExpSettingsPanelContainer/ExpertSettings/AnalyzerFoldableContainer/AnalyzerSettings"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Stall penalty for high camber in Backward flight (flying against the scoop)."
 theme = ExtResource("2_5lp6x")
-min_value = 0.01
-max_value = 1.0
-step = 0.01
+max_value = 50.0
 page = 0.1
-value = 0.01
-prefix = "drag_mcrit_thick_factor:"
+allow_greater = true
+allow_lesser = true
+prefix = "Stall Bwd Camber Penalty:  "
 script = ExtResource("3_v4lwo")
+default_val = 0.0
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="LeftPanelRightSeparator10px" type="PanelContainer" parent="MainLayout/ConfigSettingsFoldable/LeftPanel/LeftPanelHBoxContainer"]
@@ -1408,7 +1559,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-current_tab = 0
+current_tab = 3
 drag_to_rearrange_enabled = true
 tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
@@ -1416,6 +1567,7 @@ script = ExtResource("20_g6t25")
 metadata/_custom_type_script = "uid://cwy2o7848c0mm"
 
 [node name="2D Analysis" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -1449,80 +1601,6 @@ clip_contents = true
 layout_mode = 2
 size_flags_vertical = 8
 alignment = 1
-
-[node name="ShowCl" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-tooltip_text = "Toggle Lift-Curve in Chart"
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_font_sizes/font_size = 16
-button_pressed = true
-text = "Lift(CL)"
-expand_icon = true
-
-[node name="ShowCd" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-tooltip_text = "Toggle Drag-Curve in Chart"
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_font_sizes/font_size = 16
-button_pressed = true
-text = "Drag (Cd)"
-autowrap_trim_flags = 192
-
-[node name="ShowCm" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-tooltip_text = "Toggle Moment-Curve in Chart"
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_font_sizes/font_size = 16
-button_pressed = true
-text = "Moment (Cm)"
-
-[node name="ShowStall" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-tooltip_text = "Toggles Stall-Curve in Chart (VThe stall value is displayed from 0.0 to 1.0.
-Where 1.0 means no stall and 0.0 means full stall.)"
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_font_sizes/font_size = 16
-button_pressed = true
-text = "Stall"
-
-[node name="ShowSnapshot" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-tooltip_text = "Toggles Snapshot Cl-Curve.
-First, a snapshot must be created.
-See Configuration (left panel) for the parameters -> Snapshot button.
-"
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_font_sizes/font_size = 16
-text = "Snapshot
-"
-
-[node name="ShowRef" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/2D Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-tooltip_text = "Displays the NACA-0012 reference curve, which was experimentally created in a wind tunnel.
-
-Note: This curve is not perfectly represented in this tool and serves only as a rough reference."
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_font_sizes/font_size = 16
-text = "RefC"
-script = SubResource("GDScript_2pufc")
 
 [node name="Polar Analysis" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
 visible = false
@@ -1600,52 +1678,6 @@ layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
 
-[node name="PolarShowCurve" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 8
-tooltip_text = "Toggle the main Drag Polar curve (Cl vs Cd)."
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_colors/font_color = Color(0.17272583, 0.3629984, 0.7137648, 1)
-theme_override_colors/font_focus_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_hover_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.39215687, 0.58431375, 0.92941177, 1)
-button_pressed = true
-text = "Show Curve"
-
-[node name="PolarShowGlide" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 8
-tooltip_text = "Marks the point of Maximum Lift-to-Drag Ratio (L/D max). This is your \"Best Glide\" speed (furthest distance for altitude lost)."
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_colors/font_color = Color(0.49718744, 0.1868529, 0.19135019, 1)
-theme_override_colors/font_focus_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_hover_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.8039216, 0.36078432, 0.36078432, 1)
-button_pressed = true
-text = "Show Glide
-"
-
-[node name="PolarShowSink" type="CheckBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Polar Analysis/ToolbarBottom/Toolbar"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 8
-tooltip_text = "Marks the point of Minimum Sink Rate (Max Power Factor). This is your \"Max Endurance\" speed (longest time in air)."
-focus_mode = 0
-theme = ExtResource("2_5lp6x")
-theme_override_colors/font_color = Color(0, 0.3079468, 1.92523e-07, 1)
-theme_override_colors/font_focus_color = Color(0, 1, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 1, 0, 1)
-button_pressed = true
-text = "Show Sink"
-
 [node name="Raw Data" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
 visible = false
 layout_mode = 2
@@ -1660,15 +1692,33 @@ layout_mode = 2
 script = ExtResource("17_bfatx")
 metadata/_custom_type_script = "uid://b5mlewhb80edl"
 
-[node name="RawDataTree" type="Tree" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data"]
+[node name="HBoxContainer" type="HSplitContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RawDataTree2D" type="Tree" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 focus_mode = 0
 columns = 5
 column_titles_visible = true
-hide_root = true
-select_mode = 2
+allow_reselect = true
+allow_rmb_select = true
+select_mode = 1
+
+[node name="RawDataTree3D" type="Tree" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+columns = 5
+column_titles_visible = true
+allow_reselect = true
+allow_rmb_select = true
+select_mode = 1
 
 [node name="ToolbarBottom" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Raw Data/Raw Data"]
 custom_minimum_size = Vector2(0, 32)
@@ -1694,6 +1744,66 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Export XFoil (.pol)"
 
+[node name="Aero Ray Scanner Visualizer" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer"]
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer"]
+layout_mode = 2
+
+[node name="AeroRayVisualizer" type="Control" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer/VBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("21_ay4ay")
+background_color = Color(0.12156863, 0.12156863, 0.14117648, 1)
+metadata/_custom_type_script = "uid://ccf2gybuo4077"
+
+[node name="Toolbar" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer/VBoxContainer/Toolbar"]
+layout_mode = 2
+
+[node name="NumRays" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer/VBoxContainer/Toolbar/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+min_value = 10.0
+max_value = 1000.0
+value = 100.0
+prefix = "Rays:"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="RaySpacingMultiplier" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer/VBoxContainer/Toolbar/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.1
+min_value = 0.01
+max_value = 10.0
+step = 0.01
+value = 1.2
+prefix = "*"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="Alpha" type="HSlider" parent="MainLayout/HBoxContainer/WorkArea/CenterPanelTabContainer/Aero Ray Scanner Visualizer/VBoxContainer/Toolbar/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 85.0
+min_value = -180.0
+max_value = 180.0
+step = 0.05
+tick_count = 360
+
 [node name="RightPanel" type="VSplitContainer" parent="MainLayout/HBoxContainer/WorkArea"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -1704,7 +1814,7 @@ size_flags_stretch_ratio = 0.5
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.65
-current_tab = 0
+current_tab = 1
 drag_to_rearrange_enabled = true
 tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
@@ -1712,6 +1822,7 @@ script = ExtResource("20_g6t25")
 metadata/_custom_type_script = "uid://cwy2o7848c0mm"
 
 [node name="Airfoil Preview" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_tab_index = 0
@@ -1745,6 +1856,16 @@ min_range_y = 0.04
 max_range_y = 2.0
 metadata/_custom_type_script = "uid://bd36psmww5euc"
 
+[node name="Legend" type="ScrollContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="SeriesLegendList" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/TabContainer/Legend"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="FoldableFoldFix" type="PanelContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel"]
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
@@ -1773,11 +1894,9 @@ metadata/_custom_type_script = "uid://boari7r8qeh58"
 
 [node name="FoldableContainer" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls"]
 layout_mode = 2
-folded = true
 title = "General Controls"
 
 [node name="SimInputsGridContainer" type="GridContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FoldableContainer"]
-visible = false
 layout_mode = 2
 columns = 2
 
@@ -1802,6 +1921,7 @@ value = 5.0
 allow_greater = true
 allow_lesser = true
 prefix = "Alpha:"
+suffix = "°"
 script = ExtResource("3_v4lwo")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
@@ -1894,7 +2014,7 @@ value = 1.225
 allow_greater = true
 allow_lesser = true
 prefix = "AirDens:"
-suffix = "kg/m3"
+suffix = "kg/m³"
 script = ExtResource("3_v4lwo")
 metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
@@ -2063,15 +2183,54 @@ max_value = 1.0
 step = 0.01
 prefix = "Loc:"
 
+[node name="Row03" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="InputWingSpan" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row03"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Aspect Ratio (Span² / Area). High AR (15+) = Gliders (Efficient, Low Induced Drag). Low AR (3-6) = Fighter Jets / Deltas (High Induced Drag)."
+step = 0.01
+value = 2.45
+prefix = "Span:"
+suffix = "m"
+
+[node name="WingAreaSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row03"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Reference Wing Area (m²). Used to calculate the final Forces (Newtons). Does not affect the Coefficients (Cl/Cd)."
+theme = ExtResource("2_5lp6x")
+min_value = 0.01
+max_value = 200.0
+step = 0.01
+value = 1.0
+allow_greater = true
+allow_lesser = true
+prefix = "Area:"
+suffix = "m²"
+script = ExtResource("3_v4lwo")
+metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
+
+[node name="unusedSpinBox2" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/FiniteWingLabel/FiniteWingVBox/Row03"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Oswald Efficiency Factor (e). 1.0 = Theoretical ideal (Elliptical Lift Distribution). 0.85 = Standard rectangular wing. 0.7 = Biplanes or inefficient shapes."
+editable = false
+prefix = "..."
+
 [node name="ForceVisualizerFoldable" type="FoldableContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-folded = true
 title = "Force Visualizer"
 
 [node name="ForceVisualizerControls" type="VBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable"]
-visible = false
 layout_mode = 2
 
 [node name="Row01" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls"]
@@ -2084,22 +2243,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("3_4umof")
 metadata/_custom_type_script = "uid://qrqyogpuh5nv"
-
-[node name="WingAreaSpinBox" type="SpinBox" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls/Row01/UIRow5"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 27)
-layout_mode = 2
-tooltip_text = "Reference Wing Area (m²). Used to calculate the final Forces (Newtons). Does not affect the Coefficients (Cl/Cd)."
-theme = ExtResource("2_5lp6x")
-min_value = 0.01
-step = 0.01
-value = 1.0
-allow_greater = true
-allow_lesser = true
-prefix = "Area:"
-suffix = "m2"
-script = ExtResource("3_v4lwo")
-metadata/_custom_type_script = "uid://btyt8b8wl3mqe"
 
 [node name="Row02" type="HBoxContainer" parent="MainLayout/HBoxContainer/WorkArea/RightPanel/FoldableFoldFix/ForceVisualizerAndSimControlsVSplit/SimulationControlsFoldable/SimulationControls/ForceVisualizerFoldable/ForceVisualizerControls"]
 layout_mode = 2

@@ -1,0 +1,183 @@
+[gd_scene load_steps=9 format=3 uid="uid://4no4pkrbhtp0"]
+
+[ext_resource type="Script" uid="uid://dg8v8bxchbdvg" path="res://scripts/MainWindows.gd" id="1_08rn7"]
+[ext_resource type="Theme" uid="uid://dblsxlww46j3l" path="res://ui/Theme/CurveToolTheme.tres" id="1_khv74"]
+[ext_resource type="PackedScene" uid="uid://cgdqpxfcvq4f1" path="res://scenes/AnalysisDashboard.tscn" id="3_khv74"]
+[ext_resource type="PackedScene" uid="uid://co5lhdilj1n8y" path="res://scenes/AirfoilCreatorView.tscn" id="4_08th6"]
+
+[sub_resource type="Theme" id="Theme_aefve"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_khv74"]
+bg_color = Color(0.16862746, 0.21568628, 0.25490198, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08rn7"]
+bg_color = Color(0.16862746, 0.21568628, 0.25490198, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c2m3h"]
+bg_color = Color(0.16862746, 0.21568628, 0.25490198, 1)
+border_width_left = 3
+border_width_right = 3
+border_color = Color(0.12156863, 0.12156863, 0.14117648, 1)
+
+[node name="MainWindow" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme = SubResource("Theme_aefve")
+script = ExtResource("1_08rn7")
+
+[node name="Left" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_khv74")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="Right" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_khv74")
+
+[node name="DetailedBackGround" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Top" type="PanelContainer" parent="DetailedBackGround"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_khv74")
+
+[node name="Middle" type="PanelContainer" parent="DetailedBackGround"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_khv74")
+
+[node name="Bottom" type="PanelContainer" parent="DetailedBackGround"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_khv74")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("1_khv74")
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_khv74")
+current_tab = 0
+tab_focus_mode = 0
+
+[node name="Analysis Dashboard" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="TopPanelSeparator" type="PanelContainer" parent="VBoxContainer/TabContainer/Analysis Dashboard"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_08rn7")
+
+[node name="Analysis Dashboard" type="HBoxContainer" parent="VBoxContainer/TabContainer/Analysis Dashboard"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftEdgeSeparator" type="PanelContainer" parent="VBoxContainer/TabContainer/Analysis Dashboard/Analysis Dashboard"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/TabContainer/Analysis Dashboard/Analysis Dashboard"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c2m3h")
+
+[node name="Analysis Dashboard" parent="VBoxContainer/TabContainer/Analysis Dashboard/Analysis Dashboard" instance=ExtResource("3_khv74")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/TabContainer/Analysis Dashboard/Analysis Dashboard"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c2m3h")
+
+[node name="RightEdgeSeparator" type="PanelContainer" parent="VBoxContainer/TabContainer/Analysis Dashboard/Analysis Dashboard"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="Airfoil Creator" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="TopPanelSeparator2" type="PanelContainer" parent="VBoxContainer/TabContainer/Airfoil Creator"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme = ExtResource("1_khv74")
+theme_override_styles/panel = SubResource("StyleBoxFlat_08rn7")
+
+[node name="Airfoil Creator" type="HBoxContainer" parent="VBoxContainer/TabContainer/Airfoil Creator"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LeftEdgeSeparator" type="PanelContainer" parent="VBoxContainer/TabContainer/Airfoil Creator/Airfoil Creator"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/TabContainer/Airfoil Creator/Airfoil Creator"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c2m3h")
+
+[node name="Airfoil Creator" parent="VBoxContainer/TabContainer/Airfoil Creator/Airfoil Creator" instance=ExtResource("4_08th6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/TabContainer/Airfoil Creator/Airfoil Creator"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c2m3h")
+
+[node name="RightEdgeSeparator" type="PanelContainer" parent="VBoxContainer/TabContainer/Airfoil Creator/Airfoil Creator"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="BottomLineMargin" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_khv74")
+theme_override_constants/margin_top = 2
+
+[node name="BottomPanelSeparator" type="PanelContainer" parent="VBoxContainer/BottomLineMargin"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme = ExtResource("1_khv74")
+
+[node name="QuitDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "Quit SimiFoil"
+size = Vector2i(400, 140)
+extend_to_title = true
+sharp_corners = true
+min_size = Vector2i(400, 140)
+theme = ExtResource("1_khv74")
+ok_button_text = "Quit"
+dialog_text = "Do you really want to quit SimiFoil?
+Unsaved changes will be lost.
+"

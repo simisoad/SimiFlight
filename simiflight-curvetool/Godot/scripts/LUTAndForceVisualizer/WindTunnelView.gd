@@ -218,17 +218,16 @@ func _draw_moment(center: Vector2, m: float, m_coeff: float):
 # --- Input (Zoom / Pan) ---
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_MIDDLE:
-			if event.pressed:
-				_is_dragging = true
-				_last_mouse_pos = event.position
-			else:
-				_is_dragging = false
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			if event.double_click:
-				view_zoom = default_zoom
-				pan_offset = Vector2.ZERO
-				queue_redraw()
+		if event.is_action_pressed(&"pan_chart"):
+			_is_dragging = true
+			_last_mouse_pos = event.position
+		elif event.is_action_released(&"pan_chart"):
+			_is_dragging = false
+
+		if event.is_action_pressed(&"reset_zoom_chart") and event.double_click:
+			view_zoom = default_zoom
+			pan_offset = Vector2.ZERO
+			queue_redraw()
 
 		if event.pressed:
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:

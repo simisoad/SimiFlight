@@ -114,21 +114,18 @@ func _draw_plot():
 	plot.clear_series()
 	if current_points.is_empty(): return
 
-	var upper_pts: Array = current_points.upper
-	var lower_pts: Array = current_points.lower
+	var upper_pts: Array[Vector2]
+	var lower_pts: Array[Vector2]
 
-	# Calculate closure line
-	#var closure_pts: Array[Vector2] = []
-	#if not upper_pts.is_empty():
-		#closure_pts.append(upper_pts.back())
-		#closure_pts.append(lower_pts.back())
+	for p in current_points.upper:
+		upper_pts.append(p)
+	for p in current_points.lower:
+		lower_pts.append(p)
 
-	plot.add_series("Upper", upper_pts, Color.GREEN, 2.0)
-	plot.add_series("Lower", lower_pts, Color.YELLOW, 2.0)
-
-	# Draw closure if TE is thick
-	#if spin_te.value > 0.0 or abs(upper_pts.back().y - lower_pts.back().y) > 0.001:
-		#plot.add_series("Closure", closure_pts, Color.AQUA, 15.0)
+	var up = ChartSeries.new(); up.name = "Upper"; up.points = upper_pts; up.color = Color.WEB_GREEN
+	var lo = ChartSeries.new(); lo.name = "Lower"; lo.points = lower_pts; lo.color = Color.YELLOW_GREEN
+	plot.add_series_resource(up)
+	plot.add_series_resource(lo)
 
 func _get_auto_name(family: int, params: Dictionary) -> String:
 	var name_parts = []
@@ -212,7 +209,7 @@ func _on_save_pressed():
 	if fname.is_empty(): fname = input_name.placeholder_text.strip_edges()
 	if not fname.ends_with(".dat"): fname += ".dat"
 
-	# NEW: Use the helper to get the safe path
+	# Use the helper to get the safe path
 	var directory = FileSystemHandler.get_user_airfoil_dir()
 	var path = directory.path_join(fname)
 
@@ -222,7 +219,19 @@ func _on_save_pressed():
 		return
 
 	file.store_line(fname.get_basename())
-
+	# --- GENERATE METADATA ---
+	var meta = {
+		"family": opt_shape.get_selected_id(),
+		"camber_type": opt_camber.get_selected_id(),
+		"design_m": spin_m.value / 100.0,
+		"design_p": spin_p.value / 10.0,
+		"design_t": spin_t.value / 100.0,
+		"le_mult": spin_le.value,
+		"te_thick": spin_te.value / 100.0,
+		"shape_exp": spin_exp.value,
+		"is_inverted": check_mirror.button_pressed
+	}
+	file.store_line("#META: " + JSON.stringify(meta))
 	# Write Upper (Tail to Nose)
 	file.store_line("upper")
 	var up = current_points.upper.duplicate()

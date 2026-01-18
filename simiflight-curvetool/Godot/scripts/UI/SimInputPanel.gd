@@ -14,7 +14,7 @@ signal parameters_changed(alpha: float, mach: float, re: float, speed: float, de
 @onready var sampling_step: SpinBox = %SamplingStep
 
 
-# NEW: Chart Range Inputs (Moved from Generator View)
+# Chart Range Inputs (Moved from Generator View)
 @onready var input_alpha_start: SpinBoxExtended = %AlphaStart
 @onready var input_alpha_end: SpinBoxExtended = %AlphaEnd
 
@@ -44,10 +44,10 @@ func _ready() -> void:
 				sampling_step.get_line_edit().self_modulate = Color.YELLOW
 			else:
 				sampling_step.get_line_edit().self_modulate = Color.WHITE
-				) # do not _emit_change()!
+				) # do not emit_change()!
 	# 1. Sync Alpha Slider/Box
-	slider_alpha.value_changed.connect(func(v): input_alpha.value = v; _emit_change())
-	input_alpha.value_changed.connect(func(v): slider_alpha.value = v; _emit_change())
+	slider_alpha.value_changed.connect(func(v): input_alpha.value = v; emit_change())
+	input_alpha.value_changed.connect(func(v): slider_alpha.value = v; emit_change())
 
 	# 2. Physics Connections
 	input_speed.value_changed.connect(_on_speed_changed)
@@ -56,16 +56,16 @@ func _ready() -> void:
 	input_density.value_changed.connect(_on_density_changed)
 
 	# 3. Simple Updates
-	input_area.value_changed.connect(func(_v): _emit_change())
-	input_alpha_start.value_changed.connect(func(_v): _emit_change())
-	input_alpha_end.value_changed.connect(func(_v): _emit_change())
+	input_area.value_changed.connect(func(_v): emit_change())
+	input_alpha_start.value_changed.connect(func(_v): emit_change())
+	input_alpha_end.value_changed.connect(func(_v): emit_change())
 
 	# Initial Emit
 	await get_tree().process_frame
-	_emit_change()
+	emit_change()
 	_on_mach_changed(input_mach.value)
 
-func _emit_change() -> void:
+func emit_change() -> void:
 	if _updating: return
 	parameters_changed.emit(
 		input_alpha.value,
@@ -84,7 +84,7 @@ func _on_speed_changed(v: float) -> void:
 	input_mach.value = v / SPEED_OF_SOUND
 	input_re.value = (input_density.value * v * CHORD) / DYN_VISCOSITY
 	_updating = false
-	_emit_change()
+	emit_change()
 
 func _on_mach_changed(v: float) -> void:
 	if _updating: return
@@ -93,7 +93,7 @@ func _on_mach_changed(v: float) -> void:
 	input_speed.value = speed
 	input_re.value = (input_density.value * speed * CHORD) / DYN_VISCOSITY
 	_updating = false
-	_emit_change()
+	emit_change()
 
 func _on_reynolds_changed(v: float) -> void:
 	if _updating: return
@@ -104,7 +104,7 @@ func _on_reynolds_changed(v: float) -> void:
 	input_speed.value = speed
 	input_mach.value = speed / SPEED_OF_SOUND
 	_updating = false
-	_emit_change()
+	emit_change()
 
 func _on_density_changed(_v) -> void:
 	# Trigger re-calc of Re based on current speed

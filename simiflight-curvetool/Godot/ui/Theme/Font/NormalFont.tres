@@ -40,5 +40,5 @@ cache/0/17/0/scale = 1.0
 [resource]
 fallbacks = Array[Font]([SubResource("FontFile_ntxfi")])
 font_names = PackedStringArray("Sans-Serif")
-hinting = 2
-oversampling = 2.0
+modulate_color_glyphs = true
+oversampling = 1.0

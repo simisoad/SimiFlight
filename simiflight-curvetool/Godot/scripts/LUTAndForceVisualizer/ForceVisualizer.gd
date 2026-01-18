@@ -22,7 +22,6 @@ func set_profile_geometry(profile: AirfoilProfile) -> void:
 
 func update_visuals(alpha: float, coeffs: Dictionary, forces: Dictionary, speed: float) -> void:
 
-
 	# Update Labels
 	lbl_cl.text = "Cl: %.3f" % coeffs.cl
 	lbl_cd.text = "Cd: %.4f" % coeffs.cd
@@ -46,7 +45,6 @@ func set_auto_scale(enabled: bool):
 	wind_tunnel_view.auto_scale_vectors = enabled
 	wind_tunnel_view.queue_redraw()
 
-# NEW Method
 func set_wind_animation(enabled: bool):
 	wind_tunnel_view.enable_animation = enabled
 	wind_tunnel_view.queue_redraw()

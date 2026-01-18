@@ -12,6 +12,8 @@ class_name SimpleChart extends Control
 @export var highlight_range_color: Color = Color(1, 1, 1, 0.05)
 
 @export_group("Layout")
+@export var x_axis_var: String = "alpha" # Matches property names in AeroResult
+@export var y_axis_var: String = "cl"
 @export var x_label: String = ""
 @export var y_label: String = ""
 @export var lock_aspect_ratio: bool = false
@@ -45,6 +47,7 @@ class_name SimpleChart extends Control
 @export var max_range_y: float = 5.0
 
 @export_group("Features")
+@export var show_markers: bool = true # Global toggle for all markers
 @export var show_range_highlight: bool = false
 @export var highlight_min_x: float = -180.0
 @export var highlight_max_x: float = 180.0
@@ -63,8 +66,8 @@ var initial_max_x: float = 180.0
 var initial_min_y: float = -2.5
 var initial_max_y: float = 2.5
 
-var _series: Array[Dictionary] = []
-var _markers: Array[Dictionary] = []
+var _series_list: Array[ChartSeries] = []
+
 var _plot_area: Control
 var _default_font: Font
 var _dragging: bool = false
@@ -216,8 +219,8 @@ func _draw() -> void:
 
 	# Legend (Fixed Spacing)
 	var legend_x = margin_left
-	for s in _series:
-		if not s.series_visible: continue
+	for s in _series_list:
+		if not s.visible: continue
 		draw_rect(Rect2(legend_x, 10, 10, 10), s.color)
 		draw_string(_default_font, Vector2(legend_x + 15, 20), s.name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, axis_text_color)
 		var string_size = _default_font.get_string_size(s.name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
@@ -225,35 +228,44 @@ func _draw() -> void:
 
 	draw_rect(_plot_area.get_rect(), plot_area_color, false, 2.0)
 	_plot_area.queue_redraw()
-
+## Renders the lines and markers for all visible series.
 func _on_plot_area_draw() -> void:
 	var sz = _plot_area.size
 
-	# Draw Series
-	for s in _series:
-		if not s.series_visible or s.points.is_empty(): continue
-		var step = 1
+	# 1. Draw the Lines
+	for s in _series_list:
+		if not s.visible or s.points.is_empty():
+			continue
 
+		var step = 1
 		if s.points.size() > DOWN_SAMPLING_THRESHOLD_WEB and OS.has_feature("web"):
-			step = s.points.size() / DOWN_SAMPLING_THRESHOLD_WEB # Downsample for rendering
+			step = s.points.size() / DOWN_SAMPLING_THRESHOLD_WEB
 
 		var poly = PackedVector2Array()
-		for p in range(0, s.points.size(), step):
-			var draw_point: Vector2 = s.points[p]
-			poly.append(Vector2(_map_x_local(draw_point.x, sz.x), _map_y_local(draw_point.y, sz.y)))
+		for i in range(0, s.points.size(), step):
+			var p = s.points[i]
+			poly.append(Vector2(_map_x_local(p.x, sz.x), _map_y_local(p.y, sz.y)))
+
 		if poly.size() > 1:
 			_plot_area.draw_polyline(poly, s.color, s.width, true)
 
-	# Draw Markers
-	for m in _markers:
-		if not m.series_visible: continue
-
-		var center = Vector2(_map_x_local(m.pos.x, sz.x), _map_y_local(m.pos.y, sz.y))
-		# INFO: Set width to -1.0 if fill is true, to avoid annoying warning of the draw_circle method...
-		var width: float = m.width
-		if m.fill:
-			width = -1.0
-		_plot_area.draw_circle(center, m.radius, m.color, m.fill, width)
+	# 2. Draw the Markers (Integrated into the Series loop)
+	if not show_markers: return
+	for s in _series_list:
+		# Markers only show if their parent series is visible
+		if not s.visible: continue
+		for m in s.markers:
+			if not m.visible: continue
+			var pos = Vector2(_map_x_local(m.x_val, sz.x), _map_y_local(m.y_val, sz.y))
+			# --- THE GLOW EFFECT ---
+			#if m.name == "Pos": # Only for the live point
+			var glow_col = m.color
+			glow_col.a = 0.3
+			_plot_area.draw_circle(pos, m.radius + 4.0, glow_col, true, -1.0, true)
+			_plot_area.draw_circle(pos, m.radius + 2.0, glow_col, true, -1.0, true)
+			# Professional look: use -1.0 width for filled circles to avoid Godot warnings
+			var draw_width = -1.0 if m.fill else 2.0
+			_plot_area.draw_circle(pos, m.radius, m.color, m.fill, draw_width, true)
 
 # --- Math Helpers ---
 func _map_x(v: float) -> float:
@@ -281,25 +293,28 @@ func _calc_step_size(min_v: float, max_v: float, count: float) -> float:
 
 
 # --- Public API ---
-func add_series(series_name: String, points: Array, color: Color, width: float = 2.0, series_visible: bool = true):
-	_series.append({"name": series_name, "points": points, "color": color, "width": width, "series_visible": series_visible})
-	#print(self.name, " , has %s series. " % _series.size())
+func add_series_resource(res: ChartSeries) -> void:
+	_series_list.append(res)
 	queue_redraw()
 
-func add_marker(series_name: String, pos: Vector2, radius: float, color: Color, width: float, fill: bool, series_visible: bool = true):
-	_markers.append({"name": series_name, "pos": pos, "radius": radius, "color": color, "width": width, "fill": fill, "series_visible": series_visible})
-	#print(self.name, " , has %s markers. " % _markers.size())
+func clear_all_series() -> void:
+	_series_list.clear()
 	queue_redraw()
 
-func clear_series(): _series.clear(); queue_redraw()
-func clear_markers(): _markers.clear(); queue_redraw()
+func clear_series() -> void:
+	_series_list.clear()
+	queue_redraw()
+
 
 func set_series_visible(series_name: String, v: bool):
-	for s in _series: if s.name == series_name: s.series_visible = v
+	for s in _series_list: if s.name == series_name: s.visible = v
 	queue_redraw()
 
 func set_marker_visible(series_name: String, v: bool):
-	for m in _markers: if m.name == series_name: m.series_visible = v
+	for s in _series_list:
+		if not s.visible: continue # If curve is hidden, markers are hidden!
+		for m in s.markers:
+			if m.name == series_name: m.visible = v
 	queue_redraw()
 
 func set_domain(nx: float, xx: float, ny: float, xy: float):
@@ -322,10 +337,13 @@ func _gui_input(event: InputEvent) -> void:
 	if not enable_zoom: return
 
 	if event is InputEventMouseButton:
-		if event.button_index in [MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE]:
-			_dragging = event.pressed
+		if event.is_action_pressed(&"pan_chart"):
+			_dragging = true
 			_last_mouse_pos = event.position
-			if event.double_click and event.button_index == MOUSE_BUTTON_RIGHT: reset_zoom()
+		elif event.is_action_released(&"pan_chart"):
+			_dragging = false
+		if event.is_action_pressed(&"reset_zoom_chart") and event.double_click:
+			reset_zoom()
 
 		if event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
 			var factor = zoom_sensitivity * (-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
