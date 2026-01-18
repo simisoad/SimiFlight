@@ -2,6 +2,18 @@
 [![Godot Version](https://img.shields.io/badge/Godot-4.x-blue.svg)](https://godotengine.org)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
+## Licensing
+
+This repository contains multiple components.
+
+- **SimiFoil (simiflight-curvetool)**  
+  Source-available, non-commercial license  
+  See `simiflight-curvetool/LICENSE`
+
+- **SimiFlight core**  
+  All rights reserved (no license yet)
+
+
 This project is a further development of my flight simulator, which I developed for my high school graduation project(Matura-Project in Switzerland).
 
 Matura-Flightsimulator: https://nomis3d.itch.io/maturaarbeit-flugsimulator
